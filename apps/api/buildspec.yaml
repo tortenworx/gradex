@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20.x
+    commands:
+      - echo "⦿ Installing dependencies"
+      - curl -fsSL https://get.pnpm.io/install.sh | SHELL=`which bash` bash -
+      - . ~/.bashrc
+      - pnpm install --frozen-lockfile
+    finally:
+      - echo "ⓘ"
+  build:
+    commands:
+      - pnpm build
+    finally:
+      - echo "ⓘ Building application"
