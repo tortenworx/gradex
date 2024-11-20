@@ -23,9 +23,9 @@ artifacts:
       files:
         - '**/*'
       base-directory: 'apps/api/*'
-      name: api-artifact
+      name: api
     artifact2:
       files:
         - '**/*'
       base-directory: 'apps/web/*'
-      name: web-artifact
+      name: web
