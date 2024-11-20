@@ -19,12 +19,12 @@ artifacts:
   files:
     - '**/*'
   secondary-artifacts:
-    artifact1:
+    api:
       files:
         - '**/*'
       base-directory: 'apps/api/*'
       name: api
-    artifact2:
+    web:
       files:
         - '**/*'
       base-directory: 'apps/web/*'
