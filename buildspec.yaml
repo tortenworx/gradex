@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20.x
+    commands:
+      - curl -fsSL https://get.pnpm.io/install.sh | SHELL=`which bash` bash -
+      - . ~/.bashrc
+      - pnpm install --frozen-lockfile
+    finally:
+      - echo "ⓘ Installing dependencies"
+  build:
+    commands:
+      - pnpm dlx turbo build
+    finally:
+      - echo "ⓘ Building application"
+artifacts:
+  files:
+    - '**/*'
+  secondary-artifacts:
+    artifact1:
+      files:
+        - 'apps/api/*'
+      name: api-artifact
+    artifact2:
+      files:
+        - 'apps/web/*'
+      name: api-web
