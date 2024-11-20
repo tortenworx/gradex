@@ -21,9 +21,11 @@ artifacts:
   secondary-artifacts:
     artifact1:
       files:
-        - 'apps/api/*'
+        - '**/*'
+      base-directory: 'apps/api/*'
       name: api-artifact
     artifact2:
       files:
-        - 'apps/web/*'
-      name: api-web
+        - '**/*'
+      base-directory: 'apps/web/*'
+      name: web-artifact
