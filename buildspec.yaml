@@ -24,10 +24,10 @@ artifacts:
         - '**/**'
       base-directory: 'apps/api'
       name: api
-      discard-paths: false
+      discard-paths: no
     web:
       files:
         - '**/*'
       base-directory: 'apps/web'
-      discard-paths: false
+      discard-paths: no
       name: web
