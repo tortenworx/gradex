@@ -22,10 +22,10 @@ artifacts:
     api:
       files:
         - '**'
-      base-directory: 'apps/api/*'
+      base-directory: 'apps/api/**'
       name: api
     web:
       files:
         - '**'
-      base-directory: 'apps/web/*'
+      base-directory: 'apps/web/**'
       name: web
