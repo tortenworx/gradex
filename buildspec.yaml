@@ -17,11 +17,11 @@ phases:
       - echo "ⓘ Building application"
 artifacts:
   files:
-    - '**/*'
+    - '**/**'
   secondary-artifacts:
     api:
       files:
-        - '**/*'
+        - '**/**'
       base-directory: 'apps/api'
       name: api
     web:
