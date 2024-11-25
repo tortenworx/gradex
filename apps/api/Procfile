@@ -1,1 +1,1 @@
-web: curl -fsSL https://get.pnpm.io/install.sh | SHELL=`which bash` bash - && . ~/.bashrc && pnpm install && pnpm install dotenv && NODE_ENV=production node dist/main.js
+web: npm install && npm install dotenv && NODE_ENV=production node dist/main.js
