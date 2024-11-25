@@ -1,1 +1,1 @@
-web: NODE_ENV=production node dist/main.js
+web: start-app.sh
