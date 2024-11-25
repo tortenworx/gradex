@@ -34,4 +34,4 @@ artifacts:
       name: web
 cache:
   paths:
-    - ~/.pnpm_store
+    - /root/.pnpm-store/**/*

@@ -1,1 +1,1 @@
-web: "pnpm install && NODE_ENV=production node dist/main.js"
+web: pnpm install && pnpm install dotenv && NODE_ENV=production node dist/main.js
