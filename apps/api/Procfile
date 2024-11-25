@@ -1,1 +1,1 @@
-web: chmod u+x start-app.sh && start-app.sh
+web: chmod u+x start-app.sh && ./start-app.sh
