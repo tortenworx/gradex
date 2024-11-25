@@ -11,9 +11,6 @@ phases:
       - pnpm install
     finally:
       - echo "Finished Install stage!"
-  pre-build:
-    commands:
-      - "cd "
   build:
     commands:
       - pnpm dlx turbo build
