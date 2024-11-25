@@ -10,6 +10,7 @@ phases:
       - . ~/.bashrc
       - pnpm install
     finally:
+      - ls
       - echo "Finished Install stage!"
   build:
     commands:
@@ -28,6 +29,5 @@ artifacts:
     web:
       files:
         - 'apps/web/**/*'
-      base-directory: 'apps/web'
       discard-paths: no
       name: web
