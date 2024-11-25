@@ -23,7 +23,8 @@ artifacts:
   secondary-artifacts:
     api:
       files:
-        - 'apps/api/**/*'
+        - '**/*'
+      base-directory: 'apps/api/'
       name: api
       discard-paths: no
     web:
@@ -31,3 +32,6 @@ artifacts:
         - 'apps/web/**/*'
       discard-paths: no
       name: web
+cache:
+  paths:
+    - ~/.pnpm_store
