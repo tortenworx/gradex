@@ -4,4 +4,6 @@ then
     . ~/.bashrc
 fi
 
+pnpm install
+pnpm install dotenv
 NODE_ENV=production node dist/main.js
