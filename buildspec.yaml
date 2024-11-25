@@ -5,29 +5,32 @@ phases:
     runtime-versions:
       nodejs: 20.x
     commands:
+      - echo "ⓘ Installing dependencies"
       - curl -fsSL https://get.pnpm.io/install.sh | SHELL=`which bash` bash -
       - . ~/.bashrc
-      - pnpm install --frozen-lockfile
+      - pnpm install
     finally:
-      - echo "ⓘ Installing dependencies"
+      - echo "Finished Install stage!"
+  pre-build:
+    commands:
+      - "cd "
   build:
     commands:
       - pnpm dlx turbo build
     finally:
-      - echo "ⓘ Building application"
+      - echo "ⓘ Build Stage Complete"
 artifacts:
   files:
-    - '**/**'
+    - '**/*'
   secondary-artifacts:
     api:
       files:
-        - '**/**'
-      base-directory: 'apps/api'
+        - 'apps/api/**/*'
       name: api
       discard-paths: no
     web:
       files:
-        - '**/*'
+        - 'apps/web/**/*'
       base-directory: 'apps/web'
       discard-paths: no
       name: web
