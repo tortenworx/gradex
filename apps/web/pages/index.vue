@@ -1,7 +1,7 @@
 <template>
     <main>
         <h1 class="font-medium text-3xl font-serif text-green-900">
-            {{ $t(`${getTime()}`) }}, {{ data?.first_name }}! {{ getTimeEmoji() }}
+            {{ $t(`${getTime()}`) }}, {{ 'bean' }}! {{ getTimeEmoji() }}
         </h1>
         <h3 class="font-light text-2xl">
             {{ $t('home.greetings.h2') }}
@@ -10,12 +10,9 @@
 </template>
 <script setup lang="ts">
 useHead({
-    'title': 'Dashboard - GradeX'
+  'title': 'Dashboard - GradeX'
 })
-definePageMeta({
-  layout: 'authenticated',
-})
-const { data } = useAuth();
+
 </script>
 <script lang="ts">
 import HomeCard from '@/components/homecards/index.vue'

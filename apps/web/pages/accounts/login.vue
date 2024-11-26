@@ -13,11 +13,10 @@
             {{ $t('login.main') }}
           </h1>
         </div>
-        <ButtonsAuthenticateWithGoogle />
+        <ButtonsAuthenticateWithGoogle @click="signIn(`google`)" />
         <DividerWithText>or sign in with</DividerWithText>
         <Form
           :validation-schema="schema"
-          @submit="authenticate"
           class="flex flex-col gap-2"
         >
           <TextField name="username" type="text" label="login.username" placeholder="202S-8483" />
@@ -41,26 +40,16 @@ import { Form } from 'vee-validate';
 import * as Yup from 'yup';
 import TextField from '~/components/forms/TextField.vue';
 import PasswordField from '~/components/forms/PasswordField.vue';
+
+const { signIn } = useAuth()
 useHead({
   'title': 'Log-in to GradeX',
 })
-definePageMeta({
-  auth: {
-    unauthenticatedOnly: true,
-    navigateAuthenicatedTo: '/'
-  }
-})
-const { signIn } = useAuth()
-const router = useRouter()
+
 const schema = Yup.object().shape({
   username: Yup.string().required("login.errors.required"),
   password: Yup.string().min(8, "login.errors.min_8").required("login.errors.required")
 })
-
-function authenticate({ username, password }: any) {
-  signIn({ username, password }, { callbackUrl: '/', external: false })
-}
-
 </script>
 
 <style>

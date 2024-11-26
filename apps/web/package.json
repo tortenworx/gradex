@@ -10,10 +10,10 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@auth/core": "^0.37.4",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/i18n": "9.0.0-rc.2",
     "@pinia/nuxt": "^0.7.0",
-    "@sidebase/nuxt-auth": "^0.9.4",
     "@vee-validate/nuxt": "^4.14.6",
     "@vee-validate/yup": "^4.14.6",
     "@zag-js/menu": "^0.77.1",

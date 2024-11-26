@@ -47,13 +47,17 @@ const toggleVisibility = () => {
 }
 </script>
 <script lang="ts">
-import { Eye, EyeClosed, EyeOff } from 'lucide-vue-next';
+import { Eye, EyeClosed, SquareAsterisk } from 'lucide-vue-next';
 </script>
 
 <template>
     <div class="flex flex-col gap-2 container">
         <label :for="name" class="font-bold">{{ $t(label) }}</label>
         <div class="relative">
+        <SquareAsterisk
+            
+            class="absolute z-50 top-0 bottom-0 right-4 flex items-center justify-center"
+        />
         <input
             :type="visible ? 'text' : 'password'"
             :id="name"

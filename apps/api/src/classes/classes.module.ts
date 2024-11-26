@@ -11,7 +11,7 @@ import { User, UserSchema } from '../schemas/user.schema';
     MongooseModule.forFeature([
       { name: Subject.name, schema: SubjectSchema },
       { name: Class.name, schema: ClassSchema },
-      { name: User.name, schema: UserSchema  },
+      { name: User.name, schema: UserSchema },
     ]),
   ],
   controllers: [ClassesController],
