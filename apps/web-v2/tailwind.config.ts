@@ -10,7 +10,7 @@ export default {
     extend: {
       colors: {
         'oct': {
-          'green': '#022113',
+          'green': '#03A000',
           'othagreen': '#00684A',
           'lime': '#0B9008',
           'yellow': '#E6EA45'
