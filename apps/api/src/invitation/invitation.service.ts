@@ -60,12 +60,7 @@ export class InvitationService {
   }
   async resendInvitation(resendInvitationDto: ResendInvitationDto) {
     const user = await this.userModel.findOne({
-      $and: [
-        {
-          id_number: resendInvitationDto.id_number,
-          last_name: resendInvitationDto.last_name,
-        },
-      ],
+      id_number: resendInvitationDto.id_number,
     });
     if (!user)
       throw new NotFoundException('No user was found with the selected query.');

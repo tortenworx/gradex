@@ -35,10 +35,8 @@ const visible = ref(true)
 // https://vee-validate.logaretm.com/v4/guide/validation#form-level-validation
 const {
   value: inputValue,
-  errorMessage,
   handleBlur,
   handleChange,
-  meta,
 } = useField(name, undefined, {
   initialValue: props.value,
 });
@@ -53,11 +51,10 @@ import { Eye, EyeClosed, SquareAsterisk } from 'lucide-vue-next';
 <template>
     <div class="flex flex-col gap-2 container">
         <label :for="name" class="font-bold">{{ $t(label) }}</label>
-        <div class="relative">
-        <SquareAsterisk
-            
-            class="absolute z-50 top-0 bottom-0 right-4 flex items-center justify-center"
-        />
+        <div class="relative w-full">
+            <div class="absolute top-0 bottom-0 left-4 flex items-center justify-center">
+                <SquareAsterisk />
+            </div>
         <input
             :type="visible ? 'text' : 'password'"
             :id="name"
@@ -70,23 +67,16 @@ import { Eye, EyeClosed, SquareAsterisk } from 'lucide-vue-next';
             border-[1px]
             border-gray-800
             rounded-md
-            px-4
-            py-2
+            px-11
+            py-3
             focus:ring-oct-lime
             focus:border-oct-lime
             "
-            :class="{ 
-                'focus:ring-red-400 focus:border-red-400 bg-red-200 text-black': !!errorMessage,
-                'focus:ring-oct-lime focus:border-oct-lime': meta.valid 
-                }"
             >
             <div class="absolute z-50 top-0 bottom-0 right-4 flex items-center justify-center hover:cursor-pointer" @click="toggleVisibility">
                 <Eye v-if="!visible" />
                 <EyeClosed v-if="visible" />
             </div>
         </div>
-            <p :class="{'text-red-600': !!errorMessage, 'text-oct-green': meta.valid }" v-show="errorMessage || meta.valid">
-            {{ $t(errorMessage || successMessage) }}
-            </p>
     </div>
 </template>

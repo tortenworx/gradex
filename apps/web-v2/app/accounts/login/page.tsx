@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import gradexLogo from '@/assets/images/logo/gradex-default-inverted.svg'
 import AuthGoogleButton from '@/components/AuthenticateWithGoogle'
-import TextDivider from '@/components/TextDivider'
 import { EmblaCarousel } from '@/components/LoginEmblaCarousel'
+import { signIn } from '@/auth'
+import TextDivider from '@/components/divider'
+import LoginForm from '@/components/forms/UserLogIn.form';
 
 export default function LogIn() {
     return (
@@ -14,6 +16,7 @@ export default function LogIn() {
                             src={gradexLogo}
                             alt="Image of the Olivarez College Tagaytay logo next to the words GradeX."
                             width={8*48}
+                            priority={true}
                         />
                         <h1 className="font-serif text-oct-green text-3xl">
                             Log-in to your account
@@ -22,6 +25,10 @@ export default function LogIn() {
                     <div className="mt-4">
                         <AuthGoogleButton></AuthGoogleButton>
                         <TextDivider>or log-in with user credentials</TextDivider>
+                        <LoginForm submit={async (data) => {
+                            "use server"
+                            await signIn("credentials", data)
+                        }}/>
                     </div>
                 </div>
                 <div className="invisible hidden md:visible md:block relative col-span-2 min-h-full from-oct-yellow to-oct-othagreen text-white">

@@ -19,7 +19,7 @@ export class InvitationController {
   }
   @Post('/resend')
   async resendInvitation(
-    resendInvitationDto: ResendInvitationDto,
+    @Body() resendInvitationDto: ResendInvitationDto,
   ): Promise<object> {
     return await this.invitationService.resendInvitation(resendInvitationDto);
   }

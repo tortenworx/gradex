@@ -10,6 +10,7 @@ export default {
     extend: {
       colors: {
         'oct': {
+          'darkgreen': '#022113',
           'green': '#03A000',
           'othagreen': '#00684A',
           'lime': '#0B9008',
@@ -19,7 +20,7 @@ export default {
     fontFamily: {
       'sans': 'var(--font-dm-sans)',
       'serif': 'var(--font-lora)',
-      'mono': 'var(--dm-mono)'
+      'mono': 'var(--font-dm-mono)'
     }
   },
   plugins: [require('@tailwindcss/forms')],

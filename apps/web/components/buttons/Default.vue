@@ -14,6 +14,10 @@ const props = defineProps({
   color: {
     type: String,
     default: 'oct-lime'
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
@@ -23,10 +27,15 @@ const props = defineProps({
   class="
   flex items-center justify-center
   bg-oct-lime
+  disabled:bg-slate-600
+  disabled:active:ring-0
+  disabled:active:text-current
   active:bg-transparent active:ring-2 active:ring-oct-green active:text-oct-green
   hover:shadow-xl transition-all
   px-8 p-3 w-full text-white
-  rounded-md">
+  rounded-md
+  "
+  :disabled="disabled">
     <slot></slot>
   </button>
 </template>

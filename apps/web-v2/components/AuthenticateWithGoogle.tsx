@@ -4,7 +4,7 @@ import { signIn } from "@/auth"
 
 export default function AuthGoogleButton() {
     async function authenticate() {
-        "use server"
+        "use server";
         await signIn("google")
     }
     return (

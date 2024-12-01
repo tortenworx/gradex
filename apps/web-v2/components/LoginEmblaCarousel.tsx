@@ -5,6 +5,7 @@ import Autoplay from 'embla-carousel-autoplay'
 import Image from 'next/image';
 
 export function EmblaCarousel() {
+  // TODO: Make this dynamic, aka connect the carousel to the API.
   const data = [
     {
         "image": "https://cdn.torten.xyz/gradex-testing/468077838_122177097692062381_7890325569239408004_n.jpg",

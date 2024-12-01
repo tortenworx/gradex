@@ -65,13 +65,6 @@ const {
             focus:ring-oct-lime
             focus:border-oct-lime
             "
-            :class="{ 
-                'focus:ring-red-600 focus:border-red-600 bg-red-400 text-red-600': !!errorMessage,
-                'focus:ring-oct-lime focus:border-oct-lime': meta.valid 
-                }"
             >
-            <p :class="{'text-red-600': !!errorMessage, 'text-oct-green': meta.valid }" v-show="errorMessage || meta.valid">
-            {{ $t(errorMessage || successMessage) }}
-            </p>
     </div>
 </template>

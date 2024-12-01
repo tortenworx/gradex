@@ -27,11 +27,19 @@ export class CredentialsController {
   async usernameTaken(@Param('username') username: string): Promise<boolean> {
     return await this.credentialsService.checkIfUsernameTaken(username);
   }
-  @Post('authenticate')
+  @Post('authenticate/jwt')
   async authenticateUser(
     @Body() authenticateUserDto: AuthenticateUserDto,
   ): Promise<object> {
     return await this.credentialsService.authenticate(authenticateUserDto);
+  }
+  @Post('authenticate/next')
+  async authenticateUserNext(
+    @Body() authenticateUserDto: AuthenticateUserDto,
+  ): Promise<object> {
+    return await this.credentialsService.authenticate_nextauth(
+      authenticateUserDto,
+    );
   }
   @Get('user')
   @Roles(['USER', 'FACULTY', 'SUPERADMIN'])

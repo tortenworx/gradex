@@ -2,6 +2,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateCredentialDto } from './dto/create-credential.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -42,10 +43,10 @@ export class CredentialsService {
   async authenticate(
     authenticateUserDto: AuthenticateUserDto,
   ): Promise<object> {
-    const credentialSearch = await this.credentialModel.findOne({
-      user_name: authenticateUserDto.username,
-    });
-    if (!credentialSearch) {
+    const isUsernameIdNumber = authenticateUserDto.username.match(
+      /^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g,
+    );
+    if (isUsernameIdNumber) {
       const userSearch = await this.userModel.findOne({
         id_number: authenticateUserDto.username,
       });
@@ -74,8 +75,11 @@ export class CredentialsService {
         access_token: jwtToken,
       };
     }
+    const credentialSearch = await this.credentialModel.findOne({
+      user_name: authenticateUserDto.username,
+    });
     const userSearch = await this.userModel.findOne({
-      credential: credentialSearch,
+      credential: credentialSearch.id,
     });
     const jwtToken = await this.jwtModule.signAsync({
       sub: userSearch.id,
@@ -86,6 +90,47 @@ export class CredentialsService {
     return {
       access_token: jwtToken,
     };
+  }
+  async authenticate_nextauth(
+    authenticateUserDto: AuthenticateUserDto,
+  ): Promise<object> {
+    const isUsernameIdNumber = authenticateUserDto.username.match(
+      /^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g,
+    );
+    if (isUsernameIdNumber) {
+      const userRecord = await this.userModel.findOne({
+        id_number: authenticateUserDto.username,
+      });
+      if (!userRecord)
+        throw new NotFoundException(
+          'No user was found with provided ID number',
+        );
+      const credenetial = await this.credentialModel.findById(
+        userRecord.credential,
+      );
+      const passwordVerify = await argon2.verify(
+        credenetial.salted_password,
+        authenticateUserDto.password,
+      );
+      if (!passwordVerify)
+        throw new UnauthorizedException('Invalid credentials provided.');
+      return userRecord;
+    } else {
+      const credentialSearch = await this.credentialModel.findOne({
+        user_name: authenticateUserDto.username,
+      });
+      if (!credentialSearch)
+        throw new NotFoundException(
+          'No user was found with the provided username',
+        );
+      const passwordVerify = await argon2.verify(
+        credentialSearch.salted_password,
+        authenticateUserDto.password,
+      );
+      if (!passwordVerify)
+        throw new UnauthorizedException('Invalid credentials provided.');
+      return await this.userModel.findById(credentialSearch.linked_record);
+    }
   }
 
   resetPassword() {}

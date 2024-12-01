@@ -1,12 +1,4 @@
 <script setup lang="ts">
-
-const { data, signOut } = useAuth();
-const router = useRouter()
-
-function signOutAndReturnToLogin() {
-    signOut()
-    router.push('/accounts/login')
-}
 </script>
 
 <template>
@@ -19,7 +11,7 @@ function signOutAndReturnToLogin() {
                 </NuxtLink>
             </div>
             <div>
-                <NavbarUser :user="data" :logOut="signOut()" />
+                <!-- <NavbarUser :user="data" :logOut="signOut()" /> -->
             </div>
         </nav>
         <div class="px-4 py-4">

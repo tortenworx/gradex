@@ -3,6 +3,11 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
+  auth: {
+    provider: {
+      
+    }
+  },
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -33,5 +38,6 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
+    '@sidebase/nuxt-auth'
   ]
 })
