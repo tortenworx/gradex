@@ -14,7 +14,7 @@
           class="flex flex-col gap-2"
           v-slot="{ meta }"
         >
-          <TextField name="username" type="text" label="login.username" placeholder="202S-8483" />
+          <UsernameField name="username" type="text" label="login.username" placeholder="202S-8483" />
           <PasswordField name="password" label="login.password" placeholder="**********" />
           <div class="flex items-center justify-between">
               <NuxtLink href="/accounts/resend-invitation">Resend Invitation</NuxtLink>
@@ -42,10 +42,11 @@
 import { Form } from 'vee-validate';
 import * as Yup from 'yup';
 import TextField from '~/components/forms/TextField.vue';
+import UsernameField from '~/components/forms/UsernameField.vue';
 import PasswordField from '~/components/forms/PasswordField.vue';
 
 useHead({
-  'title': 'Log-in to GradeX',
+  'title': 'Log-in to your account | GradeX'
 })
 
 const schema = Yup.object().shape({

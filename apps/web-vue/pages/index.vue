@@ -5,7 +5,8 @@
         </h1>
         <h3 class="font-light text-2xl">
             {{ $t('home.greetings.h2') }}
-        </h3>  
+        </h3>
+        {{ loggedIn }}
     </main>
 </template>
 <script setup lang="ts">
@@ -19,6 +20,8 @@ import HomeCard from '@/components/homecards/index.vue'
 import HomeCardIcon from '@/components/homecards/icon.vue'
 import HomeCardText from '@/components/homecards/text.vue'
 import { FileChartColumn, Presentation, FileStack, FileSearch, Shapes, TextSearch, Cog, UserCog } from 'lucide-vue-next';
+
+const { loggedIn } = useUserSession()
 
 function getTime() {
   var today = new Date()
