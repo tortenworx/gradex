@@ -5,6 +5,9 @@ import { SessionProvider } from "next-auth/react";
 import footerLogo from '@/assets/images/logo/gradex-minified-solid.svg'
 import Image from "next/image";
 import Link from "next/link";
+import GlobalToastRegion from "@/components/react-aria/GlobalToast";
+import { Toaster } from 'react-hot-toast';
+
 
 const serif = Lora({
   subsets: ['latin'],
@@ -62,7 +65,7 @@ export default function RootLayout({
                 &copy; 2024 All rights reserved.
               </p>
               <p>
-                GradeX is a capstone project made to fulfill the requirements of Practical Research 2 (SH004) and Inquiries, Investigations, and Immersions (SH004). For more details of our research paper, please visit the <Link href="/about" className="text-oct-yellow underline underline-offset-4">about page</Link>.
+                GradeX is a capstone project made to fulfill the requirements of Practical Research 2 (SH004) and Inquiries, Investigations, and Immersions (SH007). For more details of our research paper, please visit the <Link href="/about" className="text-oct-yellow underline underline-offset-4">about page</Link>.
               </p>
             </div>
             <div className="flex flex-col">
@@ -78,6 +81,7 @@ export default function RootLayout({
               <a href="http://119.93.245.104:8080" target="_blank">eLibrary</a>
             </div>
           </footer>
+          <Toaster position="bottom-right" />
         </body>
       </SessionProvider>
     </html>

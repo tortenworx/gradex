@@ -47,6 +47,7 @@ export class CredentialsService {
       /^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g,
     );
     if (isUsernameIdNumber) {
+      console.log('flow', authenticateUserDto);
       const userSearch = await this.userModel.findOne({
         id_number: authenticateUserDto.username,
       });
@@ -78,9 +79,17 @@ export class CredentialsService {
     const credentialSearch = await this.credentialModel.findOne({
       user_name: authenticateUserDto.username,
     });
+    if (!credentialSearch)
+      throw new NotFoundException(
+        'No credentials was found with the given credentials, did user register one?',
+      );
     const userSearch = await this.userModel.findOne({
       credential: credentialSearch.id,
     });
+    if (!userSearch)
+      throw new NotFoundException(
+        'No user was found with the following credentials',
+      );
     const jwtToken = await this.jwtModule.signAsync({
       sub: userSearch.id,
       first_name: userSearch.first_name,

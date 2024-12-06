@@ -1,10 +1,10 @@
 {
-  "name": "web",
+  "name": "web-vue",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev -p 3030",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -14,12 +14,12 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/i18n": "9.0.0-rc.2",
     "@pinia/nuxt": "^0.7.0",
-    "@sidebase/nuxt-auth": "0.9.4",
     "@vee-validate/nuxt": "^4.14.6",
     "@vee-validate/yup": "^4.14.6",
     "@zag-js/menu": "^0.77.1",
     "@zag-js/toast": "^0.77.1",
     "@zag-js/vue": "^0.77.1",
+    "axios": "^1.7.8",
     "lucide-vue-next": "^0.454.0",
     "next-auth": "~4.21.1",
     "numerable": "^0.3.15",

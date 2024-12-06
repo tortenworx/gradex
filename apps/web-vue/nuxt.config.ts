@@ -38,6 +38,6 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
-    '@sidebase/nuxt-auth'
+    'nuxt-auth-utils'
   ]
 })

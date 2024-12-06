@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  GoneException,
   Param,
   Post,
   Request,
@@ -27,7 +28,7 @@ export class CredentialsController {
   async usernameTaken(@Param('username') username: string): Promise<boolean> {
     return await this.credentialsService.checkIfUsernameTaken(username);
   }
-  @Post('authenticate/jwt')
+  @Post('authenticate/')
   async authenticateUser(
     @Body() authenticateUserDto: AuthenticateUserDto,
   ): Promise<object> {
@@ -37,6 +38,9 @@ export class CredentialsController {
   async authenticateUserNext(
     @Body() authenticateUserDto: AuthenticateUserDto,
   ): Promise<object> {
+    throw new GoneException(
+      'This API route has been unsupported. Use the default authenticate/ route on future requests.',
+    );
     return await this.credentialsService.authenticate_nextauth(
       authenticateUserDto,
     );

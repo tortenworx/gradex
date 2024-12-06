@@ -7,30 +7,40 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Link from "next/link"
 import Loading from "../loading";
-
+import toast from "react-hot-toast";
 
 const schema = yup.object({
-    username: yup.string().required(),
-    password: yup.string().min(4).max(24).required(),
+    username: yup.string().required('This field is required'),
+    password: yup.string().min(4).max(24).required('This field is required'),
+    redirectTo: yup.string()
 }).required();
 type FormData = yup.InferType<typeof schema>
 
 interface LogInProps {
-    submit: (data: FormData) => void,
+    submit: (data: FormData) => Promise<void>,
 }
 
 export default function LoginForm({ submit }: LogInProps) {
-    const { control, handleSubmit, formState: { isValid, isSubmitting } } = useForm({
+    const { register, control, handleSubmit, formState: { isValid, isSubmitting } } = useForm({
         defaultValues: {
             username: "",
-            password: ""
+            password: "",
+            redirectTo: '/'
         },
         resolver: yupResolver(schema)
     })
     return (
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit(async (d) => {
-            await submit(d)
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(async (data) => {
+            toast.promise(
+                submit(data),
+                {
+                    loading: 'Logging',
+                    error: (error) => `${error}`,
+                    success: 'Logged in!'
+                }
+            )
         })}>
+            <input type="hidden" {...register('redirectTo')} />
             <Controller 
                 name="username"
                 control={control}
