@@ -1,7 +1,7 @@
 import axios from "axios"
 import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
-import NextAuth from "next-auth"
+import NextAuth, { AuthError } from "next-auth"
  
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
@@ -11,15 +11,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google({
         clientId: '152335755694-sn0mps9md9kc9sdp2tcsbb0jn71up7q2.apps.googleusercontent.com',
         clientSecret: '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',
+        authorization: {
+            params: {
+                hd: 'olivarezcollegetagaytay.edu.ph'
+            }
+        },
         profile(profile) {
             return profile
         },
-        client: {
-            params: {
-                hb: 'olivarezcollegetagaytay.edu.ph'
-            }
-        }
-        
     }),
     Credentials({
         credentials: {
@@ -31,14 +30,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 username: credentials.username,
                 password: credentials.password
             }).catch(error => {
-                throw new Error(error)
+                throw new AuthError('Invalid credentials provided. Check your details, then try again')
             })
             const getUser = await axios.get(process.env.API_BASE_URL + 'credentials/user', {
                 headers: {
                     Authorization: 'Bearer ' + data.access_token
                 }
             }).catch(error => {
-                throw new Error(error)
+                throw new AuthError(error)
             })
             return {
                 id: getUser.data._id,
@@ -46,6 +45,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 ...getUser.data
             }
         },
+        
     })
   ],
   callbacks: {

@@ -1,12 +1,16 @@
 "use client";
 import Loading from "@/components/loading";
-import { signOut } from "next-auth/react";
-import { ReactNode, useState } from "react";
-import Image from "next/image";
-import navbarLogo from '@/assets/images/logo/gradex-default.svg'
-
+import Navbar from "@/components/Navbar";
+import { signOut, useSession } from "next-auth/react";
+import { useState } from "react";
+import HomeGreeting from "@/components/HomeGreeting";
+import GradesGroup from "@/components/home/GradeGroup";
+import ReportsGroup from "@/components/home/ReportsGroup";
 export default function Home() {
   const [loading, isLoading] = useState(false)
+  const { data: session, update } = useSession()
+  if (!session?.user) 
+    update()
   function handleLogOut() {
     isLoading(true);
     setTimeout(() => {
@@ -14,31 +18,21 @@ export default function Home() {
       signOut()
     }, 2000)
   }
+
   return (
     <>
-      <nav className="bg-gradient-to-r from-oct-darkgreen to-oct-othagreen px-4 py-2 flex items-center justify-between">
-        <Image src={navbarLogo} alt="GradeX" width={214} />
-      </nav>
+      <Navbar />
       <main className="px-4 py-2 min-h-screen">
-        <p>peanit</p>
+        <HomeGreeting />
         <button onClick={handleLogOut} className="px-5 py-2 bg-oct-othagreen text-white rounded-md shadow-xl active:shadow-inner hover:bg-oct-lime transition-colors duration-200 flex items-center justify-center gap-2">
           { loading && <Loading /> }
           Log-out
         </button>
+        <div className="flex flex-col gap-2 mt-4">
+          <GradesGroup session={session} />
+          <ReportsGroup session={session} />
+        </div>
       </main>
     </>
   );
-}
-
-Home.getLayout = function getLayout(page: ReactNode) {
-  return (
-    <>
-      <nav className="bg-gradient-to-r from-oct-darkgreen to-oct-othagreen px-4 py-2 flex items-center justify-between">
-        <Image src={navbarLogo} alt="GradeX" width={214} />
-      </nav>
-      <main className="px-4 py-2 min-h-screen">
-        {page}
-      </main>
-    </>
-  )
 }

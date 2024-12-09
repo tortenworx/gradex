@@ -6,14 +6,14 @@ export type InvitationDocument = HydratedDocument<Invitation>;
 
 @Schema()
 export class Invitation {
-  @Prop({ type: mongoose.Schema.ObjectId, ref: User })
-  for_user: User;
+  @Prop({ type: mongoose.Schema.ObjectId, ref: 'User' })
+  createdFor: User;
+
+  @Prop({ type: mongoose.Schema.ObjectId, ref: 'User' })
+  createdBy: User;
 
   @Prop({ type: Date, expires: '2190h', default: Date.now })
   createdAt: Date;
-
-  @Prop({ type: mongoose.Schema.ObjectId, ref: User })
-  createdBy: User;
 }
 
-export const InvitationSchema = SchemaFactory.createForClass(User);
+export const InvitationSchema = SchemaFactory.createForClass(Invitation);
