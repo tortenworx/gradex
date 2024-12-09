@@ -12,6 +12,7 @@ import { SubjectsModule } from './subjects/subjects.module';
 import { InvitationModule } from './invitation/invitation.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { AnouncementsModule } from './anouncements/anouncements.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
     GradesModule,
     SubjectsModule,
     InvitationModule,
+    AnouncementsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

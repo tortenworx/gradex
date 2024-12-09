@@ -1,9 +1,11 @@
 export default defineNuxtRouteMiddleware((to, from) => {
+  // skip middleware on server
+  if (import.meta.server) return
   // check if the user is logged in
   const { loggedIn } = useUserSession();
 
-  const authRoutes = ['/accounts/login', '/accounts/resend-invite', '/accounts/forgot-password']
-  const guestRoutes = ['/legal/terms', '/legal/privacy']
+  const authRoutes = ['/accounts/login', '/accounts/resend', '/accounts/forgot-password']
+  const guestRoutes = ['/legal/terms', '/legal/privacy', '/about']
   // redirect the user to the login screen if they're not authenticated
   if (!authRoutes.includes(to.path) && !guestRoutes.includes(to.path) && !loggedIn.value) {
     return navigateTo('/accounts/login')

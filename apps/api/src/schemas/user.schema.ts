@@ -19,6 +19,9 @@ export enum Role {
 @Schema()
 export class User {
   @Prop({ required: true })
+  image: string;
+
+  @Prop({ required: true })
   id_number: string;
 
   @Prop({ required: true })

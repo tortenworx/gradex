@@ -68,7 +68,7 @@ import { Eye, EyeClosed, SquareAsterisk } from 'lucide-vue-next';
             border-gray-800
             rounded-md
             px-9
-            py-3
+            py-2
             focus:ring-oct-lime
             focus:border-oct-lime
             "

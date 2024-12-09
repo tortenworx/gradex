@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { toRef } from 'vue';
 import { useField } from 'vee-validate';
-import { User } from 'lucide-vue-next';
+import { IdCard } from 'lucide-vue-next';
 
 const props = defineProps({
     type: {
@@ -53,7 +53,7 @@ const {
         <label :for="name" class="font-bold">{{ $t(label) }}</label>
         <div class="relative w-full">
             <div class="absolute top-0 bottom-0 left-2 flex items-center justify-center">
-                <User />
+                <IdCard />
             </div>
         <input
             :type="type"

@@ -12,16 +12,23 @@
         <Form
           :validation-schema="schema"
           class="flex flex-col gap-2"
-          v-slot="{ meta }"
+          v-slot="{ meta, isSubmitting }"
+          @submit="submitLogin"
         >
           <UsernameField name="username" type="text" label="login.username" placeholder="202S-8483" />
           <PasswordField name="password" label="login.password" placeholder="**********" />
           <div class="flex items-center justify-between">
-              <NuxtLink href="/accounts/resend-invitation">Resend Invitation</NuxtLink>
+              <NuxtLink href="/accounts/resend">Resend Invitation</NuxtLink>
               <NuxtLink href="/accounts/forgot-password">Forgot Password?</NuxtLink>
           </div>
-          <ButtonsDefault :disabled="!meta.valid" type="submit" class="mt-4">
-            {{ $t('login.submit') }}
+          <ButtonsDefault :disabled="!meta.valid || isSubmitting" type="submit" class="mt-4">
+            <div v-if="isSubmitting" class="flex items-center justify-center gap-2">
+              <VueSpinnerTail size="24" color="#fcfcfc" />
+              <span>Submitting</span>
+            </div>
+            <div v-else class="flex items-center justify-center gap-2">
+              {{ $t('login.submit') }}
+            </div>
           </ButtonsDefault>
         </Form>
         <div class="text-center text-sm text-gray-600 mt-4">
@@ -41,9 +48,10 @@
 <script setup lang="ts">
 import { Form } from 'vee-validate';
 import * as Yup from 'yup';
-import TextField from '~/components/forms/TextField.vue';
 import UsernameField from '~/components/forms/UsernameField.vue';
 import PasswordField from '~/components/forms/PasswordField.vue';
+import { VueSpinnerTail } from 'vue3-spinners';
+import { callWithNuxt } from '#app';
 
 useHead({
   'title': 'Log-in to your account | GradeX'
@@ -53,7 +61,42 @@ const schema = Yup.object().shape({
   username: Yup.string().required("login.errors.required"),
   password: Yup.string().min(8, "login.errors.min_8").required("login.errors.required")
 })
-</script>
 
-<style>
-</style>
+</script>
+<script lang="ts">
+async function babyPauwiNaKo() {
+  await navigateTo('/')
+  await refreshNuxtData()
+}
+
+async function submitLogin(values: any) {
+  const app = useNuxtApp()
+  const popup = useNuxtApp().$toast.loading('Signing you in...')
+  const data = await $fetch('/api/auth/credentials/authenticate', {
+    method: "POST",
+    body: {
+      username: values.username,
+      password: values.password,
+    }
+  }).then(async () => {
+    useNuxtApp().$toast.update(popup, {
+      render() {
+        return 'Log-in success!'
+      },
+      autoClose: true,
+      type: 'success',
+      isLoading: false,
+    })
+    return callWithNuxt(app, () => navigateTo('/'))
+  }).catch(error => {
+    useNuxtApp().$toast.update(popup, {
+      render() {
+        return error.data.message
+      },
+      autoClose: true,
+      type: 'error',
+      isLoading: false,
+    })
+  })
+}
+</script>

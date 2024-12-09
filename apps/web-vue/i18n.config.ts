@@ -54,7 +54,20 @@ export default defineI18nConfig(() => ({
             h2: 'List all students, teachers and staff currently registered in the system.'
           }
         }
-      }
+      },
+      invitation_resend: {
+        title: "Resend Invitation",
+        desc: "In order to resend another invitation link, please enter your details below. If we found a record that matches the information that you have provided, we will send the new invitation in your school email address.",
+        label: "ID Number",
+        button_action: 'Resend Invite',
+        button_action_ongoing: 'Submitting',
+        return: 'Return to Log-in',
+        errors: {
+          invalid: "Invalid ID Number provided. Check the number, then try again.",
+          required: "Your ID Number is required"
+        },
+        sidenote: "Notice! Please ensure that the letters in your ID Number are uppercase to ensure proper delivery of your invitation."
+      },
     },
     fil: {
       login: {
@@ -109,6 +122,19 @@ export default defineI18nConfig(() => ({
           }
         }
       }
-    }
+    },
+    invitation_resend: {
+      title: "Magpadala ng Bagong imbitasyon",
+      desc: "Para makapagpadala ng bagong link na imbitasyon, maaring ilagay ng iyong mga detalye sa baba. Kung mayroon kaming nakitang record na tumutugma sa iyong detalyeng inilakap, ipapadala namin ang bagong imbitasyon sa iyong school email address.",
+      label: "ID Number",
+      button_action: 'Magpadala ng bagong imbitasyon',
+      button_action_ongoing: 'Submitting',
+      return: 'Bumalik sa Log-in',
+      errors: {
+        invalid: "Hindi tama ang inilagay na ID number, tingnan ang iyong ID number at subukan muli.",
+        required: "Kailangan ilagay ang iyong ID Number."
+      },
+      sidenote: "Paalala! Itiyak naka malaking titik ang mga letra sa iyong ID number para sa mas mabisang pagpapadala ng iyong imbitasyon."
+    },
   }
 }))

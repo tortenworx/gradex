@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.37.4",
+    "@nuxt/ui": "3.0.0-alpha.9",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/i18n": "9.0.0-rc.2",
     "@pinia/nuxt": "^0.7.0",
@@ -19,6 +20,7 @@
     "@zag-js/menu": "^0.77.1",
     "@zag-js/toast": "^0.77.1",
     "@zag-js/vue": "^0.77.1",
+    "add": "^2.0.6",
     "axios": "^1.7.8",
     "lucide-vue-next": "^0.454.0",
     "next-auth": "~4.21.1",
@@ -28,6 +30,8 @@
     "vue": "latest",
     "vue-router": "latest",
     "vue-spinkit": "^2.0.0",
+    "vue3-spinners": "^1.2.2",
+    "vue3-toastify": "^0.2.5",
     "yup": "^1.4.0"
   },
   "packageManager": "pnpm@9.7.1+sha512.faf344af2d6ca65c4c5c8c2224ea77a81a5e8859cbc4e06b1511ddce2f0151512431dd19e6aff31f2c6a8f5f2aced9bd2273e1fed7dd4de1868984059d2c4247",

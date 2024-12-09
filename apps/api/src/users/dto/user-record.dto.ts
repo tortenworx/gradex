@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  IsUrl,
   Matches,
 } from 'class-validator';
 import { Gender, Role } from '../../schemas/user.schema';
@@ -13,6 +14,10 @@ export class UserRecord {
     message: 'ID Number does not match with Regular Expression Validation',
   })
   id_number: string;
+
+  @IsNotEmpty()
+  @IsUrl()
+  image: string;
 
   @IsNotEmpty()
   @IsString()

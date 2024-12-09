@@ -34,17 +34,6 @@ export class CredentialsController {
   ): Promise<object> {
     return await this.credentialsService.authenticate(authenticateUserDto);
   }
-  @Post('authenticate/next')
-  async authenticateUserNext(
-    @Body() authenticateUserDto: AuthenticateUserDto,
-  ): Promise<object> {
-    throw new GoneException(
-      'This API route has been unsupported. Use the default authenticate/ route on future requests.',
-    );
-    return await this.credentialsService.authenticate_nextauth(
-      authenticateUserDto,
-    );
-  }
   @Get('user')
   @Roles(['USER', 'FACULTY', 'SUPERADMIN'])
   @UseGuards(CredentialsGuard)

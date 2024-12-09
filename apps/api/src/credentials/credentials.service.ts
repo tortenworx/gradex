@@ -2,7 +2,6 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateCredentialDto } from './dto/create-credential.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -12,6 +11,7 @@ import { Credential } from '../schemas/credentials.schema';
 import * as argon2 from 'argon2';
 import { AuthenticateUserDto } from './dto/authenticate-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class CredentialsService {
@@ -47,7 +47,6 @@ export class CredentialsService {
       /^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g,
     );
     if (isUsernameIdNumber) {
-      console.log('flow', authenticateUserDto);
       const userSearch = await this.userModel.findOne({
         id_number: authenticateUserDto.username,
       });
@@ -58,6 +57,10 @@ export class CredentialsService {
       const credential = await this.credentialModel.findById(
         userSearch.credential,
       );
+      if (!credential)
+        throw new NotFoundException(
+          "No credentials exist for such user. Please accept your invitation if you haven't already, or resend one if expired.",
+        );
       const passwordVerify = await argon2.verify(
         credential.salted_password,
         authenticateUserDto.password,
@@ -81,7 +84,7 @@ export class CredentialsService {
     });
     if (!credentialSearch)
       throw new NotFoundException(
-        'No credentials was found with the given credentials, did user register one?',
+        "No credentials exist for such user. Please accept your invitation if you haven't already, or resend one if expired.",
       );
     const userSearch = await this.userModel.findOne({
       credential: credentialSearch.id,
@@ -100,49 +103,21 @@ export class CredentialsService {
       access_token: jwtToken,
     };
   }
-  async authenticate_nextauth(
-    authenticateUserDto: AuthenticateUserDto,
-  ): Promise<object> {
-    const isUsernameIdNumber = authenticateUserDto.username.match(
-      /^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g,
-    );
-    if (isUsernameIdNumber) {
-      const userRecord = await this.userModel.findOne({
-        id_number: authenticateUserDto.username,
-      });
-      if (!userRecord)
-        throw new NotFoundException(
-          'No user was found with provided ID number',
-        );
-      const credenetial = await this.credentialModel.findById(
-        userRecord.credential,
-      );
-      const passwordVerify = await argon2.verify(
-        credenetial.salted_password,
-        authenticateUserDto.password,
-      );
-      if (!passwordVerify)
-        throw new UnauthorizedException('Invalid credentials provided.');
-      return userRecord;
-    } else {
-      const credentialSearch = await this.credentialModel.findOne({
-        user_name: authenticateUserDto.username,
-      });
-      if (!credentialSearch)
-        throw new NotFoundException(
-          'No user was found with the provided username',
-        );
-      const passwordVerify = await argon2.verify(
-        credentialSearch.salted_password,
-        authenticateUserDto.password,
-      );
-      if (!passwordVerify)
-        throw new UnauthorizedException('Invalid credentials provided.');
-      return await this.userModel.findById(credentialSearch.linked_record);
-    }
-  }
 
-  resetPassword() {}
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const user = await this.userModel.findById(resetPasswordDto.user_id);
+    if (!user)
+      throw new NotFoundException(
+        '[RP0] No user was found with the selected query.',
+      );
+    const credential = await this.credentialModel.findOne(user.credential);
+    if (!credential)
+      throw new NotFoundException('[RP1] No credential exists on user record.');
+    const salted_password = await argon2.hash(resetPasswordDto.new_password);
+    credential.salted_password = salted_password;
+    credential.save();
+    return true;
+  }
 
   showUsername() {}
 
@@ -156,9 +131,8 @@ export class CredentialsService {
       .select('-credential');
     if (!userObj)
       throw new NotFoundException(
-        'No user was found with provided ID. Contact Support.',
+        '[C0] No user was found with provided ID. Contact Support.',
       );
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return userObj;
   }
 

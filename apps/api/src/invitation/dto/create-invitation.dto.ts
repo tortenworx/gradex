@@ -1,9 +1,11 @@
-import { IsEmail, IsNotEmpty, Matches } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, Matches } from 'class-validator';
 
 export class CreateInvitationDto {
   @IsNotEmpty()
-  userId: string;
+  createdBy: string;
   @IsNotEmpty()
+  userId: string;
+  @IsOptional()
   @IsEmail()
   @Matches(
     /^[A-Za-z0-9._%+-]+@(?!olivarezcollegetagaytay.edu.ph)[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/gi,
