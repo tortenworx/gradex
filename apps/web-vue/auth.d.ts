@@ -10,4 +10,12 @@ declare module '#auth-utils' {
         gender: string;
         role: string;
     }
+    interface UserSession {
+        user: User | UserType,
+        secure: SecureSessionData,
+        loggedInAt: Date
+    }
+    interface SecureSessionData {
+        apiKey: string;
+    }
 }

@@ -1,8 +1,10 @@
 import type UserType from "@/types/User";
 import type { H3Event } from "h3";
 import axios from "axios";
+import backend from "~/utils/backend-resolver";
+import { resolveUser } from "~/utils/backend-resolver";
 
-async function logSession(event: H3Event<Request>, user: UserType, apiKey?: string) {
+async function logSession(event: H3Event<Request>, user: UserType, apiKey: string) {
     await replaceUserSession(event, {
         user,
         secure: {
@@ -13,10 +15,10 @@ async function logSession(event: H3Event<Request>, user: UserType, apiKey?: stri
 }
 
 async function attemptCredentials(event: H3Event<Request>, username: string, password: string) {
-    const { data: keyData, status: keyStatus, statusText: keyStatusText } = await axios.post('http://localhost:8000/credentials/authenticate/', {
+    const { data: keyData, status: keyStatus, statusText: keyStatusText } = await backend.post(`/credentials/authenticate/`, {
         username: username,
         password: password
-    }, { validateStatus: () => true })
+    })
     if (keyStatus !== 201) {
         throw createError({
             statusCode: keyStatus,
@@ -24,21 +26,15 @@ async function attemptCredentials(event: H3Event<Request>, username: string, pas
             statusMessage: keyData.message.toString()
         })
     }
-    const { data, status: userStatus, statusText: userStatusText } = await axios.get('http://localhost:8000/credentials/user/', { 
-        headers: {
-            Authorization: 'Bearer ' +  keyData.access_token
-        },
-        validateStatus: () => true
-    });
-    if (userStatus !== 200) {
+    const user = await resolveUser(keyData.access_token).catch(err => {
         throw createError({
-            statusCode: userStatus,
-            statusText: userStatusText,
-            statusMessage: data.message
+            statusCode: err.status,
+            statusText: err.statusText,
+            statusMessage: err.data.message
         })
-    }
+    })
 
-    await logSession(event, data, keyData.access_token)
+    await logSession(event, user, keyData.access_token)
     return true
 }
 

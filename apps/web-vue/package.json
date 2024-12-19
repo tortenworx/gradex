@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev -p 3030",
+    "dev": "nuxt dev -p 4000",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -26,6 +26,7 @@
     "next-auth": "~4.21.1",
     "numerable": "^0.3.15",
     "nuxt": "^3.14.159",
+    "nuxt-auth-utils": "0.5.6",
     "radix-vue": "^1.9.8",
     "vue": "latest",
     "vue-router": "latest",
