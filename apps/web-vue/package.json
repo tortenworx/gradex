@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev -p 4000",
+    "dev": "nuxt dev -p 4000 --https --ssl-key ssl/gradex.backend.key --ssl-cert ssl/gradex.backend.crt",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"

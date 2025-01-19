@@ -64,19 +64,13 @@ const schema = Yup.object().shape({
 
 </script>
 <script lang="ts">
-async function babyPauwiNaKo() {
-  await navigateTo('/')
-  await refreshNuxtData()
-}
-
 async function submitLogin(values: any) {
-  const app = useNuxtApp()
   const popup = useNuxtApp().$toast.loading('Signing you in...')
-  const data = await $fetch('/api/auth/credentials/authenticate', {
-    method: "POST",
+  let signedIn = false
+  await $fetch('/api/auth/credentials/authenticate', {
+    method: 'POST',
     body: {
-      username: values.username,
-      password: values.password,
+      ...values
     }
   }).then(async () => {
     useNuxtApp().$toast.update(popup, {
@@ -87,7 +81,7 @@ async function submitLogin(values: any) {
       type: 'success',
       isLoading: false,
     })
-    return callWithNuxt(app, () => navigateTo('/'))
+    signedIn = true
   }).catch(error => {
     useNuxtApp().$toast.update(popup, {
       render() {
@@ -98,5 +92,9 @@ async function submitLogin(values: any) {
       isLoading: false,
     })
   })
+  console.log(signedIn)
+  if (signedIn) {
+    return navigateTo('/', { external: true })
+  }
 }
 </script>

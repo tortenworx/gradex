@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Class } from '../schemas/class.schema';
@@ -17,6 +22,7 @@ export class ClassesService {
   ) {}
 
   async createClass(createClassDto: CreateClassDto): Promise<Class> {
+    console.log(createClassDto);
     const adviser = await this.userModel.findById(createClassDto.adviser);
     if (!adviser || adviser.role !== Role.FACULTY)
       throw new NotFoundException(
@@ -54,13 +60,24 @@ export class ClassesService {
     const student = await this.userModel.findById(addUserToClassDto.user_id);
     if (!classToAdd)
       throw new NotFoundException(
-        'No class found with the provided ID. Check ID, then try again.',
+        '[CA1] An error occured while trying to attach student to class.',
+        { description: 'No class found with the provided ID.' },
       );
     if (!student)
       throw new NotFoundException(
-        'No student found with the provided ID. Check ID, then try again.',
+        '[CAU2] An error occured when trying to attach student to class.',
+        {
+          description: 'No student found with the provided ID.',
+        },
       );
-    classToAdd.students.push(student);
-    return classToAdd.save();
+    if (student.role !== Role.USER) {
+      throw new UnprocessableEntityException('[CAU3] An error occured.', {
+        description: 'The user is not a student.',
+      });
+    }
+    return this.classModel.updateOne(
+      { _id: classToAdd._id },
+      { $push: { students: student } },
+    );
   }
 }

@@ -2,7 +2,6 @@ import {
   IsAlphanumeric,
   IsMongoId,
   IsNotEmpty,
-  IsStrongPassword,
   MinLength,
 } from 'class-validator';
 
@@ -16,7 +15,6 @@ export class CreateCredentialDto {
   username: string;
 
   @IsNotEmpty()
-  @MinLength(12)
-  @IsStrongPassword()
+  @MinLength(8)
   password: string;
 }

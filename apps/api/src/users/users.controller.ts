@@ -46,8 +46,14 @@ export class UsersController {
   }
   @Roles(['SUPERADMIN'])
   @UseGuards(CredentialsGuard)
-  @Get('/list')
+  @Get('/fetch/')
+  async getUsers() {
+    return this.usersService.getUsers();
+  }
+  @Roles(['SUPERADMIN'])
+  @UseGuards(CredentialsGuard)
+  @Get('/fetch/:id')
   async getUser(@Request() request) {
-    return this.usersService.getUsers(request.user.sub);
+    return this.usersService.getUsers(request.params.id);
   }
 }

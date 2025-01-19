@@ -2,8 +2,6 @@ import { IsEmail, IsNotEmpty, IsOptional, Matches } from 'class-validator';
 
 export class CreateInvitationDto {
   @IsNotEmpty()
-  createdBy: string;
-  @IsNotEmpty()
   userId: string;
   @IsOptional()
   @IsEmail()

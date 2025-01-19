@@ -17,16 +17,13 @@ definePageMeta({
 useHead({
   'title': 'Dashboard - GradeX'
 })
-
 </script>
 <script lang="ts">
 import HomeCard from '@/components/homecards/index.vue'
 import HomeCardIcon from '@/components/homecards/icon.vue'
 import HomeCardText from '@/components/homecards/text.vue'
 import { FileChartColumn, Presentation, FileStack, FileSearch, Shapes, TextSearch, Cog, UserCog } from 'lucide-vue-next';
-
 const { loggedIn, user, clear } = useUserSession()
-
 async function redirect() {
   await navigateTo('/about')
 }

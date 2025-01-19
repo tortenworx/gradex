@@ -15,7 +15,7 @@ export class UserRecord {
   })
   id_number: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsUrl()
   image: string;
 

@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Role, User } from '../schemas/user.schema';
+import { User } from '../schemas/user.schema';
 import { NewUserDto } from './dto/create-record.dto';
 import { CredentialsService } from '../credentials/credentials.service';
 import { Credential } from '../schemas/credentials.schema';
@@ -57,10 +57,8 @@ export class UsersService {
     }
     return user;
   }
-  async getUsers(userId) {
-    const isUserAuthorized = await this.userModel.findById(userId);
-    if (isUserAuthorized.role !== Role.SUPERADMIN)
-      throw new UnauthorizedException('Not authorized.');
+  async getUsers(id?: string): Promise<User[] | User> {
+    if (id) return await this.userModel.find({ _id: id }).select('-credential');
     return await this.userModel.find().select('-credential');
   }
   async deleteUser(deleteUserDto: DeleteUserDto): Promise<[any, any]> {
