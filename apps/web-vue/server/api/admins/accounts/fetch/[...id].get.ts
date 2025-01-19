@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    const { data: users, status, statusText } = await backend.get(`/users/list/${event.context.params.id}`, {
+    const { data: users, status, statusText } = await backend.get(`/users/fetch/${event.context.params.id}`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }

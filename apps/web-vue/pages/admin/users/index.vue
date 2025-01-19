@@ -68,6 +68,6 @@ useHead({
 })
 const res = await $fetch('/api/admins/accounts/fetchAll', {
     method: "GET"
-})
+}).catch(err => console.error(err))
 console.log(res)
 </script>

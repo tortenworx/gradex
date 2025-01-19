@@ -2,7 +2,7 @@ import axios from "axios"
 
 
 const backend = axios.create({
-    baseURL: process.env.API_URL || 'https://gradex-api.ctrl-alt-elite.club/',
+    baseURL: 'http://localhost:8080',
     timeout: 5000,
     validateStatus(status) {
         return status < 500;

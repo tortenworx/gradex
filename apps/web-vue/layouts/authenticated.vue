@@ -10,7 +10,6 @@
                 </NuxtLink>
             </div>
             <div>
-                <!-- <NavbarUser :user="data" :logOut="signOut()" /> -->
             </div>
         </nav>
         <div class="px-4 py-4">
