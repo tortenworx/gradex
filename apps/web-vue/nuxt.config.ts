@@ -3,18 +3,17 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: {
     enabled: true,
-
     timeline: {
       enabled: true
     }
   },
-  css: ['~/assets/css/main.css'],
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {}
+  runtimeConfig: {
+    session: {
+      password: process.env.NUXT_SESSION_PASSWORD || 'hyena',
+      maxAge: 60 * 60 * 1
     }
   },
+  css: ['~/assets/css/main.css'],
   googleFonts: {
     families: {
       "DM Mono": {
@@ -39,6 +38,7 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
-    'nuxt-auth-utils'
+    'nuxt-auth-utils',
+    '@nuxtjs/tailwindcss'
   ]
 })

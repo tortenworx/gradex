@@ -52,12 +52,12 @@ const {
         <label :for="name" class="font-bold">{{ $t(label) }}</label>
         <div class="relative w-full">
             <span v-if="$slots.leading">
-                <div class="absolute top-0 bottom-0 left-2 flex items-center justify-center">
+                <div class="absolute top-0 bottom-0 left-2 flex items-center justify-center text-oct-othagreen">
                     <slot name="leading"></slot>
                 </div>
             </span>
             <span v-if="$slots.trailing">
-                <div class="absolute top-0 bottom-0 right-2 flex items-center justify-center">
+                <div class="absolute top-0 bottom-0 right-2 flex items-center justify-center text-oct-othagreen">
                     <slot name="trailing"></slot>
                 </div>
             </span>
@@ -78,7 +78,7 @@ const {
             focus:ring-oct-lime
             focus:border-oct-lime
             "
-            v-bind:class="{'px-9': $slots.leading, 'pr-9': $slots.trailing}"
+            v-bind:class="{'pl-10': $slots.leading, 'pr-10': $slots.trailing}"
             >
         </div>
     </div>
