@@ -15,7 +15,7 @@
         <select
             :name="name"
             :value="value"
-            class="w-full border-[1px] border-gray-800 rounded-md px-2 py-2 focus:ring-oct-lime focus:border-oct-lime"
+            class="w-full border-[1px] text-slate-950 dark:text-white dark:bg-slate-900 border-gray-800 dark:border-gray-500 rounded-md px-2 py-2 focus:ring-oct-lime focus:border-oct-lime"
             v-bind:class="{'pl-9': $slots.leading, 'pr-9': $slots.trailing}"
             @input="handleChange"
             @blur="handleBlur"

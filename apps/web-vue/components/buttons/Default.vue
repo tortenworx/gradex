@@ -28,6 +28,7 @@ const props = defineProps({
   flex items-center justify-center
   bg-oct-lime
   disabled:bg-slate-600
+  disabled:dark:bg-slate-700
   disabled:active:ring-0
   disabled:active:text-current
   active:bg-transparent active:ring-2 active:ring-oct-green active:text-oct-green

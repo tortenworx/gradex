@@ -1,6 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
+  colorMode: {
+    preference: 'light'
+  },
   devtools: {
     enabled: true,
     timeline: {
@@ -31,7 +34,18 @@ export default defineNuxtConfig({
     },
   },
   i18n: {
-    vueI18n: './i18n.config.ts'
+    vueI18n: './i18n.config.ts',
+    strategy: 'no_prefix',
+    locales: [
+      {
+        code: "en",
+        name: "English"
+      },
+      {
+        code: "fil",
+        name: "Filipino"
+      }
+    ],
   },
   modules: [
     '@nuxtjs/google-fonts',
@@ -39,6 +53,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@pinia/nuxt',
     'nuxt-auth-utils',
-    '@nuxtjs/tailwindcss'
+    '@nuxt/ui',
+    '@nuxtjs/tailwindcss',
   ]
 })

@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-serif font-medium text-oct-green flex items-center justify-start">
+        <h1 class="text-2xl font-serif font-medium text-oct-green dark:text-green-600 flex items-center justify-start">
             <UserPlus :size="24" />
             <span class="ml-2">Create New User</span>
         </h1>
@@ -69,14 +69,8 @@
                 <Mail />
             </template>
         </FormsTextField>
-        <FormsTextField label="Educational Email Address" class="">
-            <template #leading>
-                <Mail />
-            </template>
-            <template #trailing>
-                <span class="text-xs text-gray-800">@olivarezcollegetagaytay.edu.ph</span>
-            </template>
-        </FormsTextField>
+        <FormsEducEmail label="Educational Email Address" class="">
+        </FormsEducEmail>
         <div class="md:invisible md:hidden md:justify-start visible flex justify-center gap-2">
             <button class="bg-oct-othagreen px-4 py-2 rounded-md text-white hover:bg-oct-lime transition-colors duration-300 flex items-center justify-center gap-2">
                 <UserPlus :size="20"/>

@@ -104,6 +104,8 @@ export class CredentialsService {
     };
   }
 
+  async requestPwReset() {}
+
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
     const user = await this.userModel.findById(resetPasswordDto.user_id);
     if (!user)

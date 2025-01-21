@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-2xl font-serif font-medium text-oct-green">Currently editing: {{ res.last_name }}, {{ res.first_name }}</h1>
+            <h1 class="text-2xl font-serif font-medium text-oct-green dark:text-green-600">Currently editing: {{ res.last_name }}, {{ res.first_name }}</h1>
             <h3 class="text-sm text-gray-500 font-mono">User ID: {{ res._id }}</h3>
         </div>
         <div class="invisible hidden md:visible md:flex gap-2">
@@ -65,6 +65,16 @@
                 <Mail />
             </template>
         </FormsTextField>
+        <UInput>
+            <template #leading>
+                <span class="text-base mr-20">+63</span>
+            </template>
+        </UInput>
+        <UInput icon="i-heroicons-envelope" size="md">
+            <template #trailing>
+                <span class="text-xs text-gray-600">@olivarezcollegetagaytay.edu.ph</span>
+            </template>
+        </UInput>
     </div>
 </template>
 

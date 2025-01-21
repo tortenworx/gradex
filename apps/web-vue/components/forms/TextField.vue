@@ -71,7 +71,9 @@ const {
             class="block
             w-full
             border-[1px]
+            dark:bg-slate-900
             border-gray-800
+            dark:border-gray-600
             rounded-md
             px-2
             py-2

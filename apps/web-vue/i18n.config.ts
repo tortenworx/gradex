@@ -1,6 +1,16 @@
 export default defineI18nConfig(() => ({
   legacy: false,
   locale: 'en',
+  availableLocales: [
+    {
+      code: "en",
+      name: "English"
+    },
+    {
+      code: "fil",
+      name: "Filipino"
+    }
+  ],
   messages: {
     en: {
       login: {
@@ -68,6 +78,17 @@ export default defineI18nConfig(() => ({
         },
         sidenote: "Notice! Please ensure that the letters in your ID Number are uppercase to ensure proper delivery of your invitation."
       },
+      pw_reset: {
+        return: "Return to log-in",
+        title: "Send Password Reset Link",
+        desc: "To create a password reset link, please enter your ID Number below. If we found a record that matches the information that you have provided, we will send the password reset link in your school email address.",
+        button_action: 'Send Reset Link',
+        button_action_ongoing: 'Submitting',
+        errors: {
+          invalid: "Invalid ID Number provided. Check the number, then try again.",
+          required: "Your ID Number is required"
+        },
+      }
     },
     fil: {
       login: {
@@ -121,20 +142,31 @@ export default defineI18nConfig(() => ({
             h2: 'Ilista ang lahat ng mga mag-aaral, guro at kawani na kasalukuyang nakarehistro sa system.'
           }
         }
-      }
-    },
-    invitation_resend: {
-      title: "Magpadala ng Bagong imbitasyon",
-      desc: "Para makapagpadala ng bagong link na imbitasyon, maaring ilagay ng iyong mga detalye sa baba. Kung mayroon kaming nakitang record na tumutugma sa iyong detalyeng inilakap, ipapadala namin ang bagong imbitasyon sa iyong school email address.",
-      label: "ID Number",
-      button_action: 'Magpadala ng bagong imbitasyon',
-      button_action_ongoing: 'Submitting',
-      return: 'Bumalik sa Log-in',
-      errors: {
-        invalid: "Hindi tama ang inilagay na ID number, tingnan ang iyong ID number at subukan muli.",
-        required: "Kailangan ilagay ang iyong ID Number."
       },
-      sidenote: "Paalala! Itiyak naka malaking titik ang mga letra sa iyong ID number para sa mas mabisang pagpapadala ng iyong imbitasyon."
+      pw_reset: {
+        return: "Bumalik sa log-in",
+        title: "Magpadala ng Link para sa Pag-reset ng Password",
+        desc: "Upang makagawa ng link para sa pag-reset ng password, ilagay ang iyong ID Number sa ibaba. Kung mayroon kaming nakitang record na tumutugma sa iyong detalyeng inilakap, ipapadala namin ang link para sa pag-reset ng password sa iyong school email address.",
+        button_action: 'Ipadala ang link para sa pag-reset',
+        button_action_ongoing: 'Sinusumite',
+        errors: {
+          invalid: "Maling ID Number ang inilagay, tingnan ang iyong ID number at subukan muli.",
+          required: "Kailangan ilagay ang iyong ID Number."
+        },
+      },
+      invitation_resend: {
+        title: "Magpadala ng Bagong imbitasyon",
+        desc: "Para makapagpadala ng bagong link na imbitasyon, maaring ilagay ng iyong mga detalye sa baba. Kung mayroon kaming nakitang record na tumutugma sa iyong detalyeng inilakap, ipapadala namin ang bagong imbitasyon sa iyong school email address.",
+        label: "ID Number",
+        button_action: 'Magpadala ng bagong imbitasyon',
+        button_action_ongoing: 'Submitting',
+        return: 'Bumalik sa Log-in',
+        errors: {
+          invalid: "Hindi tama ang inilagay na ID number, tingnan ang iyong ID number at subukan muli.",
+          required: "Kailangan ilagay ang iyong ID Number."
+        },
+        sidenote: "Paalala! Itiyak naka malaking titik ang mga letra sa iyong ID number para sa mas mabisang pagpapadala ng iyong imbitasyon."
+      },
     },
   }
 }))

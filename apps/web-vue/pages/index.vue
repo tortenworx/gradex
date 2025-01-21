@@ -1,6 +1,6 @@
 <template>
     <main>
-        <h1 class="font-medium text-3xl font-serif text-green-900">
+        <h1 class="font-medium text-3xl font-serif text-green-900 dark:text-green-600">
             {{ $t(`${getTime()}`) }}, {{ user?.first_name }}! {{ getTimeEmoji() }}
         </h1>
         <h3 class="font-light text-2xl">

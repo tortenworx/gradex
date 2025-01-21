@@ -1,11 +1,12 @@
 <template>
     <main class="bg-oct-green flex items-center justify-center min-h-screen">
-        <div class="bg-white px-8 py-6 rounded-lg md:min-w-96 md:max-w-md">
-            <NuxtLink href="/accounts/login" class="text-lime-600">&larr; {{ $t('invitation_resend.return') }}</NuxtLink>
+        <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-96 md:max-w-md">
+            <NuxtLink href="/accounts/login" class="text-lime-600">&larr; {{ $t('pw_reset.return') }}</NuxtLink>
             <div class="my-2">
-                <img src="~/assets/images/logo/gradex-default-inverted.svg" alt="Logo of the system. Grade with a styled X" width="240"  />
-                <h1 class="text-3xl font-serif text-oct-othagreen font-medium">{{ $t('invitation_resend.title') }}</h1>
-                <p class="mt-2 text-gray-600 text-sm">{{ $t('invitation_resend.desc') }}</p>
+                <img src="~/assets/images/logo/gradex-default-inverted.svg" class="dark:invisible block visible dark:hidden" alt="Logo of the system. Grade with a styled X" width="240"  />
+                <img src="~/assets/images/logo/gradex-default.svg" class="dark:visible dark:block invisible hidden" alt="Logo of the system. Grade with a styled X" width="240"  />
+                <h1 class="text-3xl font-serif text-oct-othagreen dark:text-green-600 font-medium">{{ $t('pw_reset.title') }}</h1>
+                <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm">{{ $t('pw_reset.desc') }}</p>
             </div>
             <Form
             :validation-schema="schema"
@@ -14,17 +15,17 @@
             @submit="submit"
             >
             <div>
-                <IdNumberField name="id_number" type="text" label="invitation_resend.label" placeholder="202S-8483" v-uppercase />
+                <IdNumberField name="id_number" type="text" label="invitation_resend.label" placeholder="202S-8483" />
                 <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.id_number || '') }}</span>
             </div>
             
             <ButtonsDefault :disabled="!meta.valid || isSubmitting" type="submit" class="mt-4">
                 <div v-if="isSubmitting" class="flex items-center justify-center gap-2">
                 <VueSpinnerTail size="24" color="#fcfcfc" />
-                <span>{{ $t('invitation_resend.button_action_ongoing') }}</span>
+                <span>{{ $t('pw_reset.button_action_ongoing') }}</span>
                 </div>
                 <div v-else class="flex items-center justify-center gap-2">
-                {{ $t('invitation_resend.button_action') }}
+                {{ $t('pw_reset.button_action') }}
                 </div>
             </ButtonsDefault>
             </Form>

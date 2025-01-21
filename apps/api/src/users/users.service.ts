@@ -59,7 +59,7 @@ export class UsersService {
   }
   async getUsers(id?: string): Promise<User[] | User> {
     if (id) return await this.userModel.find({ _id: id }).select('-credential');
-    return await this.userModel.find().select('-credential');
+    return await this.userModel.find().select('-credential, -__v');
   }
   async deleteUser(deleteUserDto: DeleteUserDto): Promise<[any, any]> {
     const user = await this.userModel.findByIdAndDelete(deleteUserDto.id);

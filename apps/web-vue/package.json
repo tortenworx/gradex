@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.37.4",
+    "@nuxt/ui": "2.21.0",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/i18n": "9.0.0-rc.2",
     "@nuxtjs/tailwindcss": "6.13.1",
