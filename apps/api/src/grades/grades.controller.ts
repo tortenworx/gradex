@@ -15,7 +15,7 @@ export class GradesController {
     @Request() request,
     createGradeReportDto: CreateGradeReportDto,
   ): Promise<any> {
-    return await this.gradesService.createReport(
+    return await this.gradesService.newReport(
       createGradeReportDto,
       request.user.sub,
     );

@@ -11,5 +11,5 @@ import { GradeReport } from "./grade-repoort.dto";
 // ) {}
 
 
-export class UpdateCatAgeDto extends PickType(GradeReport, ['semester', 'status', 'type', 'subject'] as const) {}
+export class CreateReportDto extends PickType(GradeReport, ['semester', 'status', 'type', 'subject'] as const) {}
 

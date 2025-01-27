@@ -20,8 +20,9 @@ export class GradesService {
       throw new NotFoundException(
         'No user attached on the authorization header. Contact support.',
       );
+    const subject = await this.subjectModel.findById(createReportDto.subject)
     const report = new this.gradeReportModel()
-    report.subject = createReportDto.subject
+    report.subject = subject
     report.created_by = reportAuthor
     report.type = createReportDto.type || REPORT_TYPE.SENIOR_HIGH
     report.status = REPORT_STATUS.EDITING
