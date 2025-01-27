@@ -5,7 +5,7 @@ import backend from "~/utils/backend-resolver";
 import { resolveUser } from "~/utils/backend-resolver";
 
 async function logSession(event: H3Event<Request>, user: UserType, apiKey: string) {
-    await replaceUserSession(event, {
+    await setUserSession(event, {
         user,
         secure: {
             apiKey

@@ -11,7 +11,7 @@
                 </NuxtLink>
             </div>
         </div>
-        <UTable :rows="rows" :columns="columns"  />
+        <UTable :rows="rows" :columns="columns" v-if="rows" />
     </main>
 </template>
 
@@ -68,7 +68,7 @@ useHead({
 await $fetch('/api/admins/accounts/fetchAll', {
     method: "GET"
 }).then((data) => {
-    data.forEach((item) => {
+    data.forEach((item: any) => {
         rows.push({
             id: item._id,
             id_number: item.id_number,
@@ -79,5 +79,7 @@ await $fetch('/api/admins/accounts/fetchAll', {
             gender: toTitleCase(item.gender),
         })
     })
+}).catch(error => {
+    throw new Error('An bug has occured', { cause: error.statusMessage })
 })
 </script>

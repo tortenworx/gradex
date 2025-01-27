@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { FormsSelection } from '#components';
-import { Globe } from 'lucide-vue-next';
+import { Globe, Menu, X, XIcon } from 'lucide-vue-next';
 const { locale, locales, setLocale  } = useI18n()
+const { user } = useUserSession()
 const colorMode = useColorMode()
 const isDark = computed({
   get () {
@@ -14,12 +15,16 @@ const isDark = computed({
 const availableLocales = computed(() => {
   return locales.value.filter(i => i.code !== locale.value)
 })
+const isOpen = ref(false)
 </script>
 
 <template>
     <div>
         <nav class="bg-gradient-to-r from-oct-green to-oct-lime px-4 py-2 flex items-center justify-between">
-            <div>
+            <div class="flex gap-1">
+              <UButton @click="isOpen = true">
+                <Menu />
+              </UButton>
                 <NuxtLink href="/">
                     <img src="~/assets/images/logo/gradex-solid.svg" alt="" width="186">
                 </NuxtLink>
@@ -35,24 +40,24 @@ const availableLocales = computed(() => {
               <NuxtLink href="/">
                 <img src="~/assets/images/logo/gradex-minified-solid.svg" width="248" />
               </NuxtLink>
-              <p class="mt-2">&copy; 2024, All rights reserved.</p>
-              <p>GradeX is a capstone project made to fullfil the requirements for Practical Research 2.<br>Read more about our research paper <NuxtLink href="/about" class="text-lime-600 underline">here</NuxtLink></p>
+              <p class="mt-2">&copy; 2024, {{ $t('footer.rights') }}.</p>
+              <p> {{ $t('footer.desc') }} <NuxtLink href="/about" class="text-lime-600 underline">{{ $t('footer.link') }}</NuxtLink></p>
             </div>
             <div class="flex flex-col">
-              <h5 class="font-mono text-oct-yellow uppercase">Links</h5>
+              <h5 class="font-mono text-oct-yellow uppercase">{{ $t('footer.parts.links') }}</h5>
               <a href="https://olivarezcollegetagaytay.edu.ph" target="_blank" class="max-w-fit">Website</a>
               <a href="https://facebook.com/OCTagaytayOfficial" target="_blank" class="max-w-fit">Facebook</a>
               <a href="https://www.facebook.com/oct.shs/" target="_blank" class="max-w-fit">SHS Facebook</a>
             </div>
             <div class="flex flex-col">
-              <h5 class="text-oct-yellow uppercase font-mono">Services</h5>
+              <h5 class="text-oct-yellow uppercase font-mono">{{ $t('footer.parts.services') }}</h5>
               <a href="https://octiensys.com" target="_blank" class="max-w-fit">Student Portal</a>
               <a href="https://119.93.245.104/iensys/" target="_blank" class="max-w-fit">Faculty Portal</a>
               <a href="http://119.93.245.104:8080" target="_blank" class="max-w-fit">eLibrary</a>
             </div>
             <div class="flex flex-col">
               <div>
-                <h5 class="text-oct-yellow uppercase font-mono">Color Mode</h5>
+                <h5 class="text-oct-yellow uppercase font-mono">{{ $t('footer.parts.color_mode') }}</h5>
                   <ClientOnly>
                   <UButton
                     :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
@@ -70,7 +75,7 @@ const availableLocales = computed(() => {
                 </ClientOnly>
               </div>
               <div>
-                <h5 class="text-oct-yellow uppercase font-mono">Language</h5>
+                <h5 class="text-oct-yellow uppercase font-mono">{{ $t('footer.parts.language') }}</h5>
                 <FormsSelection :placeholder="locale == 'en' ? 'English' : 'Filipino'" @change="setLocale($event.target.value)">
                   <template #leading>
                     <Globe />
@@ -82,4 +87,25 @@ const availableLocales = computed(() => {
               </div>
           </div>
     </div>
+    <USlideover v-model="isOpen" :overlay="false" side="left" class="md:max-w-[25%]">
+      <div class="px-4 py-2 flex flex-col gap-2">
+        <section class="flex items-center justify-between">
+          <h1 class="font-serif text-oct-green dark:text-green-600 text-xl">Menu</h1>
+          <UButton @click="isOpen = false">
+            <XIcon />
+          </UButton>
+        </section>
+        <section class="flex flex-col gap-2">
+          <UButton variant="ghost" color="gray" to="/" icon="i-heroicons-home-20-solid">
+            Home
+          </UButton>
+          <UButton variant="ghost" color="gray" to="/settings" icon="i-heroicons-cog-20-solid">
+            {{ $t('sidebar.usr_settings') }}
+          </UButton>
+          <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/global-variables" icon="i-heroicons-server-20-solid">
+            {{ $t('sidebar.global_vars') }}
+          </UButton>
+        </section>
+      </div>
+    </USlideover>
 </template>

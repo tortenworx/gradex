@@ -11,6 +11,6 @@ const props = defineProps({
     <NuxtLayout>
         <h1>{{ props.error?.statusCode }}</h1>
         <p>An error has occured</p>
-        <p>{{ props.error?.cause }}</p>
+        <p>{{ props.error?.statusMessage }}</p>
     </NuxtLayout>
 </template>

@@ -7,7 +7,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { REPORT_STATUS, REPORT_TYPE } from '../../schemas/grade-report.schema';
-export class CreateGradeReportDto {
+export class GradeReport {
   @IsMongoId()
   @IsNotEmpty()
   subject: string;

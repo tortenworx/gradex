@@ -88,6 +88,22 @@ export default defineI18nConfig(() => ({
           invalid: "Invalid ID Number provided. Check the number, then try again.",
           required: "Your ID Number is required"
         },
+      },
+      sidebar: {
+        'home': 'Dashboard',
+        'usr_settings': 'Settings',
+        'global_vars': 'System Settings',
+      },
+      footer: {
+        'desc': 'GradeX is a capstone project made to fullfil the requirements for Practical Research 2. Read more about our research paper',
+        'link': 'here',
+        'rights': 'All rights reserved',
+        'parts': {
+          'links': 'Links',
+          'services': 'Services',
+          'color_mode': 'Color Mode',
+          'language': 'Language'
+        }
       }
     },
     fil: {
@@ -167,6 +183,22 @@ export default defineI18nConfig(() => ({
         },
         sidenote: "Paalala! Itiyak naka malaking titik ang mga letra sa iyong ID number para sa mas mabisang pagpapadala ng iyong imbitasyon."
       },
+      sidebar: {
+        'home': 'Dashboard',
+        'usr_settings': 'Settings',
+        'global_vars': 'Settings ng Sistema',
+      },
+      footer: {
+        'desc': 'Ang GradeX ay isang proyektong capstone para tuparin ang mga kinakailangan sa Praktikal na Pananaliksik. Para sa impormasyon para sa aming papel, pumunta',
+        'link': 'dito',
+        'rights': 'Reserbado ang lahat ng karapatan',
+        'parts': {
+          'links': 'Mga Links',
+          'services': 'Mga Serbisyo',
+          'color_mode': 'Madilim na tema',
+          'language': 'Wika'
+        }
+      }
     },
   }
 }))
