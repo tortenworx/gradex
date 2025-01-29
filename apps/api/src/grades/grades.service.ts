@@ -21,6 +21,10 @@ export class GradesService {
         'No user attached on the authorization header. Contact support.',
       );
     const subject = await this.subjectModel.findById(createReportDto.subject)
+    if (!subject)
+      throw new NotFoundException(
+        'No subject was found with the provided information.'
+    );
     const report = new this.gradeReportModel()
     report.subject = subject
     report.created_by = reportAuthor
