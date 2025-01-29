@@ -64,8 +64,10 @@ import { Eye, EyeClosed, SquareAsterisk } from 'lucide-vue-next';
             @blur="handleBlur"
             class="block
             w-full
+            dark:bg-slate-800
             border-[1px]
             border-gray-800
+            dark:border-gray-400
             rounded-md
             px-9
             py-2

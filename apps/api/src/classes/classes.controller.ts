@@ -1,4 +1,4 @@
-import { Controller, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Put, UseGuards } from '@nestjs/common';
 import { ClassesService } from './classes.service';
 import { Roles } from '../credentials/decorator/roles.decorator';
 import { CredentialsGuard } from '../credentials/credentials.guard';
@@ -10,25 +10,25 @@ import { AttachSubjectToClassDto } from './dto/attach-subject.dto';
 @Controller('classes')
 export class ClassesController {
   constructor(private readonly classesService: ClassesService) {}
-  @Post('/create-class')
+  @Post('/create')
   @Roles(['SUPERADMIN'])
   @UseGuards(CredentialsGuard)
-  async createClass(createClassDto: CreateClassDto) {
+  async createClass(@Body() createClassDto: CreateClassDto) {
     return this.classesService.createClass(createClassDto);
   }
-  @Put('/add-user-to-class')
+  @Put('/students/attach')
   @Roles(['SUPERADMIN'])
   @UseGuards(CredentialsGuard)
   async attachStudentToClass(
-    addUserToClassDto: AddUserToClassDto,
-  ): Promise<Class> {
+    @Body() addUserToClassDto: AddUserToClassDto,
+  ): Promise<any> {
     return await this.classesService.attachUserToClass(addUserToClassDto);
   }
-  @Put('/add-subject-to-class')
+  @Put('/subjects/attach')
   @Roles(['SUPERADMIN'])
   @UseGuards(CredentialsGuard)
   async attachSubjectToClass(
-    addSubjectToClass: AttachSubjectToClassDto,
+    @Body() addSubjectToClass: AttachSubjectToClassDto,
   ): Promise<Class> {
     return await this.classesService.attachSubjectToClass(addSubjectToClass);
   }

@@ -25,7 +25,7 @@
                 <li><strong>Share private correspondence or abuse, exploit or take advantage correspondence not meant for you</strong>. This means any correspondence, especially email correspondence, with the exception of marketing emails which are clearly listed on the email’s footer is meant only for the one on the recipient list. If you receive an email that is not for you, you are to forward it to the actual recipient and dispose the email from your inbox immediately.</li>
             </ul>
             <h2 id="contact" class="text-3xl text-oct-othagreen mt-4 mb-2">Contact</h2>
-            <p>If you have any questions about these terms, please contact one of our researchers at <a href="mailto:mackenzie.tito@olivarezcollegetagaytay.edu.ph" class="text-oct-othagreen underline underline-offset-4">mackenzie.tito@olivarezcollegetagaytay.edu.ph</a>. We may send you electronic communications related to our services. Where required, we’ll get your consent before sending you direct marketing, and we’ll make it easy for you to opt out.</p>
+            <p>If you have any questions about these terms, please contact one of our researchers at <a href="mailto:mackenzie.tito@olivarezcollegetagaytay.edu.ph" class="text-oct-othagreen underline underline-offset-4 active:underline-offset-1 active:text-oct-green visited:text-oct-lime">mackenzie.tito@olivarezcollegetagaytay.edu.ph</a>. We may send you electronic communications related to our services. Where required, we’ll get your consent before sending you direct marketing, and we’ll make it easy for you to opt out.</p>
         </div>
     </main>
 </template>

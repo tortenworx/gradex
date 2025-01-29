@@ -63,6 +63,8 @@ const {
             @input="handleChange"
             @blur="handleBlur"
             class="block
+            dark:bg-slate-800
+            dark:text-slate-200
             w-full
             border-[1px]
             border-gray-800

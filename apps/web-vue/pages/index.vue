@@ -1,6 +1,6 @@
 <template>
     <main>
-        <h1 class="font-medium text-3xl font-serif text-green-900">
+        <h1 class="font-medium text-3xl font-serif text-green-900 dark:text-green-600">
             {{ $t(`${getTime()}`) }}, {{ user?.first_name }}! {{ getTimeEmoji() }}
         </h1>
         <h3 class="font-light text-2xl">
@@ -17,20 +17,14 @@ definePageMeta({
 useHead({
   'title': 'Dashboard - GradeX'
 })
-
+const { loggedIn, user } = useUserSession()
 </script>
 <script lang="ts">
-import HomeCard from '@/components/homecards/index.vue'
-import HomeCardIcon from '@/components/homecards/icon.vue'
-import HomeCardText from '@/components/homecards/text.vue'
-import { FileChartColumn, Presentation, FileStack, FileSearch, Shapes, TextSearch, Cog, UserCog } from 'lucide-vue-next';
-
-const { loggedIn, user, clear } = useUserSession()
-
 async function redirect() {
   await navigateTo('/about')
 }
 async function logOutAndRedirect() {
+  const { clear } = useUserSession()
   await clear()
   await navigateTo('/accounts/login')
 }

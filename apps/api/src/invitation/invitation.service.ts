@@ -79,18 +79,20 @@ export class InvitationService {
     const user = await this.userModel.findOne({
       id_number: resendInvitationDto.id_number,
     });
-    const potentialAdmin =
-      await this.credentialsService.getUserThruHeaders(fromAdminId);
+    if (fromAdminId) {
+      const potentialAdmin =
+        await this.credentialsService.getUserThruHeaders(fromAdminId);
+      if (
+        user.role !== Role.USER ||
+        (!potentialAdmin && potentialAdmin.role !== Role.SUPERADMIN)
+      )
+        throw new UnauthorizedException(
+          '[INV02RD] Faculty and Administrator accounts cannot regenerate invites thru this channel, please contact an Administrator to generate a new invitation.',
+        );
+    }
     if (!user)
       throw new NotFoundException(
         '[INV001RD] No user was found with the selected query.',
-      );
-    if (
-      user.role !== Role.USER ||
-      (!potentialAdmin && potentialAdmin.role !== Role.SUPERADMIN)
-    )
-      throw new UnauthorizedException(
-        '[INV02RD] Faculty and Administrator accounts cannot regenerate invites thru this channel, please contact an Administrator to generate a new invitation.',
       );
     if (user.credential)
       throw new UnauthorizedException(

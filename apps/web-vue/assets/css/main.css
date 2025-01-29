@@ -3,6 +3,32 @@ input::-ms-clear {
     display: none;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #9dc9bc;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #00684a;
+  border-radius: 6px;
+  padding: 10px 10px;
+}
+
+::-webkit-scrollbar-thumb::before {
+    content: 'u found me!';
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #00684b6e;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

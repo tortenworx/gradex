@@ -1,20 +1,22 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
+  colorMode: {
+    preference: 'light'
+  },
   devtools: {
     enabled: true,
-
     timeline: {
       enabled: true
     }
   },
-  css: ['~/assets/css/main.css'],
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {}
+  runtimeConfig: {
+    session: {
+      password: process.env.NUXT_SESSION_PASSWORD || 'hyena',
+      maxAge: 60 * 60 * 1
     }
   },
+  css: ['~/assets/css/main.css'],
   googleFonts: {
     families: {
       "DM Mono": {
@@ -32,13 +34,26 @@ export default defineNuxtConfig({
     },
   },
   i18n: {
-    vueI18n: './i18n.config.ts'
+    vueI18n: './i18n.config.ts',
+    strategy: 'no_prefix',
+    locales: [
+      {
+        code: "en",
+        name: "English"
+      },
+      {
+        code: "fil",
+        name: "Filipino"
+      }
+    ],
   },
   modules: [
     '@nuxtjs/google-fonts',
     '@vee-validate/nuxt',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
-    'nuxt-auth-utils'
+    'nuxt-auth-utils',
+    '@nuxt/ui',
+    '@nuxtjs/tailwindcss',
   ]
 })

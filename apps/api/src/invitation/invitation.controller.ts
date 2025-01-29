@@ -27,7 +27,7 @@ export class InvitationController {
   ): Promise<object> {
     return await this.invitationService.createInvitation(
       createInvitationDto,
-      request.sub.user,
+      request.user.sub,
     );
   }
   @Post('/resend')

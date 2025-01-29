@@ -4,28 +4,30 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev -p 3030",
+    "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
     "@auth/core": "^0.37.4",
-    "@nuxt/ui": "3.0.0-alpha.9",
+    "@nuxt/ui": "2.21.0",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/i18n": "9.0.0-rc.2",
+    "@nuxtjs/tailwindcss": "6.13.1",
     "@pinia/nuxt": "^0.7.0",
     "@vee-validate/nuxt": "^4.14.6",
     "@vee-validate/yup": "^4.14.6",
+    "@vueuse/core": "^12.4.0",
     "@zag-js/menu": "^0.77.1",
     "@zag-js/toast": "^0.77.1",
     "@zag-js/vue": "^0.77.1",
-    "add": "^2.0.6",
     "axios": "^1.7.8",
     "lucide-vue-next": "^0.454.0",
     "next-auth": "~4.21.1",
     "numerable": "^0.3.15",
     "nuxt": "^3.14.159",
+    "nuxt-auth-utils": "0.5.6",
     "radix-vue": "^1.9.8",
     "vue": "latest",
     "vue-router": "latest",
@@ -37,8 +39,7 @@
   "packageManager": "pnpm@9.7.1+sha512.faf344af2d6ca65c4c5c8c2224ea77a81a5e8859cbc4e06b1511ddce2f0151512431dd19e6aff31f2c6a8f5f2aced9bd2273e1fed7dd4de1868984059d2c4247",
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.9",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.14"
+    "@tailwindcss/postcss": "0.0.0-development.1",
+    "tailwindcss": "^3.4.17"
   }
 }

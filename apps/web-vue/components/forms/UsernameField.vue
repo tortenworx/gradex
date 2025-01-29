@@ -52,7 +52,7 @@ const {
     <div class="flex flex-col gap-2">
         <label :for="name" class="font-bold">{{ $t(label) }}</label>
         <div class="relative w-full">
-            <div class="absolute top-0 bottom-0 left-2 flex items-center justify-center">
+            <div class="absolute top-0 bottom-0 left-2 flex items-center justify-center ">
                 <User />
             </div>
         <input
@@ -63,9 +63,11 @@ const {
             @input="handleChange"
             @blur="handleBlur"
             class="block
+            dark:bg-slate-800
             w-full
             border-[1px]
             border-gray-800
+            dark:border-gray-400
             rounded-md
             px-9
             py-2

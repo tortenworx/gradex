@@ -1,14 +1,15 @@
 <template>
-    <main class="grid grid-cols-1 md:grid-cols-3 grid-flow-col min-h-screen">
+    <main class="grid grid-cols-1 md:grid-cols-3 grid-flow-col min-h-screen dark:bg-slate-950">
       <div class="px-4 py-2">
         <div class="mb-4">
-          <img src="~/assets/images/logo/gradex-default-inverted.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="max-w-96">
+          <img src="~/assets/images/logo/gradex-default-inverted.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="max-w-96 dark:invisible dark:hidden visible block">
+          <img src="~/assets/images/logo/gradex-default.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="max-w-96 dark:visible dark:block invisible hidden">
           <h1 class="font-serif text-2xl text-oct-lime">
             {{ $t('login.main') }}
           </h1>
         </div>
-        <ButtonsAuthenticateWithGoogle />
-        <DividerWithText>or with username and password</DividerWithText>
+        <ButtonsAuthenticateWithGoogle @click="navigateTo('/auth/google')" />
+        <UDivider label="or with username and password" class="my-4" />
         <Form
           :validation-schema="schema"
           class="flex flex-col gap-2"
@@ -31,7 +32,7 @@
             </div>
           </ButtonsDefault>
         </Form>
-        <div class="text-center text-sm text-gray-600 mt-4">
+        <div class="text-center text-sm text-gray-600 dark:text-gray-200 mt-4">
           <p>&copy; {{ new Date().getFullYear() }} All rights reseved.</p>
           <p>Image rights belongs to their respective owners.</p>
         </div>
@@ -64,19 +65,13 @@ const schema = Yup.object().shape({
 
 </script>
 <script lang="ts">
-async function babyPauwiNaKo() {
-  await navigateTo('/')
-  await refreshNuxtData()
-}
-
 async function submitLogin(values: any) {
-  const app = useNuxtApp()
   const popup = useNuxtApp().$toast.loading('Signing you in...')
-  const data = await $fetch('/api/auth/credentials/authenticate', {
-    method: "POST",
+  let signedIn = false
+  await $fetch('/api/auth/credentials/authenticate', {
+    method: 'POST',
     body: {
-      username: values.username,
-      password: values.password,
+      ...values
     }
   }).then(async () => {
     useNuxtApp().$toast.update(popup, {
@@ -87,7 +82,7 @@ async function submitLogin(values: any) {
       type: 'success',
       isLoading: false,
     })
-    return callWithNuxt(app, () => navigateTo('/'))
+    signedIn = true
   }).catch(error => {
     useNuxtApp().$toast.update(popup, {
       render() {
@@ -98,5 +93,9 @@ async function submitLogin(values: any) {
       isLoading: false,
     })
   })
+  console.log(signedIn)
+  if (signedIn) {
+    return navigateTo('/', { external: true })
+  }
 }
 </script>

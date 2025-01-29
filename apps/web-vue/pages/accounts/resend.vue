@@ -1,11 +1,12 @@
 <template>
     <main class="bg-oct-green flex items-center justify-center min-h-screen px-4 py-2">
-        <div class="bg-white px-8 py-6 rounded-lg md:min-w-96 md:max-w-md">
-            <NuxtLink href="/accounts/login" class="text-lime-600">&larr; {{ $t('invitation_resend.return') }}</NuxtLink>
+        <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-96 md:max-w-md">
+            <NuxtLink href="/accounts/login" class="text-lime-600 dark:text-green-600">&larr; {{ $t('invitation_resend.return') }}</NuxtLink>
             <div class="my-2">
-              <img src="~/assets/images/logo/gradex-default-inverted.svg" alt="Logo of the system. Grade with a styled X" width="240"  />
+              <img src="~/assets/images/logo/gradex-default-inverted.svg" class="dark:invisible block visible dark:hidden" alt="Logo of the system. Grade with a styled X" width="240"  />
+              <img src="~/assets/images/logo/gradex-default.svg" class="dark:visible dark:block invisible hidden" alt="Logo of the system. Grade with a styled X" width="240"  />
               <h1 class="text-3xl font-serif text-oct-othagreen font-medium">{{ $t('invitation_resend.title') }}</h1>
-              <p class="mt-2 text-gray-600 text-sm">{{ $t('invitation_resend.desc') }}</p>
+              <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm">{{ $t('invitation_resend.desc') }}</p>
             </div>
             <Form
             :validation-schema="resendSchema"
@@ -44,10 +45,10 @@ const resendSchema = Yup.object().shape({
 
 <script lang="ts">
 async function submit(values:any) {
-  await $fetch('http://localhost:8000/invitation/resend', {
+  await $fetch(`http://localhost:8080/invitation/resend`, {
     method: "POST",
     body: {
-      id_number: values.id_number.toUpperCase()
+      id_number: values.id_number
     }
   }).then(() => {
     toast.success(

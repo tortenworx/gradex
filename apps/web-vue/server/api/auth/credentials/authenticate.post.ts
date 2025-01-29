@@ -3,5 +3,6 @@ import auth from '@/server/utils/auth'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  await auth.attemptCredentials(event, body.username, body.password);
+  const data = await auth.attemptCredentials(event, body.username, body.password);
+  return data
 });
