@@ -15,7 +15,6 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/i18n": "9.0.0-rc.2",
     "@nuxtjs/tailwindcss": "6.13.1",
-    "@pinia/nuxt": "^0.7.0",
     "@vee-validate/nuxt": "^4.14.6",
     "@vee-validate/yup": "^4.14.6",
     "@vueuse/core": "^12.4.0",
