@@ -9,4 +9,11 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+  @Get('/ask-alive')
+  isAlive(): object {
+    return {
+      alive: true,
+      time: Date.now()
+    }
+  }
 }

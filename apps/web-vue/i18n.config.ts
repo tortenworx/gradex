@@ -15,7 +15,7 @@ export default defineI18nConfig(() => ({
     en: {
       login: {
         main: 'Log-in to your account',
-        username: 'Username o Student ID',
+        username: 'Username or Student ID',
         password: 'Password',
         submit: 'Log-in',
         errors: {
@@ -84,6 +84,7 @@ export default defineI18nConfig(() => ({
         desc: "To create a password reset link, please enter your ID Number below. If we found a record that matches the information that you have provided, we will send the password reset link in your school email address.",
         button_action: 'Send Reset Link',
         button_action_ongoing: 'Submitting',
+        label: 'Username or ID Number',
         errors: {
           invalid: "Invalid ID Number provided. Check the number, then try again.",
           required: "Your ID Number is required"
@@ -104,7 +105,20 @@ export default defineI18nConfig(() => ({
           'color_mode': 'Color Mode',
           'language': 'Language'
         }
-      }
+      },
+      new_pw: {
+        header: "Reset your password",
+        greetings: "Greetings, ",
+        not_you: "Not you?",
+        new_password: "New Password",
+        confirm_password: "Confirm Password",
+        submit: "Reset Password",
+        submitting: "Submitting...",
+        errors: {
+          min_8: "Your new password should be a minimum of 8 characters.",
+          match: "Passwords must match."
+        }
+      },
     },
     fil: {
       login: {
@@ -165,9 +179,10 @@ export default defineI18nConfig(() => ({
         desc: "Upang makagawa ng link para sa pag-reset ng password, ilagay ang iyong ID Number sa ibaba. Kung mayroon kaming nakitang record na tumutugma sa iyong detalyeng inilakap, ipapadala namin ang link para sa pag-reset ng password sa iyong school email address.",
         button_action: 'Ipadala ang link para sa pag-reset',
         button_action_ongoing: 'Sinusumite',
+        label: 'Username o Numbero sa ID',
         errors: {
-          invalid: "Maling ID Number ang inilagay, tingnan ang iyong ID number at subukan muli.",
-          required: "Kailangan ilagay ang iyong ID Number."
+          invalid: "Maling Username o ID Number ang inilagay, tingnan ang iyong ID number at subukan muli.",
+          required: "Kailangan ilagay ang iyong username."
         },
       },
       invitation_resend: {
@@ -198,7 +213,21 @@ export default defineI18nConfig(() => ({
           'color_mode': 'Madilim na tema',
           'language': 'Wika'
         }
-      }
+      },
+      new_pw: {
+        header: "Palitan ang iyong password",
+        greetings: "Kamusta, ",
+        not_you: "Hindi ikaw?",
+        new_password: "Bagong Password",
+        confirm_password: "Ulitin ang Password",
+        submit: "Paltan ang iyong password",
+        submitting: "Ipinapasa...",
+        errors: {
+          min_8: "Ang iyong bagong password ay dapat hindi bababa ng 8 na mga karakter.",
+          match: "Dapat magkatugma ang mga password."
+        }
+      },
+      '': ''
     },
   }
 }))

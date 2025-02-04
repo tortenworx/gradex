@@ -5,13 +5,16 @@ import backend from "~/utils/backend-resolver";
 import { resolveUser } from "~/utils/backend-resolver";
 
 async function logSession(event: H3Event<Request>, user: UserType, apiKey: string) {
-    await setUserSession(event, {
+    await replaceUserSession(event, {
         user,
         secure: {
             apiKey
         },
         loggedInAt: new Date()
-    })
+    }, {
+            maxAge: 60 * 60 * 1
+        }
+    )
 }
 
 async function attemptCredentials(event: H3Event<Request>, username: string, password: string) {

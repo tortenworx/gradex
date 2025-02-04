@@ -2,7 +2,7 @@ import axios from "axios"
 
 
 const backend = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: process.env.API_URL,
     timeout: 5000,
     validateStatus(status) {
         return status < 500;
