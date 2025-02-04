@@ -1,9 +1,7 @@
 import backend from "~/utils/backend-resolver"
 
 export default defineEventHandler(async (event) => {
-    const sessionData = await getUserSession(event)
-    const accessToken = sessionData.secure.apiKey
-
+    const sessionData = await requireUserSession(event)
     if (!sessionData.secure) {
         throw createError({
             statusCode: 500,
@@ -11,20 +9,40 @@ export default defineEventHandler(async (event) => {
             statusMessage: 'The API Key for the backend disappeaed for some reason. This is a known bug. Retry later.'
         })
     }
+    const accessToken = sessionData.secure.apiKey
 
-    const { data: users, status, statusText } = await backend.get('/users/fetch', {
-        headers: {
-            Authorization: `Bearer ${accessToken}`
+    try {
+        const { data, status, statusText } = await backend.get('/users/fetch', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        console.log('api fetch done')
+        if (status >= 400) {
+            throw createError({
+                statusCode: status,
+                statusText,
+                statusMessage: data.message.toString()
+            })
         }
-    })
-
-    if (status >= 400) {
+        const result: any[] = []
+        data.forEach((element: any) => {          
+            result.push({
+                id: element._id,
+                id_number: element.id_number,
+                full_name: `${element.last_name}, ${element.first_name} ${element.middle_name}`,
+                mobile_number: '0'+element.mobile_number,
+                personal_email: element.personal_email_address,
+                school_email: element.educational_email_address,
+                gender: element.gender,
+            })
+        });
+        return result;
+    } catch (error) {
+        console.error(error)
         throw createError({
-            statusCode: status,
-            statusText,
-            statusMessage: users.message.toString()
+            statusCode: 500,
+            statusText: 'Undefined error occured',
         })
     }
-
-    return users;
 })

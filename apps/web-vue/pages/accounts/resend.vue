@@ -45,7 +45,8 @@ const resendSchema = Yup.object().shape({
 
 <script lang="ts">
 async function submit(values:any) {
-  await $fetch(`http://localhost:8080/invitation/resend`, {
+  const runtime = useRuntimeConfig()
+  await $fetch(`${runtime.public.apiUrl}invitation/resend`, {
     method: "POST",
     body: {
       id_number: values.id_number

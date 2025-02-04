@@ -11,7 +11,7 @@
         <div class="mx-auto px-4 w-screen md:max-w-prose">
             <h1 id="privacy-policy" class="text-5xl font-serif text-oct-green mb-4 font-medium">Privacy Policy</h1>
             <h2 id="welcome" class="text-3xl text-oct-othagreen mt-4 mb-2 font-semibold">Welcome</h2>
-            <p>This document explains how we collect, use store and protect your personal information using our services. This Privacy Policy (the “Privacy Policy”) applies to <a href="https://gradex.ctrl-alt-elite.club">gradex.ctrl-alt-elite.club</a> website (the “website”) and governs data collection and usage. It is important that you read this policy as by using this Website, you consent to the data policies described in this Privacy Policy</p>
+            <p>This document explains how we collect, use store and protect your personal information using our services. This Privacy Policy (the “Privacy Policy”) applies to <a href="https://gradex.lyra-research.site">gradex.lyra-research.site</a> website (the “website”) and governs data collection and usage. It is important that you read this policy as by using this Website, you consent to the data policies described in this Privacy Policy</p>
             <h2 id="the-information-we-collect" class="text-3xl text-oct-othagreen mt-4 mb-2 font-semibold">The information we collect</h2>
             <p>GradeX collects the certain information when you use our service, this information is crucial in running our system.</p>
             <h4 id="the-information-that-you-or-a-third-party-provides" class="text-xl text-oct-othagreen mt-4 mb-2">The information that you or a third party provides (e.g., school registrars, administrators, etc.)</h4>

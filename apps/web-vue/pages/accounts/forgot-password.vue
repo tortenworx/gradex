@@ -1,5 +1,5 @@
 <template>
-    <main class="bg-oct-green flex items-center justify-center min-h-screen">
+    <main class="bg-oct-green flex items-center justify-center min-h-screen px-4">
         <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-96 md:max-w-md">
             <NuxtLink href="/accounts/login" class="text-lime-600">&larr; {{ $t('pw_reset.return') }}</NuxtLink>
             <div class="my-2">
@@ -15,7 +15,7 @@
             @submit="submit"
             >
             <div>
-                <IdNumberField name="id_number" type="text" label="invitation_resend.label" placeholder="202S-8483" />
+                <UsernameField name="username" type="text" label="pw_reset.label" placeholder="totenator or 202S-5155" />
                 <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.id_number || '') }}</span>
             </div>
             
@@ -37,33 +37,34 @@
 import * as Yup from 'yup';
 import IdNumberField from '@/components/forms/IdNumberField.vue'
 import { VueSpinnerTail } from "vue3-spinners"
+import { toast } from 'vue3-toastify';
+import UsernameField from '~/components/forms/UsernameField.vue';
 
 const schema = Yup.object().shape({
-  id_number: Yup.string().matches(/^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g, 'invitation_resend.errors.invalid').required("invitation_resend.errors.required"),
   username: Yup.string().required('Your username is required.')
 })
 
 async function submit(values: any) {
-  console.log(values)
+  const runtime = useRuntimeConfig()
   const popup = useNuxtApp().$toast.loading('Sending new invite')
-//   const data = await $fetch('http://localhost:8000/invitation/resend', {
-//     method: "POST",
-//     body: {
-//         id_number: values.id_number.toUpperCase()
-//     }
-//   }).catch(error => {
-//     toast.update(popup, {
-//       render() {
-//         return error.data.message
-//       },
-//       autoClose: true,
-//       type: 'error',
-//       isLoading: false,
-//     })
-//   })
+  const data = await $fetch(`${runtime.public.apiUrl}pw-reset`, {
+    method: "POST",
+    body: {
+      username: values.username
+    }
+  }).catch(error => {
+    toast.update(popup, {
+      render() {
+        return error.data.message || error
+      },
+      autoClose: true,
+      type: 'error',
+      isLoading: false,
+    })
+  })
   useNuxtApp().$toast.update(popup, {
     render() {
-      return 'New invite has been sent successfully!'
+      return 'Reset link sent successfully! Please check your school e-mail for the link.'
     },
     autoClose: true,
     type: 'success',

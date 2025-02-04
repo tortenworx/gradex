@@ -2,8 +2,9 @@
 import { FormsSelection } from '#components';
 import { Globe, Menu, X, XIcon } from 'lucide-vue-next';
 const { locale, locales, setLocale  } = useI18n()
-const { user } = useUserSession()
+const { user, clear } = useUserSession()
 const colorMode = useColorMode()
+const router = useRouter()
 const isDark = computed({
   get () {
     return colorMode.value === 'dark'
@@ -16,12 +17,35 @@ const availableLocales = computed(() => {
   return locales.value.filter(i => i.code !== locale.value)
 })
 const isOpen = ref(false)
+
+function logOut() {
+  clear()
+  router.push('/accounts/login')
+}
+
+const avatarItems = [
+  [{
+    slot: 'account',
+    label: '',
+    disabled: true
+  }], 
+  [{
+    label: 'Settings',
+    icon: 'i-lucide-settings',
+    click: () => router.push('/settings')
+  }], 
+  [{
+    label: 'Log Out',
+    icon: 'i-lucide-log-out',
+    click: () => logOut()
+  }], 
+]
 </script>
 
 <template>
     <div>
         <nav class="bg-gradient-to-r from-oct-green to-oct-lime px-4 py-2 flex items-center justify-between">
-            <div class="flex gap-1">
+            <div class="flex gap-2">
               <UButton @click="isOpen = true">
                 <Menu />
               </UButton>
@@ -30,6 +54,16 @@ const isOpen = ref(false)
                 </NuxtLink>
             </div>
             <div>
+              <UDropdown :items="avatarItems">
+                <UAvatar icon="i-heroicons-photo" :src="user.image" size="lg" />
+                <template #account>
+                  <div class="flex-1 min-w-0 text-left">
+                    <p>
+                      Signed in as {{ user?.first_name }} {{ user?.last_name }}
+                    </p>
+                  </div>
+                </template>
+              </UDropdown>
             </div>
         </nav>
         <div class="px-4 py-4">

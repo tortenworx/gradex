@@ -11,9 +11,8 @@ export default defineNuxtConfig({
     }
   },
   runtimeConfig: {
-    session: {
-      password: process.env.NUXT_SESSION_PASSWORD || 'hyena',
-      maxAge: 60 * 60 * 1
+    public: {
+      apiUrl: process.env.API_URL,
     }
   },
   css: ['~/assets/css/main.css'],

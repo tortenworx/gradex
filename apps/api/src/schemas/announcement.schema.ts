@@ -20,4 +20,4 @@ export class Announcement {
   createdAt: Date;
 }
 
-export const InvitationSchema = SchemaFactory.createForClass(Announcement);
+export const AnnouncementSchema = SchemaFactory.createForClass(Announcement);

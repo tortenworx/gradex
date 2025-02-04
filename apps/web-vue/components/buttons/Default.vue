@@ -33,7 +33,7 @@ const props = defineProps({
   disabled:active:text-current
   active:bg-transparent active:ring-2 active:ring-oct-green active:text-oct-green
   hover:shadow-xl transition-all
-  px-8 p-3 w-full text-white
+  px-8 p-3 text-white
   rounded-md
   "
   :disabled="disabled">

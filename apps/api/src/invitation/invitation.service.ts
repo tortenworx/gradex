@@ -46,13 +46,13 @@ export class InvitationService {
       for_user: user.id,
     });
     const invitation_url =
-      'http://gradex.ctrl-alt-elite.club/invitation/' + invitationData.id;
+      'https://gradex.lyra-research.site/accounts/accept?code=' + invitationData.id;
     try {
       this.mailerService.sendMail({
         to:
           createInvitationDto.reciepient_address || user.personal_email_address,
         from: 'GradeX <gradex-noreply@mail-distribution.torten.xyz>',
-        subject: '[GradeX] Finish your account',
+        subject: '[GradeX] Complete your account',
         text:
           'Your account is nearly ready, create your log-in credentials using this link: ' +
           invitation_url,
@@ -103,7 +103,7 @@ export class InvitationService {
       createdBy: user,
     });
     const invitation_url =
-      'http://gradex.ctrl-alt-elite.club/invitation/' + invitationData.id;
+      'https://gradex.lyra-research.site/acccounts/accept?code=' + invitationData.id;
     try {
       this.mailerService.sendMail({
         to: user.educational_email_address,

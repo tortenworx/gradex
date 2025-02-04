@@ -1,14 +1,17 @@
 <template>
     <main>
+      <section class="w-full text-center">
         <h1 class="font-medium text-3xl font-serif text-green-900 dark:text-green-600">
             {{ $t(`${getTime()}`) }}, {{ user?.first_name }}! {{ getTimeEmoji() }}
         </h1>
         <h3 class="font-light text-2xl">
             {{ $t('home.greetings.h2') }}
         </h3>
+      </section>
+      <section>
+        <h1 class="text-3xl font-serif text-oct-othagreen">Latest Announcements</h1>
+      </section>
     </main>
-    <ButtonsDefault @click="redirect">REDIRECT</ButtonsDefault>
-    <ButtonsDefault @click="logOutAndRedirect">LOGOUT</ButtonsDefault>
 </template>
 <script setup lang="ts">
 definePageMeta({
@@ -20,9 +23,6 @@ useHead({
 const { loggedIn, user } = useUserSession()
 </script>
 <script lang="ts">
-async function redirect() {
-  await navigateTo('/about')
-}
 async function logOutAndRedirect() {
   const { clear } = useUserSession()
   await clear()

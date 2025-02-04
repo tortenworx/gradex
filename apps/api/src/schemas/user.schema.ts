@@ -16,7 +16,7 @@ export enum Role {
   SUPERADMIN = 'SUPERADMIN',
 }
 
-@Schema()
+@Schema({ autoSearchIndex: true })
 export class User {
   @Prop({ required: true })
   image: string;
