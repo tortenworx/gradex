@@ -50,7 +50,6 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     '@vee-validate/nuxt',
     '@nuxtjs/i18n',
-    '@pinia/nuxt',
     'nuxt-auth-utils',
     '@nuxt/ui',
     '@nuxtjs/tailwindcss',
