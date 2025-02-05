@@ -35,7 +35,7 @@ async function submit(values: any) {
   })
 }
 
-const isValidId = ref(false)
+const isValidId = reactive(false)
 
 const idSchema = Yup.object().shape({
   id_number: Yup.string().required("invitation_resend.errors.required").matches(/^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g, 'invitation_resend.errors.invalid').oneOf([user.value?.id_number], 'Student ID Number does not match the record.'),
