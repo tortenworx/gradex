@@ -19,7 +19,7 @@ export class AnnouncementsController {
 
   @Get()
   findAll(@Query() query) {
-    return this.announcementsService.findAll(query.limit);
+    return this.announcementsService.findAll(query.login, query.limit);
   }
 
   @Get(':id')

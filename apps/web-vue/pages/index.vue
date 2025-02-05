@@ -10,6 +10,9 @@
       </section>
       <section>
         <h1 class="text-3xl font-serif text-oct-othagreen">Latest Announcements</h1>
+        <div>
+          <HomecardsAnnouncement />
+        </div>
       </section>
     </main>
 </template>

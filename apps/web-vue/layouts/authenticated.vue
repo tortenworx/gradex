@@ -77,6 +77,9 @@ const avatarItems = [
               <a href="http://119.93.245.104:8080" target="_blank" class="max-w-fit">eLibrary</a>
             </div>
           </div>
+          <section class="flex items-center justify-center text-sm text-gray-600">
+            <span>Version 0.2.4</span>
+          </section>
     </div>
     <USlideover v-model="isOpen" :overlay="false" side="left" class="md:max-w-[25%]">
       <div class="px-4 py-2 flex flex-col gap-2">

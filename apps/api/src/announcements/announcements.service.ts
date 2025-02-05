@@ -21,8 +21,12 @@ export class AnnouncementsService {
     return announcement;
   }
 
-  async findAll(limit) {
-    return await this.announcementSchema.find().limit(limit)
+  async findAll(isLogin, limit) {
+    if (isLogin) {
+      return await this.announcementSchema.find({ login_image: { '$exists': true } }).limit(limit)
+    } else {
+      return await this.announcementSchema.find().limit(limit)
+    }
   }
 
   async findOne(id: string) {
@@ -30,8 +34,9 @@ export class AnnouncementsService {
   }
 
   async update(id: string, updateAnnouncementDto: UpdateAnnouncementDto) {
+    console.log(updateAnnouncementDto)
     return await this.announcementSchema.findByIdAndUpdate(id, {
-      ...UpdateAnnouncementDto
+      ...updateAnnouncementDto
     })
   }
 
