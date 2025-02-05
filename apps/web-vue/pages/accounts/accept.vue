@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const route = useRoute()
 const runtime = useRuntimeConfig()
-const { data: user, refresh } = useFetch<UserRecord>(`http://localhost:8080/invitation/resolve/${route.query.key}`)
+const { data: user, refresh } = useFetch<UserRecord>(`http://localhost:8080/invitation/resolve/${route.query.code}`)
 
 if (!user) refresh()
 console.log(user.value)
@@ -14,7 +14,7 @@ async function submit(values: any) {
   const confirmInvite = await $fetch(`${runtime.public.apiUrl}invitation/confirm`, {
     method: "POST",
     body: {
-      invitationId: route.query.key,
+      invitationId: route.query.code,
       id_number: user.value?.id_number,
       credentials: {
         username: values.username,
@@ -56,7 +56,7 @@ const schema = Yup.object().shape({
 <template>
     <main class="bg-oct-green flex items-center justify-center min-h-screen px-4">
         <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-md md:max-w-md">
-          <div v-if="$route.query.key && user !== null">
+          <div v-if="$route.query.code && user !== null">
             <div class="my-2">
                 <NuxtLink href="/accounts/login" class="text-lime-600">&larr; {{ $t('pw_reset.return') }}</NuxtLink>
                 <img src="~/assets/images/logo/gradex-default-inverted.svg" class="dark:invisible block visible dark:hidden" alt="Logo of the system. Grade with a styled X" width="240"  />
