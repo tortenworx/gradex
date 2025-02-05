@@ -18,7 +18,7 @@ async function logSession(event: H3Event<Request>, user: UserType, apiKey: strin
 }
 
 async function attemptCredentials(event: H3Event<Request>, username: string, password: string) {
-    const { data: keyData, status: keyStatus, statusText: keyStatusText } = await backend.post(`/credentials/authenticate/`, {
+    const { data: keyData, status: keyStatus, statusText: keyStatusText } = await backend.post(`credentials/authenticate/`, {
         username: username,
         password: password
     })

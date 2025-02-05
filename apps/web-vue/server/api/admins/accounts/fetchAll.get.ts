@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     const accessToken = sessionData.secure.apiKey
 
     try {
-        const { data, status, statusText } = await backend.get('/users/fetch', {
+        const { data, status, statusText } = await backend.get('users/fetch', {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }

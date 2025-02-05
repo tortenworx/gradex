@@ -1,8 +1,8 @@
 import axios from "axios"
-
+const runtime = useRuntimeConfig()
 
 const backend = axios.create({
-    baseURL: process.env.API_URL,
+    baseURL: runtime.public.apiUrl || 'https://api.gradex.lyra-research.site/',
     timeout: 5000,
     validateStatus(status) {
         return status < 500;
@@ -10,7 +10,7 @@ const backend = axios.create({
 })
 
 export async function resolveUser(token: string) {
-    const { data, status, statusText } = await backend.get('/credentials/user', {
+    const { data, status, statusText } = await backend.get('credentials/user', {
         headers: {
             Authorization: `Bearer ${token}`
         },
