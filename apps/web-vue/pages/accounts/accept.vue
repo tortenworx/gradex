@@ -35,7 +35,7 @@ async function submit(values: any) {
   })
 }
 
-const isValidId = reactive(false)
+const isValidId = reactive({ value: false })
 
 const idSchema = Yup.object().shape({
   id_number: Yup.string().required("invitation_resend.errors.required").matches(/^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g, 'invitation_resend.errors.invalid').oneOf([user.value?.id_number], 'Student ID Number does not match the record.'),
@@ -81,7 +81,7 @@ const schema = Yup.object().shape({
                   :validation-schema="idSchema"
                   class="flex flex-col"
                   v-slot="{ meta, isSubmitting, errors }"
-                  @submit="isValidId = true"
+                  @submit="isValidId.value = true"
                   >
                   <div>
                     <IdNumberField name="id_number" type="text" label="Enter your ID Number in order to continue to confirm it's you." placeholder="202S-8483" />
