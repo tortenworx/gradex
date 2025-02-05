@@ -1,6 +1,6 @@
 <template>
     <main class="bg-oct-green flex items-center justify-center min-h-screen px-4">
-        <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-96 md:max-w-md">
+        <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-md md:max-w-md">
             <NuxtLink href="/accounts/login" class="text-lime-600">&larr; {{ $t('pw_reset.return') }}</NuxtLink>
             <div class="my-2">
                 <img src="~/assets/images/logo/gradex-default-inverted.svg" class="dark:invisible block visible dark:hidden" alt="Logo of the system. Grade with a styled X" width="240"  />
@@ -39,6 +39,10 @@ import IdNumberField from '@/components/forms/IdNumberField.vue'
 import { VueSpinnerTail } from "vue3-spinners"
 import { toast } from 'vue3-toastify';
 import UsernameField from '~/components/forms/UsernameField.vue';
+
+definePageMeta({
+  title: "Request for a password reset | GradeX"
+})
 
 const schema = Yup.object().shape({
   username: Yup.string().required('Your username is required.')

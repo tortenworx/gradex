@@ -1,26 +1,13 @@
 <script setup lang="ts">
 import { FormsSelection } from '#components';
 import { Globe, Menu, X, XIcon } from 'lucide-vue-next';
-const { locale, locales, setLocale  } = useI18n()
 const { user, clear } = useUserSession()
-const colorMode = useColorMode()
 const router = useRouter()
-const isDark = computed({
-  get () {
-    return colorMode.value === 'dark'
-  },
-  set () {
-    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-  }
-})
-const availableLocales = computed(() => {
-  return locales.value.filter(i => i.code !== locale.value)
-})
 const isOpen = ref(false)
 
 function logOut() {
   clear()
-  router.push('/accounts/login')
+  router.push({ path: '/accounts/login' })
 }
 
 const avatarItems = [
@@ -89,36 +76,6 @@ const avatarItems = [
               <a href="https://119.93.245.104/iensys/" target="_blank" class="max-w-fit">Faculty Portal</a>
               <a href="http://119.93.245.104:8080" target="_blank" class="max-w-fit">eLibrary</a>
             </div>
-            <div class="flex flex-col">
-              <div>
-                <h5 class="text-oct-yellow uppercase font-mono">{{ $t('footer.parts.color_mode') }}</h5>
-                  <ClientOnly>
-                  <UButton
-                    :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
-                    color="gray"
-                    variant="ghost"
-                    aria-label="Theme"
-                    @click="isDark = !isDark"
-                    class="text-white"
-                  >
-                  {{ isDark ? "Dark Mode" : "Light Mode" }}
-                  </UButton>
-                  <template #fallback>
-                    <div class="w-8 h-8" />
-                  </template>
-                </ClientOnly>
-              </div>
-              <div>
-                <h5 class="text-oct-yellow uppercase font-mono">{{ $t('footer.parts.language') }}</h5>
-                <FormsSelection :placeholder="locale == 'en' ? 'English' : 'Filipino'" @change="setLocale($event.target.value)">
-                  <template #leading>
-                    <Globe />
-                  </template>
-                  <option disabled>{{ locale == "en" ? "English" : "Filipino" }}</option>
-                  <option v-for="locale in availableLocales" :value="locale.code">{{ locale.name }}</option>
-                </FormsSelection>
-              </div>
-              </div>
           </div>
     </div>
     <USlideover v-model="isOpen" :overlay="false" side="left" class="md:max-w-[25%]">

@@ -14,7 +14,7 @@ export class AnnouncementsController {
   @UseGuards(CredentialsGuard)
   @Post()
   create(@Body() createAnnouncementDto: CreateAnnouncementDto, @Req() request) {
-    return this.announcementsService.create(createAnnouncementDto, request.sub.user);
+    return this.announcementsService.create(createAnnouncementDto, request.user.sub);
   }
 
   @Get()

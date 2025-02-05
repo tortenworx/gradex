@@ -38,6 +38,11 @@ import IdNumberField from '@/components/forms/IdNumberField.vue'
 import ButtonsDefault from '@/components/buttons/Default.vue';
 import { toast } from 'vue3-toastify';
 
+
+definePageMeta({
+  title: "Request for a new account invitation | GradeX"
+})
+
 const resendSchema = Yup.object().shape({
   id_number: Yup.string().required("invitation_resend.errors.required").matches(/^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g, 'invitation_resend.errors.invalid'),
 })

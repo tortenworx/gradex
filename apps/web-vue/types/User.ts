@@ -12,6 +12,7 @@ export enum Role {
 
 export default interface UserRecord {
   id: string;
+  image: string;
   id_number: string;
   first_name: string;
   middle_name: string;
