@@ -1,18 +1,20 @@
 <script setup lang="ts">
 const route = useRoute()
 const runtime = useRuntimeConfig()
-const { data: user } = await useFetch<UserRecord>(`http://localhost:8080/invitation/resolve/${route.query.code}`)
+const { data: user, refresh } = useFetch<UserRecord>(`http://localhost:8080/invitation/resolve/${route.query.key}`)
 
+if (!user) refresh()
+console.log(user.value)
 definePageMeta({
   title: "Complete your account registration."
 })
 
 async function submit(values: any) {
-  const popup = useNuxtApp().$toast.loading('Sending new invite')
+  const popup = useNuxtApp().$toast.loading('Creating your account...')
   const confirmInvite = await $fetch(`${runtime.public.apiUrl}invitation/confirm`, {
     method: "POST",
     body: {
-      invitationId: route.query.code,
+      invitationId: route.query.key,
       id_number: user.value?.id_number,
       credentials: {
         username: values.username,
@@ -42,7 +44,7 @@ async function submit(values: any) {
 const isValidId = reactive({ value: false })
 
 const idSchema = Yup.object().shape({
-  id_number: Yup.string().required("invitation_resend.errors.required").matches(/^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g, 'invitation_resend.errors.invalid').oneOf([user.value.id_number, undefined], 'Student ID Number does not match the record.'),
+  id_number: Yup.string().required("invitation_resend.errors.required").matches(/^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g, 'invitation_resend.errors.invalid').oneOf([user.value?.id_number, null], 'Student ID Number does not match the record.'),
 })
 const schema = Yup.object().shape({
   username: Yup.string().required('Your username is required.').min(3, "Usernames must be 3 characters or more"),
@@ -54,7 +56,7 @@ const schema = Yup.object().shape({
 <template>
     <main class="bg-oct-green flex items-center justify-center min-h-screen px-4">
         <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-md md:max-w-md">
-          <div v-if="$route.query.code && user !== null">
+          <div v-if="$route.query.key && user !== null">
             <div class="my-2">
                 <NuxtLink href="/accounts/login" class="text-lime-600">&larr; {{ $t('pw_reset.return') }}</NuxtLink>
                 <img src="~/assets/images/logo/gradex-default-inverted.svg" class="dark:invisible block visible dark:hidden" alt="Logo of the system. Grade with a styled X" width="240"  />
