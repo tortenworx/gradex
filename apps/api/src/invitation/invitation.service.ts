@@ -43,7 +43,7 @@ export class InvitationService {
       );
     const invitationData = await this.invitationModel.create({
       createdBy: author.id,
-      for_user: user.id,
+      createdFor: user.id,
     });
     const invitation_url =
       'https://gradex.lyra-research.site/accounts/accept?code=' + invitationData.id;
@@ -108,7 +108,7 @@ export class InvitationService {
       this.mailerService.sendMail({
         to: user.educational_email_address,
         from: 'GradeX <gradex-noreply@mail-distribution.torten.xyz>',
-        subject: '[GradeX] (Duplicate) Finish your account',
+        subject: '[GradeX] Finish your account',
         text: `Greetings in peace! \nYour GradeX account is almost complete, visit the link below to complete your account:\n   ${invitation_url} \nIf this is not you, or have any other concerns regarding GradeX, please consult with the ITC Department.`,
         template: 'invitation',
         context: {
@@ -136,9 +136,10 @@ export class InvitationService {
       throw new NotFoundException(
         '[INV02RS] No invite found with the ID specified, this could mean that the invite was either expired or malformed, check your ID, then try again.',
       );
+      console.log(invitation)
     const user = await this.userModel
       .findOne(invitation.createdFor)
-      .select('id_number first_name last_name');
+      .select('id_number first_name last_name image');
     if (!user)
       throw new BadRequestException(
         '[INV03RS] An unexpected error occured. Consult an IT personel for more details.',
@@ -161,6 +162,7 @@ export class InvitationService {
       user_id: user.id,
       ...confirmInvitationDto.credentials,
     });
+    await invitation.deleteOne()
     return true;
   }
 }

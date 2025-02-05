@@ -1,14 +1,16 @@
 <script setup lang="ts">
 const route = useRoute()
 const runtime = useRuntimeConfig()
-const { data: user } = await useFetch<UserRecord>(`http://localhost:8080/invitation/resolve/${route.query.code}`)
+const { data: user, refresh } = useFetch<UserRecord>(`http://localhost:8080/invitation/resolve/${route.query.code}`)
 
+if (!user) refresh()
+console.log(user.value)
 definePageMeta({
   title: "Complete your account registration."
 })
 
 async function submit(values: any) {
-  const popup = useNuxtApp().$toast.loading('Sending new invite')
+  const popup = useNuxtApp().$toast.loading('Creating your account...')
   const confirmInvite = await $fetch(`${runtime.public.apiUrl}invitation/confirm`, {
     method: "POST",
     body: {
@@ -42,7 +44,7 @@ async function submit(values: any) {
 const isValidId = reactive({ value: false })
 
 const idSchema = Yup.object().shape({
-  id_number: Yup.string().required("invitation_resend.errors.required").matches(/^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g, 'invitation_resend.errors.invalid').oneOf([user.value.id_number, undefined], 'Student ID Number does not match the record.'),
+  id_number: Yup.string().required("invitation_resend.errors.required").matches(/^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g, 'invitation_resend.errors.invalid').oneOf([user.value?.id_number, null], 'Student ID Number does not match the record.'),
 })
 const schema = Yup.object().shape({
   username: Yup.string().required('Your username is required.').min(3, "Usernames must be 3 characters or more"),
