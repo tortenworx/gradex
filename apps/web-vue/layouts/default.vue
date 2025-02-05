@@ -51,6 +51,9 @@
                 </FormsSelection>
               </div>
               </div>
+          <section class="flex items-center justify-center text-sm text-gray-600">
+            <span>Version 0.2.4</span>
+          </section>
         </footer>
     </div>
 </template>

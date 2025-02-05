@@ -1,7 +1,11 @@
 <script setup lang="ts">
 const route = useRoute()
 const runtime = useRuntimeConfig()
-const { data: user } = await useFetch(`http://localhost:8080/invitation/resolve/${route.query.code}`)
+const { data: user } = await useFetch<UserRecord>(`http://localhost:8080/invitation/resolve/${route.query.code}`)
+
+definePageMeta({
+  title: "Complete your account registration."
+})
 
 async function submit(values: any) {
   const popup = useNuxtApp().$toast.loading('Sending new invite')
@@ -9,7 +13,7 @@ async function submit(values: any) {
     method: "POST",
     body: {
       invitationId: route.query.code,
-      id_number: user.value.id_number,
+      id_number: user.value?.id_number,
       credentials: {
         username: values.username,
         password: values.confirm_password
@@ -35,21 +39,21 @@ async function submit(values: any) {
   })
 }
 
-const isValidId = ref(false)
+const isValidId = reactive({ value: false })
 
 const idSchema = Yup.object().shape({
-  id_number: Yup.string().required("invitation_resend.errors.required").matches(/^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g, 'invitation_resend.errors.invalid').oneOf([user.value?.id_number], 'Student ID Number does not match the record.'),
+  id_number: Yup.string().required("invitation_resend.errors.required").matches(/^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g, 'invitation_resend.errors.invalid').oneOf([user.value.id_number, undefined], 'Student ID Number does not match the record.'),
 })
 const schema = Yup.object().shape({
   username: Yup.string().required('Your username is required.').min(3, "Usernames must be 3 characters or more"),
   password: Yup.string().required('Your new password is required.').min(8, "new_pw.errors.min_8"),
-  confirm_password: Yup.string().oneOf([Yup.ref('password'), null], "new_pw.errors.match")
+  confirm_password: Yup.string().oneOf([Yup.ref('password'), undefined], "new_pw.errors.match")
 })
 </script>
 
 <template>
     <main class="bg-oct-green flex items-center justify-center min-h-screen px-4">
-        <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-96 md:max-w-md">
+        <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-md md:max-w-md">
           <div v-if="$route.query.code && user !== null">
             <div class="my-2">
                 <NuxtLink href="/accounts/login" class="text-lime-600">&larr; {{ $t('pw_reset.return') }}</NuxtLink>
@@ -81,7 +85,7 @@ const schema = Yup.object().shape({
                   :validation-schema="idSchema"
                   class="flex flex-col"
                   v-slot="{ meta, isSubmitting, errors }"
-                  @submit="isValidId = true"
+                  @submit="isValidId.value = true"
                   >
                   <div>
                     <IdNumberField name="id_number" type="text" label="Enter your ID Number in order to continue to confirm it's you." placeholder="202S-8483" />
@@ -160,10 +164,11 @@ import IdNumberField from '~/components/forms/IdNumberField.vue'
 import UsernameField from '~/components/forms/UsernameField.vue'
 import PasswordField from '~/components/forms/PasswordField.vue'
 import PasswordMeter from 'vue-simple-password-meter'
+import type UserRecord from '~/types/User';
 
 const schema = Yup.object().shape({
   password: Yup.string().required('Your new password is required.').min(8, "new_pw.errors.min_8"),
-  confirm_password: Yup.string().oneOf([Yup.ref('password'), null], "new_pw.errors.match")
+  confirm_password: Yup.string().oneOf([Yup.ref('password'), undefined], "new_pw.errors.match")
 })
 
 </script>

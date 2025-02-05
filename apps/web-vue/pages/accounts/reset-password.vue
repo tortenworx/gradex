@@ -1,7 +1,11 @@
 <script setup lang="ts">
 const route = useRoute()
 const runtime = useRuntimeConfig()
-const { data: user } = await useFetch(`http://localhost:8080/pw-reset/${route.query.id}`)
+const { data: user } = await useFetch<UserRecord>(`http://localhost:8080/pw-reset/${route.query.id}`)
+
+definePageMeta({
+  title: "Reset your password | GradeX"
+})
 
 async function submit(values: any) {
   const popup = useNuxtApp().$toast.loading('Sending new invite')
@@ -34,28 +38,33 @@ async function submit(values: any) {
 
 <template>
     <main class="bg-oct-green flex items-center justify-center min-h-screen px-4">
-        <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-96 md:max-w-md">
+        <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-96">
           <div v-if="$route.query.id && user !== null">
             <div class="my-2">
                 <NuxtLink href="/accounts/login" class="text-lime-600">&larr; {{ $t('pw_reset.return') }}</NuxtLink>
                 <img src="~/assets/images/logo/gradex-default-inverted.svg" class="dark:invisible block visible dark:hidden" alt="Logo of the system. Grade with a styled X" width="240"  />
                 <img src="~/assets/images/logo/gradex-default.svg" class="dark:visible dark:block invisible hidden" alt="Logo of the system. Grade with a styled X" width="240"  />
                 <h1 class="text-3xl font-serif text-oct-othagreen dark:text-green-600 font-medium">{{ $t('new_pw.header') }}</h1>
-              <p>
-                <span>{{ $t('new_pw.greetings') }} {{ user.first_name }}!</span>
-               <UPopover class="w-fit">
-                  <span class="text-lime-600 decoration-dotted w-fit">
-                    {{ $t('new_pw.not_you') }}
-                  </span>
-                  <template #panel>
-                    <div class="p-4 w-48">
-                      <p>
-                        This is most likely a bug. Please close this window and report this issue to the ITC department.
-                      </p>
-                    </div>
-                  </template>
-                </UPopover>
-              </p>
+                <div class="flex gap-2 py-4">
+                  <div>
+                    <UAvatar icon="i-svg-spinners-eclipse" :src="user?.image" size="lg" />
+                  </div>
+                  <div>
+                    <span>{{ $t('new_pw.greetings') }} {{ user?.first_name }}!</span>
+                    <UPopover class="w-fit">
+                      <span class="text-lime-600 decoration-dotted w-fit">
+                        {{ $t('new_pw.not_you') }}
+                      </span>
+                      <template #panel>
+                        <div class="p-4 w-48">
+                          <p>
+                            This is most likely a bug. Please close this window and report this issue to the ITC department.
+                          </p>
+                        </div>
+                      </template>
+                    </UPopover>
+                  </div>
+                </div>
           </div>
             <Form
             :validation-schema="schema"
@@ -108,10 +117,11 @@ import { VueSpinnerTail } from "vue3-spinners"
 import { toast } from 'vue3-toastify';
 import { CircleAlert } from 'lucide-vue-next'
 import PasswordField from '~/components/forms/PasswordField.vue'
+import type UserRecord from '~/types/User';
 
 const schema = Yup.object().shape({
   password: Yup.string().required('Your new password is required.').min(8, "new_pw.errors.min_8"),
-  confirm_password: Yup.string().oneOf([Yup.ref('password'), null], "new_pw.errors.match")
+  confirm_password: Yup.string().oneOf([Yup.ref('password'), undefined], "new_pw.errors.match")
 })
 
 </script>
