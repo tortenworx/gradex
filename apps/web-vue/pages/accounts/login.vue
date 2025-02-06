@@ -86,6 +86,7 @@ async function submitLogin(values: any) {
           router.push({ path: '/' })
         }
       })
+    }
   })
 }
 </script>
