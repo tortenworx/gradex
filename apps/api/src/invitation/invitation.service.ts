@@ -51,7 +51,7 @@ export class InvitationService {
       this.mailerService.sendMail({
         to:
           createInvitationDto.reciepient_address || user.personal_email_address,
-        from: 'GradeX <gradex-noreply@mail-distribution.torten.xyz>',
+        from: 'The GradeX Team <gradex@lyra-research.site>',
         subject: '[GradeX] Complete your account',
         text:
           'Your account is nearly ready, create your log-in credentials using this link: ' +
@@ -107,7 +107,7 @@ export class InvitationService {
     try {
       this.mailerService.sendMail({
         to: user.educational_email_address,
-        from: 'GradeX <gradex-noreply@mail-distribution.torten.xyz>',
+        from: 'The GradeX Team <gradex@lyra-research.site>',
         subject: '[GradeX] Finish your account',
         text: `Greetings in peace! \nYour GradeX account is almost complete, visit the link below to complete your account:\n   ${invitation_url} \nIf this is not you, or have any other concerns regarding GradeX, please consult with the ITC Department.`,
         template: 'invitation',
@@ -136,7 +136,6 @@ export class InvitationService {
       throw new NotFoundException(
         '[INV02RS] No invite found with the ID specified, this could mean that the invite was either expired or malformed, check your ID, then try again.',
       );
-      console.log(invitation)
     const user = await this.userModel
       .findOne(invitation.createdFor)
       .select('id_number first_name last_name image');

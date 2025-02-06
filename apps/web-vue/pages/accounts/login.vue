@@ -42,37 +42,52 @@ onMounted(() => {
 
 </script>
 <script lang="ts">
+const toast = useToast()
+const router = useRouter()
 async function submitLogin(values: any) {
-  const popup = useNuxtApp().$toast.loading('Signing you in...')
-  let signedIn = false
-  await $fetch('/api/auth/credentials/authenticate', {
+  toast.add({
+    id: 'log_in'
+  })
+  useFetch('/api/auth/credentials/authenticate', {
     method: 'POST',
     body: {
       ...values
+    },
+    onRequest({ request, options }) {
+      toast.update('log_in', {
+        title: 'Logging in to your account...',
+        icon: 'i-svg-spinner-eclipse-half',
+        timeout: 0,
+      })
+    },
+    onRequestError({ request, options, error }) {
+      toast.update('log_in', {
+        title: 'An error occured when logging in...',
+        description: error.message,
+        color: 'red',
+        icon: 'i-lucide-badge-x',
+        timeout: 5000,
+      })
+    },
+    onResponse({ request, response, options }) {
+      toast.update('log_in', {
+        title: 'You have signed in!',
+        description: 'You will be redirected to the dashboard in 5 seconds.',
+        color: 'green',
+        icon: 'i-lucide-circle-check-big',
+        timeout: 5000,
+        actions: [{
+          label: 'Go to log-in',
+          click: () => {
+            router.push({ path: '/' })
+          }
+        }],
+        callback: () => {
+          router.push({ path: '/' })
+        }
+      })
     }
-  }).then(async () => {
-    useNuxtApp().$toast.update(popup, {
-      render() {
-        return 'Log-in success!'
-      },
-      autoClose: true,
-      type: 'success',
-      isLoading: false,
-    })
-    signedIn = true
-  }).catch(error => {
-    useNuxtApp().$toast.update(popup, {
-      render() {
-        return error.data.message
-      },
-      autoClose: true,
-      type: 'error',
-      isLoading: false,
-    })
   })
-  if (signedIn) {
-    return navigateTo('/', { external: true })
-  }
 }
 </script>
 <template>
@@ -93,9 +108,9 @@ async function submitLogin(values: any) {
         </UCarousel>
       </div>
       <div class="px-4 py-2">
-        <div class="mb-4 max-w-screen">
-          <img src="~/assets/images/logo/gradex-default-inverted.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="max-w-96 dark:invisible dark:hidden visible block">
-          <img src="~/assets/images/logo/gradex-default.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="max-w-96 dark:visible dark:block invisible hidden">
+        <div class="mb-4 max-w-screen md:max-w-96">
+          <img src="~/assets/images/logo/gradex-default-inverted.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="dark:invisible dark:hidden visible block">
+          <img src="~/assets/images/logo/gradex-default.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="dark:visible dark:block invisible hidden">
           <h1 class="font-serif text-2xl text-oct-lime">
             {{ $t('login.main') }}
           </h1>

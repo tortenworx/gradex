@@ -2,13 +2,8 @@
 import { FormsSelection } from '#components';
 import { Globe, Menu, X, XIcon } from 'lucide-vue-next';
 const { user, clear } = useUserSession()
-const router = useRouter()
 const isOpen = ref(false)
-
-function logOut() {
-  clear()
-  router.push({ path: '/accounts/login' })
-}
+const router = useRouter()
 
 const avatarItems = [
   [{
@@ -24,7 +19,10 @@ const avatarItems = [
   [{
     label: 'Log Out',
     icon: 'i-lucide-log-out',
-    click: () => logOut()
+    click: () => {
+      clear(),
+      location.reload()
+    }
   }], 
 ]
 </script>
@@ -57,13 +55,13 @@ const avatarItems = [
             <slot></slot>
         </div>
         <div class="bg-lime-950 p-8 grid md:grid-cols-4 gap-4 text-white">
-            <div>
-              <NuxtLink href="/">
-                <img src="~/assets/images/logo/gradex-minified-solid.svg" width="248" />
-              </NuxtLink>
-              <p class="mt-2">&copy; 2024, {{ $t('footer.rights') }}.</p>
-              <p> {{ $t('footer.desc') }} <NuxtLink href="/about" class="text-lime-600 underline">{{ $t('footer.link') }}</NuxtLink></p>
-            </div>
+          <div>
+            <NuxtLink href="/">
+              <img src="~/assets/images/logo/gradex-minified-solid.svg" width="248" />
+            </NuxtLink>
+            <p class="mt-2">&copy; 2024, {{ $t('footer.rights') }}.</p>
+            <p> {{ $t('footer.desc') }} <NuxtLink href="/about" class="text-lime-600 underline">{{ $t('footer.link') }}</NuxtLink></p>
+          </div>
             <div class="flex flex-col">
               <h5 class="font-mono text-oct-yellow uppercase">{{ $t('footer.parts.links') }}</h5>
               <a href="https://olivarezcollegetagaytay.edu.ph" target="_blank" class="max-w-fit">Website</a>
@@ -76,10 +74,15 @@ const avatarItems = [
               <a href="https://119.93.245.104/iensys/" target="_blank" class="max-w-fit">Faculty Portal</a>
               <a href="http://119.93.245.104:8080" target="_blank" class="max-w-fit">eLibrary</a>
             </div>
-          </div>
-          <section class="flex items-center justify-center text-sm text-gray-600">
-            <span>Version 0.2.4</span>
-          </section>
+            <div class="flex flex-col">
+              <h5 class="text-oct-yellow uppercase font-mono">{{ $t('footer.parts.infrastructure') }}</h5>
+              <a href="mailto:gradex@lyra-research.site" target="_blank" class="max-w-fit">{{ $t('footer.support_email') }}</a>
+              <a href="https://gradex.cronitorstatus.com/" target="_blank" class="max-w-fit">{{ $t('footer.status') }}</a>
+            </div>
+        </div>
+        <section class="bg-lime-950 flex items-center justify-center text-sm text-gray-600 px-4">
+          <span>Version 0.2.4</span>
+        </section>
     </div>
     <USlideover v-model="isOpen" :overlay="false" side="left" class="md:max-w-[25%]">
       <div class="px-4 py-2 flex flex-col gap-2">
