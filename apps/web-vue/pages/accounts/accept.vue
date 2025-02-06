@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const route = useRoute()
+const router = useRouter()
 const runtime = useRuntimeConfig()
 const { data: user, refresh } = useFetch<UserRecord>(`http://localhost:8080/invitation/resolve/${route.query.code}`)
 
@@ -33,12 +34,13 @@ async function submit(values: any) {
   })
   useNuxtApp().$toast.update(popup, {
     render() {
-      return 'Reset link sent successfully! Please check your school e-mail for the link.'
+      return 'Your account has been created successfully! Will be sending you to the log-in page soon.'
     },
     autoClose: true,
     type: 'success',
     isLoading: false,
   })
+  router.push({ path: '/accounts/login', force: true })
 }
 
 const isValidId = reactive({ value: false })

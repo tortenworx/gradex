@@ -26,12 +26,12 @@ import { AnnouncementsModule } from './announcements/announcements.module';
     }),
     MailerModule.forRoot({
       transport: {
-        host: process.env.SES_EMAIL_HOST,
-        port: process.env.SES_EMAIL_PORT,
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
         secure: true,
         auth: {
-          user: process.env.SES_EMAIL_USERNAME,
-          pass: process.env.SES_EMAIL_PASSWORD,
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD,
         },
       },
       template: {

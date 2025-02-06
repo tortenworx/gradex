@@ -98,8 +98,11 @@
         "links":"Links",
         "services":"Services",
         "color_mode":"Color Mode",
-        "language":"Language"
-      }
+        "language":"Language",
+        "infrastructure": "Infrastructure"
+      },
+      "support_email": "Email support",
+      "status": "System Status"
    },
    "new_pw":{
       "header":"Reset your password",
