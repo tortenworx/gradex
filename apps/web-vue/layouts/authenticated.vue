@@ -19,7 +19,10 @@ const avatarItems = [
   [{
     label: 'Log Out',
     icon: 'i-lucide-log-out',
-    click: () => router.push('/api/auth/logout')
+    click: () => {
+      clear(),
+      location.reload()
+    }
   }], 
 ]
 </script>

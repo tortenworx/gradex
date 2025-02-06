@@ -93,9 +93,9 @@ async function submitLogin(values: any) {
         </UCarousel>
       </div>
       <div class="px-4 py-2">
-        <div class="mb-4 max-w-screen">
-          <img src="~/assets/images/logo/gradex-default-inverted.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="max-w-96 dark:invisible dark:hidden visible block">
-          <img src="~/assets/images/logo/gradex-default.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="max-w-96 dark:visible dark:block invisible hidden">
+        <div class="mb-4 max-w-screen md:max-w-96">
+          <img src="~/assets/images/logo/gradex-default-inverted.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="dark:invisible dark:hidden visible block">
+          <img src="~/assets/images/logo/gradex-default.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="dark:visible dark:block invisible hidden">
           <h1 class="font-serif text-2xl text-oct-lime">
             {{ $t('login.main') }}
           </h1>
