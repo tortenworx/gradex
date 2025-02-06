@@ -13,7 +13,7 @@ async function submit(values: any) {
   toast.add({
     id: 'creating_account',
   })
-  const { status, error, data: registerInfo } = useFetch(`${runtime.public.apiUrl}invitation/confirm`, {
+  useFetch(`${runtime.public.apiUrl}invitation/confirm`, {
     method: "POST",
     body: {
       invitationId: route.query.code,
@@ -41,8 +41,8 @@ async function submit(values: any) {
     },
     onResponse({ request, response, options }) {
       toast.update('creating_account', {
-        title: 'Your account has been created successfully! You will be redirected in the log-in page in 5 seconds',
-        description: '',
+        title: 'Your account has been created successfully!',
+        description: 'You will be redirected in the log-in page in 5 seconds',
         color: 'green',
         icon: 'i-lucide-circle-check-big',
         timeout: 5000,
