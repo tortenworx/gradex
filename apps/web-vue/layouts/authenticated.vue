@@ -2,13 +2,8 @@
 import { FormsSelection } from '#components';
 import { Globe, Menu, X, XIcon } from 'lucide-vue-next';
 const { user, clear } = useUserSession()
-const router = useRouter()
 const isOpen = ref(false)
-
-function logOut() {
-  clear()
-  router.push({ path: '/accounts/login' })
-}
+const router = useRouter()
 
 const avatarItems = [
   [{
@@ -24,7 +19,7 @@ const avatarItems = [
   [{
     label: 'Log Out',
     icon: 'i-lucide-log-out',
-    click: () => logOut()
+    click: () => router.push('/api/auth/logout')
   }], 
 ]
 </script>

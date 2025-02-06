@@ -2,17 +2,18 @@
 const route = useRoute()
 const router = useRouter()
 const runtime = useRuntimeConfig()
-const { data: user, refresh } = useFetch<UserRecord>(`http://localhost:8080/invitation/resolve/${route.query.code}`)
+const toast = useToast()
+const { data: user, refresh } = useFetch<UserRecord>(`${runtime.public.apiUrl}invitation/resolve/${route.query.code}`)
 
-if (!user) refresh()
-console.log(user.value)
 definePageMeta({
   title: "Complete your account registration."
 })
 
 async function submit(values: any) {
-  const popup = useNuxtApp().$toast.loading('Creating your account...')
-  const confirmInvite = await $fetch(`${runtime.public.apiUrl}invitation/confirm`, {
+  toast.add({
+    id: 'creating_account',
+  })
+  const { status, error, data: registerInfo } = useFetch(`${runtime.public.apiUrl}invitation/confirm`, {
     method: "POST",
     body: {
       invitationId: route.query.code,
@@ -21,29 +22,54 @@ async function submit(values: any) {
         username: values.username,
         password: values.confirm_password
       }
-    }
-  }).catch(error => {
-    toast.update(popup, {
-      render() {
-        return error.data.message || error
-      },
-      autoClose: true,
-      type: 'error',
-      isLoading: false,
-    })
-  })
-  useNuxtApp().$toast.update(popup, {
-    render() {
-      return 'Your account has been created successfully! Will be sending you to the log-in page soon.'
     },
-    autoClose: true,
-    type: 'success',
-    isLoading: false,
+    onRequest({ request, options }) {
+      toast.update('creating_account', {
+        title: 'Creating your account...',
+        icon: 'i-svg-spinner-eclipse-half',
+        timeout: 0,
+      })
+    },
+    onRequestError({ request, options, error }) {
+      toast.update('creating_account', {
+        title: 'An error occured when creating your account',
+        description: error.message,
+        color: 'red',
+        icon: 'i-lucide-badge-x',
+        timeout: 5000,
+      })
+    },
+    onResponse({ request, response, options }) {
+      toast.update('creating_account', {
+        title: 'Your account has been created successfully! You will be redirected in the log-in page in 5 seconds',
+        description: '',
+        color: 'green',
+        icon: 'i-lucide-circle-check-big',
+        timeout: 5000,
+        actions: [{
+          label: 'Go to log-in',
+          click: () => {
+            router.push({ path: '/accounts/login' })
+          }
+        }],
+        callback: () => {
+          router.push({ path: '/accounts/login' })
+        }
+      })
+    },
+    onResponseError({ request, response, options }) {
+      toast.update('creating_account', {
+        title: 'An error occured when creating your account',
+        description: response._data.message,
+        color: 'red',
+        icon: 'i-lucide-circle-x',
+        timeout: 5000,
+      })
+    }
   })
-  router.push({ path: '/accounts/login', force: true })
 }
 
-const isValidId = reactive({ value: false })
+const isValidId = useState('valid')
 
 const idSchema = Yup.object().shape({
   id_number: Yup.string().required("invitation_resend.errors.required").matches(/^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g, 'invitation_resend.errors.invalid').oneOf([user.value?.id_number, null], 'Student ID Number does not match the record.'),
@@ -89,7 +115,7 @@ const schema = Yup.object().shape({
                   :validation-schema="idSchema"
                   class="flex flex-col"
                   v-slot="{ meta, isSubmitting, errors }"
-                  @submit="isValidId.value = true"
+                  @submit="isValidId = true"
                   >
                   <div>
                     <IdNumberField name="id_number" type="text" label="Enter your ID Number in order to continue to confirm it's you." placeholder="202S-8483" />

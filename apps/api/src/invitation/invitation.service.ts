@@ -136,7 +136,6 @@ export class InvitationService {
       throw new NotFoundException(
         '[INV02RS] No invite found with the ID specified, this could mean that the invite was either expired or malformed, check your ID, then try again.',
       );
-      console.log(invitation)
     const user = await this.userModel
       .findOne(invitation.createdFor)
       .select('id_number first_name last_name image');

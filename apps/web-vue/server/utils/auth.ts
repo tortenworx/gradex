@@ -41,7 +41,12 @@ async function attemptCredentials(event: H3Event<Request>, username: string, pas
     return true
 }
 
+async function clearLogin(event: H3Event<Request>): Promise<void> {
+    await clearUserSession(event)
+}
+
 export default {
     attemptCredentials,
-    logSession
+    logSession,
+    clearLogin
 }
