@@ -38,10 +38,10 @@ async function submit(values: any) {
 
 <template>
     <main class="bg-oct-green flex items-center justify-center min-h-screen px-4">
-        <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-96">
+        <div class="bg-white dark:bg-slate-950 px-8 py-6 rounded-lg md:min-w-96 max-w-md">
           <div v-if="$route.query.id && user !== null">
             <div class="my-2">
-                <NuxtLink href="/accounts/login" class="text-lime-600">&larr; {{ $t('pw_reset.return') }}</NuxtLink>
+                <NuxtLink href="/accounts/login" class="text-lime-600">&larr; {{ $t('directional.return_to', { page: 'log-in' }) }}</NuxtLink>
                 <img src="~/assets/images/logo/gradex-default-inverted.svg" class="dark:invisible block visible dark:hidden" alt="Logo of the system. Grade with a styled X" width="240"  />
                 <img src="~/assets/images/logo/gradex-default.svg" class="dark:visible dark:block invisible hidden" alt="Logo of the system. Grade with a styled X" width="240"  />
                 <h1 class="text-3xl font-serif text-oct-othagreen dark:text-green-600 font-medium">{{ $t('new_pw.header') }}</h1>
@@ -50,10 +50,10 @@ async function submit(values: any) {
                     <UAvatar icon="i-svg-spinners-eclipse" :src="user?.image" size="lg" />
                   </div>
                   <div>
-                    <span>{{ $t('new_pw.greetings') }} {{ user?.first_name }}!</span>
+                    <span>{{ $t('greetings.default', { name: user.first_name }) }}!</span>
                     <UPopover class="w-fit">
                       <span class="text-lime-600 decoration-dotted w-fit">
-                        {{ $t('new_pw.not_you') }}
+                        {{ $t('greetings.not_you') }}
                       </span>
                       <template #panel>
                         <div class="p-4 w-48">
@@ -74,7 +74,7 @@ async function submit(values: any) {
             >
             <div>
               <PasswordField name="password" label="New Password" placeholder="**********" />
-              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.password || '') }}</span>
+              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.password || '', { digit: 8, field: "New password" }) }}</span>
             </div>
             <div>
               <PasswordField name="confirm_password" label="Confirm Password" placeholder="**********" />
@@ -101,9 +101,9 @@ async function submit(values: any) {
                 <CircleAlert :size="32" />
               </span>
               <div class="text-center">
-                <h1 class="font-serif text-oct-othagreen font-medium text-2xl">Invalid Password Reset link</h1>
-                <p class="mb-4">This password reset link is either invalid or expired. Please check the link from the email and try again.</p>
-                <NuxtLink href="/accounts/login" class="text-oct-othagreen">&larr; {{ $t('pw_reset.return') }}</NuxtLink>
+                <h1 class="font-serif text-oct-othagreen font-medium text-2xl">{{ $t('new_pw.invalid') }}</h1>
+                <p class="mb-4">{{ $t('new_pw.invalid_info') }}</p>
+                <NuxtLink href="/accounts/login" class="text-oct-othagreen">&larr; {{ $t('directional.return_to', { page: 'log-in' }) }}</NuxtLink>
               </div>
             </div>
           </div>
@@ -120,8 +120,8 @@ import PasswordField from '~/components/forms/PasswordField.vue'
 import type UserRecord from '~/types/User';
 
 const schema = Yup.object().shape({
-  password: Yup.string().required('Your new password is required.').min(8, "new_pw.errors.min_8"),
-  confirm_password: Yup.string().oneOf([Yup.ref('password'), undefined], "new_pw.errors.match")
+  password: Yup.string().required('field_errors.required_specialized').min(8, "field_errors.password_min"),
+  confirm_password: Yup.string().oneOf([Yup.ref('password'), undefined], "field_errors.password_match")
 })
 
 </script>

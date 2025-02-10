@@ -15,6 +15,13 @@ export default defineNuxtConfig({
       apiUrl: process.env.API_URL,
     }
   },
+  s3: {
+    driver: 's3',
+    bucket: process.env.R2_BUCKET_NAME,
+    endpoint: process.env.R2_ENDPOINT,
+    accessKeyId: process.env.R2_ACCESS_KEY,
+    secretAccessKey: process.env.R2_ACCESS_SECRET
+  },
   css: ['~/assets/css/main.css'],
   googleFonts: {
     families: {
@@ -53,5 +60,6 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     '@nuxt/ui',
     '@nuxtjs/tailwindcss',
+    '@bg-dev/nuxt-s3'
   ]
 })

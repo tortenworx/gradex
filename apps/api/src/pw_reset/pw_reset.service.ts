@@ -30,8 +30,8 @@ export class PwResetService {
       const user = await this.userModel.findOne({
         id_number: createPwResetDto.username
       });
-      if (user.role !== "USER") throw new UnauthorizedException('[PWR0] Only user accounts can request for password requests using this method.')
       if (!user) throw new NotFoundException('[PWR1] No user was found with the provided information.')
+      if (user.role !== "USER") throw new UnauthorizedException('[PWR0] Only user accounts can request for password requests using this method.')
       const resetDoc = await this.pwModel.create({
         user: user
       })

@@ -65,16 +65,6 @@
                 <Mail />
             </template>
         </FormsTextField>
-        <UInput>
-            <template #leading>
-                <span class="text-base mr-20">+63</span>
-            </template>
-        </UInput>
-        <UInput icon="i-heroicons-envelope" size="md">
-            <template #trailing>
-                <span class="text-xs text-gray-600">@olivarezcollegetagaytay.edu.ph</span>
-            </template>
-        </UInput>
     </div>
 </template>
 

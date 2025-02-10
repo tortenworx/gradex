@@ -5,16 +5,22 @@
       "min":"This field must have {digit} or more characters.",
       "id_num_invalid":"Invalid ID Number provided. Check the number, then try again.",
       "password_min":"Your password should be a minimum of {digit} characters.",
-      "password_match":"Passwords must match."
-   },
-   "fields": {
+      "password_match":"Passwords must match.",
       "username": "Username",
-      "username_id": "Username or ID Number",
-      "id_number": "ID Number",
+      "student_id": "ID Number",
       "password": "Password",
       "submit": "Submit",
       "submitting": "Submitting...",
       "login": "Log-in"
+   },
+   "fields": {
+      "username": "Username",
+      "username_id": "Username o Numero ng ID",
+      "id_number": "Numero ng ID",
+      "password": "Password",
+      "submit": "Isumite",
+      "submitting": "Sinusumite...",
+      "login": "Mag-login"
    },
    "directional": {
       "go_to": "Go to {page}",
@@ -22,27 +28,25 @@
    },
    "greetings": {
       "default": "Greetings, {name}",
-      "day": "Good day, {name}!",
-      "afternoon": "Good afternoon, {name}!",
-      "night": "Good evening, {name}!",
-      "not_you":"Not you?",
-      "wanna_do": "What do you want to do today"
-   },
-   "maintenance": {
-      "invitation": "Resend Invitation",
-      "password": "Forgot Password"
+      "day": "Magandang umaga, {name}!",
+      "afternoon": "Magandang hapon, {name}!",
+      "night": "Magandang gabi, {name}!",
+      "wanna_do": "Ano ang gusto mong gawin ngayong araw?",
+      "not_you":"Not you?"
    },
    "settings": {
     "title": "System Settings",
-    "color_mode": "Theme",
+    "appearance": "Appearance",
     "language": "Language",
     "language_help": "Select the language for menus, messages, and other system text. This will affect all users of this device.",
     "color_mode_help": "Choose a color scheme for the system interface.",
     "color_mode_light": "Light Mode",
     "color_mode_dark": "Dark Mode",
-    "color_mode_system": "Prefer System"
+    "color_mode_system": "Prefer System",
+    "google_settings": "Google Account Linking",
+    "two_factor": "Two Factor Authentication"
    },
-   "login": "Log-in to your account",
+   "login": "Mag-login sa iyong account",
    "home":{
       "cards":{
          "view_grades":{
@@ -79,23 +83,27 @@
          }
       }
    },
+   "maintenance": {
+      "invitation": "Bagong Invite",
+      "password": "Reset Password"
+   },
    "invitation_resend":{
       "title":"Resend Invitation",
       "desc":"In order to resend another invitation link, please enter your details below. If we found a record that matches the information that you have provided, we will send the new invitation in your school email address.",
       "button_action":"Resend Invite"
    },
    "pw_reset":{
-      "return":"Return to log-in",
-      "title":"Send Password Reset Link",
-      "desc":"To create a password reset link, please enter your ID Number below. If we found a record that matches the information that you have provided, we will send the password reset link in your school email address."
+      "return":"Bumalik sa log-in",
+      "title":"I-reset ang iyong password",
+      "desc":"Para makapagpadala ng password reset link, ilagay ang iyong username o Numero ng ID. Kung merong rekord ang system na nagtutugma sa impormasyon na iyong itinala, magpapadala kami ng email na naglalakip ng link para i-reset ang iyong password."
    },
    "sidebar":{
       "home":"Dashboard",
       "usr_settings":"Settings",
       "global_vars":"System Settings",
-      "student_grades": "Your grade report",
-      "student_classes": "Your classes",
-      "announcements": "Announcements"
+      "student_grades": "Iyong report card",
+      "student_classes": "Mga Klase",
+      "announcements": "Mga Anunsyo"
    },
    "footer":{
       "desc":"GradeX is a capstone project made to fullfil the requirements for Practical Research 2. Read more about our research paper",
@@ -116,9 +124,9 @@
       "new_password":"New Password",
       "confirm_password":"Confirm Password",
       "submit":"Reset Password",
-      "invalid": "Invalid Password reset link.",
-      "invalid_info": "This password reset link is either invalid or expired. Please check the link from the email and try again."
+      "invalid": "Napaso na ang reset password link na ito.",
+      "invalid_info": "Ang link na ito ay napaso o hindi wasto. Tingnan uli ang link na nakalakip sa naipadalang e-mail at subukan muli, o magpadala ng bagong link."
    },
-   "all_rights_reserved": "© {year}, All rights reserved.",
-   "img_rights": "Image rights belongs to their respective owners."
+   "all_rights_reserved": "© {year}, Lahat ng karapatan ay nakalaan.",
+   "img_rights": "Ang mga karapatan sa imahe ay pagmamay-ari ng kani-kanilang mga may-ari."
 }

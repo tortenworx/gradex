@@ -4,7 +4,9 @@ import * as Yup from 'yup';
 import UsernameField from '~/components/forms/UsernameField.vue';
 import PasswordField from '~/components/forms/PasswordField.vue';
 import { VueSpinnerTail } from 'vue3-spinners';
+const toast = useToast()
 const runtime = useRuntimeConfig()
+const router = useRouter()
 
 interface Announcement {
   title: string;
@@ -37,13 +39,9 @@ onMounted(() => {
     }
 
     carouselRef.value.next()
-  }, 3000)
+  }, 5000)
 })
 
-</script>
-<script lang="ts">
-const toast = useToast()
-const router = useRouter()
 async function submitLogin(values: any) {
   toast.add({
     id: 'log_in'
@@ -56,16 +54,33 @@ async function submitLogin(values: any) {
     onRequest({ request, options }) {
       toast.update('log_in', {
         title: 'Logging in to your account...',
-        icon: 'i-svg-spinner-eclipse-half',
+        icon: 'i-svg-spinners-eclipse',
         timeout: 0,
       })
     },
     onRequestError({ request, options, error }) {
       toast.update('log_in', {
-        title: 'An error occured when logging in...',
-        description: error.message,
+        title: 'An error occured when logging in:',
+        description: `${error.name} ${error.message}: ${error.cause}`,
         color: 'red',
         icon: 'i-lucide-badge-x',
+        actions: [{
+          label: 'Contact Support',
+          click: () => navigateTo('mailto:gradex@lyra-research.site', { external: true })
+        }],
+        timeout: 5000,
+      })
+    },
+    onResponseError({ options, request, response }) {
+      toast.update('log_in', {
+        title: 'An error occured when logging in:',
+        description: response._data?.message,
+        color: 'red',
+        icon: 'i-lucide-badge-x',
+        actions: [{
+          label: 'Contact Support',
+          click: () => navigateTo('mailto:gradex@lyra-research.site', { external: true })
+        }],
         timeout: 5000,
       })
     },
@@ -77,13 +92,13 @@ async function submitLogin(values: any) {
         icon: 'i-lucide-circle-check-big',
         timeout: 5000,
         actions: [{
-          label: 'Go to log-in',
+          label: 'Go to dashboard',
           click: () => {
-            router.push({ path: '/' })
+            navigateTo('/', { external: true })
           }
         }],
         callback: () => {
-          router.push({ path: '/' })
+          navigateTo('/', { external: true })
         }
       })
     }
@@ -93,7 +108,7 @@ async function submitLogin(values: any) {
 <template>
     <main class="md:grid grid-cols-1 md:grid-cols-3 grid-flow-col min-h-screen dark:bg-slate-950">
       <div class="md:invisible md:hidden">
-        <UCarousel v-slot="{ item }" :items="announcements" :ui="{ item: 'basis-full' }" v-if="announcements" ref="carousel-ref" indicators>
+        <UCarousel ref="carouselRef" v-slot="{ item }" :items="announcements" :ui="{ item: 'basis-full' }" v-if="announcements">
           <div class="flex-[0_0_100%] min-w-0 h-full relative text-white mix-blend-overlay bg-gradient-to-br from-oct-othagreen to-transparent">
             <img :src="item.login_image" class="object-fit">
             <div class="absolute md:top-5 md:left-5 bottom-0 left-0 p-4 md:px-0 flex flex-col gap-2 md:w-1/2 text-center bg-gradient-to-t from-green-800 to-transparent">
@@ -112,7 +127,7 @@ async function submitLogin(values: any) {
           <img src="~/assets/images/logo/gradex-default-inverted.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="dark:invisible dark:hidden visible block">
           <img src="~/assets/images/logo/gradex-default.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="dark:visible dark:block invisible hidden">
           <h1 class="font-serif text-2xl text-oct-lime">
-            {{ $t('login.main') }}
+            {{ $t('login') }}
           </h1>
         </div>
         <ButtonsAuthenticateWithGoogle @click="navigateTo('/auth/google')" />
@@ -123,8 +138,8 @@ async function submitLogin(values: any) {
           v-slot="{ meta, isSubmitting }"
           @submit="submitLogin"
         >
-          <UsernameField name="username" type="text" label="login.username" placeholder="202S-8483" />
-          <PasswordField name="password" label="login.password" placeholder="**********" />
+          <UsernameField name="username" type="text" label="fields.username_id" placeholder="202S-8483" />
+          <PasswordField name="password" label="fields.password" placeholder="**********" />
           <div class="flex flex-col md:flex-row items-center justify-center gap-2 mt-4">
             <ButtonsDefault :disabled="!meta.valid || isSubmitting" type="submit" class="w-full md:w-2/3">
               <div v-if="isSubmitting" class="flex items-center justify-center gap-2">
@@ -132,22 +147,22 @@ async function submitLogin(values: any) {
                 <span>Submitting</span>
               </div>
               <div v-else class="flex items-center justify-center gap-2">
-                {{ $t('login.submit') }}
+                {{ $t('fields.login') }}
               </div>
             </ButtonsDefault>
-            <div class="flex w-full md:w-auto md:flex-col items-center justify-between md:justify-center gap-1 text-sm text-gray-600">
-                <NuxtLink href="/accounts/resend">Resend Invitation</NuxtLink>
-                <NuxtLink href="/accounts/forgot-password">Forgot Password?</NuxtLink>
+            <div class="flex w-full md:w-auto md:flex-col items-center justify-between md:justify-start gap-1 text-sm text-gray-600">
+                <NuxtLink href="/accounts/resend">{{ $t('maintenance.invitation') }}</NuxtLink>
+                <NuxtLink href="/accounts/forgot-password">{{ $t('maintenance.password') }}</NuxtLink>
             </div>
           </div>
         </Form>
         <div class="text-center text-sm text-gray-600 dark:text-gray-200 mt-4">
-          <p>&copy; {{ new Date().getFullYear() }} All rights reseved.</p>
-          <p>Image rights belongs to their respective owners.</p>
+          <p>{{ $t('all_rights_reserved', { year: new Date().getFullYear() }) }}</p>
+          <p>{{ $t('img_rights') }}</p>
         </div>
       </div>
       <div class="hidden invisible md:visible md:block col-span-2">
-        <UCarousel v-slot="{ item }" :items="announcements" :ui="{ item: 'basis-full' }" v-if="announcements" ref="carousel-ref" indicators>
+        <UCarousel ref="carouselRef" v-slot="{ item }" :items="announcements" :ui="{ item: 'basis-full' }" v-if="announcements" indicators>
           <div class="flex-[0_0_100%] min-w-0 h-full relative text-white">
             <img :src="item.login_image" class="object-cover w-full h-full">
             <div class="absolute top-0 left-0 p-4 flex flex-col gap-2 bg-gradient-to-br from-green-800 via-transparent to-transparent w-full h-full">

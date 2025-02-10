@@ -17,7 +17,6 @@ export default defineEventHandler(async (event) => {
                 Authorization: `Bearer ${accessToken}`
             }
         })
-        console.log('api fetch done')
         if (status >= 400) {
             throw createError({
                 statusCode: status,

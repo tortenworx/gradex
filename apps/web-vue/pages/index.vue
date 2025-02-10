@@ -2,10 +2,10 @@
     <main>
       <section class="w-full text-center">
         <h1 class="font-medium text-3xl font-serif text-green-900 dark:text-green-600">
-            {{ $t(`${getTime()}`) }}, {{ user?.first_name }}! {{ getTimeEmoji() }}
+            {{ $t(`${getTime()}`, { name: user?.first_name}) }} {{ getTimeEmoji() }}
         </h1>
         <h3 class="font-light text-2xl">
-            {{ $t('home.greetings.h2') }}
+            {{ $t('greetings.wanna_do') }}
         </h3>
       </section>
       <section>
@@ -37,11 +37,11 @@ function getTime() {
   var curHr = today.getHours()
 
   if (curHr < 12) {
-    return 'home.greetings.h1_day'
+    return 'greetings.day'
   } else if (curHr < 18) {
-    return 'home.greetings.h1_afternoon'
+    return 'greetings.afternoon'
   } else {
-    return 'home.greetings.h1_night'
+    return 'greetings.night'
   }
 }
 

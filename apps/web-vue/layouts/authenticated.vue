@@ -21,7 +21,7 @@ const avatarItems = [
     icon: 'i-lucide-log-out',
     click: () => {
       clear(),
-      location.reload()
+      navigateTo('/accounts/login', { external: true })
     }
   }], 
 ]
@@ -51,7 +51,7 @@ const avatarItems = [
               </UDropdown>
             </div>
         </nav>
-        <div class="px-4 py-4">
+        <div class="px-4 py-4 min-h-screen">
             <slot></slot>
         </div>
         <div class="bg-lime-950 p-8 grid md:grid-cols-4 gap-4 text-white">
@@ -95,6 +95,12 @@ const avatarItems = [
         <section class="flex flex-col gap-2">
           <UButton variant="ghost" color="gray" to="/" icon="i-heroicons-home-20-solid">
             Home
+          </UButton>
+          <UButton variant="ghost" color="gray" to="/your-report" icon="i-lucide-file-user">
+            {{ $t('sidebar.student_grades') }}
+          </UButton>
+          <UButton variant="ghost" color="gray" to="/classes" icon="i-lucide-presentation">
+            {{ $t('sidebar.student_classes') }}
           </UButton>
           <UButton variant="ghost" color="gray" to="/settings" icon="i-heroicons-cog-20-solid">
             {{ $t('sidebar.usr_settings') }}
