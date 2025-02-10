@@ -2,7 +2,7 @@ import axios from "axios"
 const runtime = useRuntimeConfig()
 
 const backend = axios.create({
-    baseURL: runtime.public.apiUrl || 'https://api.gradex.lyra-research.site/',
+    baseURL: runtime.public.apiUrl,
     timeout: 5000,
     validateStatus(status) {
         return status < 500;

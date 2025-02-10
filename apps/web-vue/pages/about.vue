@@ -42,7 +42,7 @@
                 </div>
                 <div class="text-center">
                     <h3 class="text-lg text-oct-othagreen font-serif font-medium">Eddieboy Baquion</h3>
-                    <p>Research Member</p>
+                    <p>Research Member &bull; System Translator</p>
                 </div>
                 <div class="text-center">
                     <h3 class="text-lg text-oct-othagreen font-serif font-medium">Daniela Claire Cortez</h3>

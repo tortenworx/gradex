@@ -20,7 +20,7 @@
     <section class="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
         <div class="md:col-span-full flex md:flex-col gap-2 items-center justify-center">
             <!-- <div class="w-32 h-32 rounded-md bg-oct-othagreen"></div> -->
-            <FormsImageUpload></FormsImageUpload>
+            <UAvatar icon="i-lucide-image" />
             <span class="text-xs text-gray-600 font-mono md:text-center max-w-[50%] md:max-w-none">Click to select an image or drag a chosen image to the box. Images should be less than 5MB in size.</span>
         </div>
         <FormsTextField label="ID Number">
@@ -88,10 +88,14 @@
 
 <script lang="ts" setup>
 import { UserPlus, IdCard, User, PersonStanding, FileUser, Ban, Mail } from 'lucide-vue-next';
+
 useHead({
     title: 'Create a New User - GradeX'
 })
 definePageMeta({
     layout: 'authenticated'
 });
+
+
+
 </script>

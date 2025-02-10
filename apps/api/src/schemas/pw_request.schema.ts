@@ -9,7 +9,7 @@ export class PasswordResetRequest {
   @Prop({ type: mongoose.Schema.ObjectId, ref: 'User' })
   user: User;
 
-  @Prop({ type: Date, expires: '4h', default: Date.now })
+  @Prop({ type: Date, expires: '1h', default: Date.now })
   createdAt: Date;
 }
 

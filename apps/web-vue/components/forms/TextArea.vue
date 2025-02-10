@@ -65,16 +65,14 @@ const {
                     <slot name="trailing"></slot>
                 </div>
             </span>
-        <input
-            :type="type"
+        <textarea
             :id="name"
             :value="inputValue"
             :placeholder="placeholder"
             @input="handleChange"
             @blur="handleBlur"
-            :class="class"
-            class='block
-            w-full
+            :class="className"
+            class="block
             border-[1px]
             dark:bg-slate-900
             border-gray-800
@@ -84,10 +82,10 @@ const {
             py-2
             focus:ring-oct-lime
             focus:border-oct-lime
-            ${class}
-            '
+            "
             v-bind:class="{'pl-10': $slots.leading, 'pr-10': $slots.trailing}"
             >
+        </textarea>
         </div>
     </div>
 </template>
