@@ -2,6 +2,7 @@
 import { FormsSelection } from '#components';
 import { Globe, Menu, X, XIcon } from 'lucide-vue-next';
 const { user, clear } = useUserSession()
+const runtime = useRuntimeConfig()
 const isOpen = ref(false)
 const router = useRouter()
 
@@ -80,8 +81,8 @@ const avatarItems = [
               <a href="https://gradex.cronitorstatus.com/" target="_blank" class="max-w-fit">{{ $t('footer.status') }}</a>
             </div>
         </div>
-        <section class="bg-lime-950 flex items-center justify-center text-sm text-gray-600 px-4">
-          <span>Version 0.2.4</span>
+        <section class="bg-lime-950 flex items-center justify-center text-sm text-gray-600 py-4">
+          <span>Version {{ runtime.public.appVersion }}</span>
         </section>
     </div>
     <USlideover v-model="isOpen" :overlay="false" side="left" class="md:max-w-[25%]">
