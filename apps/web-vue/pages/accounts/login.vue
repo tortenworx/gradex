@@ -87,10 +87,10 @@ async function submitLogin(values: any) {
     onResponse({ request, response, options }) {
       toast.update('log_in', {
         title: 'You have signed in!',
-        description: 'You will be redirected to the dashboard in 5 seconds.',
+        description: 'You will be redirected to the dashboard in 2 seconds.',
         color: 'green',
         icon: 'i-lucide-circle-check-big',
-        timeout: 5000,
+        timeout: 2000,
         actions: [{
           label: 'Go to dashboard',
           click: () => {
@@ -111,7 +111,7 @@ async function submitLogin(values: any) {
         <UCarousel ref="carouselRef" v-slot="{ item }" :items="announcements" :ui="{ item: 'basis-full' }" v-if="announcements">
           <div class="flex-[0_0_100%] min-w-0 h-full relative text-white mix-blend-overlay bg-gradient-to-br from-oct-othagreen to-transparent">
             <img :src="item.login_image" class="object-fit">
-            <div class="absolute md:top-5 md:left-5 bottom-0 left-0 p-4 md:px-0 flex flex-col gap-2 md:w-1/2 text-center bg-gradient-to-t from-green-800 to-transparent">
+            <div class="absolute md:top-5 w-full bottom-0 left-0 p-4 md:px-0 flex flex-col gap-2 md:w-1/2 text-center bg-gradient-to-t from-green-800 to-transparent">
                 <h1 class="text-lg font-bold">
                     {{ item.title }}
                 </h1>

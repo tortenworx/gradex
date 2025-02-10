@@ -105,6 +105,9 @@ const avatarItems = [
           <UButton variant="ghost" color="gray" to="/settings" icon="i-heroicons-cog-20-solid">
             {{ $t('sidebar.usr_settings') }}
           </UButton>
+          <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/announcements" icon="i-lucide-megaphone">
+            {{ $t('sidebar.manage_announcements') }}
+          </UButton>
           <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/global-variables" icon="i-heroicons-server-20-solid">
             {{ $t('sidebar.global_vars') }}
           </UButton>

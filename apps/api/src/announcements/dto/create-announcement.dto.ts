@@ -9,7 +9,6 @@ export class CreateAnnouncementDto {
     @MaxLength(180)
     description: string;
     @IsOptional()
-    @IsUrl()
     login_image: string;
     @IsNotEmpty()
     @MaxLength(255)

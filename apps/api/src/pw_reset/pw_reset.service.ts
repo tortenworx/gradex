@@ -33,7 +33,7 @@ export class PwResetService {
       if (!user) throw new NotFoundException('[PWR1] No user was found with the provided information.')
       if (user.role !== "USER") throw new UnauthorizedException('[PWR0] Only user accounts can request for password requests using this method.')
       const resetDoc = await this.pwModel.create({
-        user: user
+        user: user,
       })
       await this.mailerService.sendMail({
           to: user.educational_email_address,

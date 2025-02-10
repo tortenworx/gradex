@@ -180,6 +180,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.16
         version: 0.5.16(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.17.14)(typescript@5.7.3)))
+      '@uppy/aws-s3':
+        specifier: ^4.2.3
+        version: 4.2.3(@uppy/core@4.4.2)
       '@uppy/core':
         specifier: ^4.4.2
         version: 4.4.2
@@ -187,6 +190,12 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(@uppy/core@4.4.2)
       '@uppy/drag-drop':
+        specifier: ^4.1.1
+        version: 4.1.1(@uppy/core@4.4.2)
+      '@uppy/image-editor':
+        specifier: ^3.3.1
+        version: 3.3.1(@uppy/core@4.4.2)
+      '@uppy/thumbnail-generator':
         specifier: ^4.1.1
         version: 4.1.1(@uppy/core@4.4.2)
       '@uppy/vue':
@@ -2514,6 +2523,9 @@ packages:
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
 
+  '@types/retry@0.12.2':
+    resolution: {integrity: sha512-XISRgDJ2Tc5q4TRqvgJtzsRkFYNJzZrhTdtMoGVBttwzzQJkPnS3WWTFc7kuDRoPtPakl+T+OfdEUjYJj7Jbow==}
+
   '@types/semver@7.5.8':
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
 
@@ -2737,6 +2749,16 @@ packages:
     peerDependencies:
       vue: '>=2.7 || >=3'
 
+  '@uppy/aws-s3@4.2.3':
+    resolution: {integrity: sha512-5vNgTE85DLujOXpzC6KEwJHLSi8o96v4rwZxMvDWQuikvX4sGcGflYjBCsPaVDYUCiiDXuhI8f93zfwCUEwQ/Q==}
+    peerDependencies:
+      '@uppy/core': ^4.4.1
+
+  '@uppy/companion-client@4.4.1':
+    resolution: {integrity: sha512-ardMacShsfzaIbqHEH48YlpzWZkBj1qhAj0Dvn3r31p9d0HA5xFUvAdLYrZ6ezKvZ0RcDbf0SB5qCrQMkjscXQ==}
+    peerDependencies:
+      '@uppy/core': ^4.4.1
+
   '@uppy/core@4.4.2':
     resolution: {integrity: sha512-df0fQtPEd5W/e5M/CWIXQb/O0rBb+LCz4HTN5Bkqm0UDzW2JFR9mrxnL0dfh3ikVlUq+9vNjAeBr9P0aluIiFg==}
 
@@ -2747,6 +2769,11 @@ packages:
 
   '@uppy/drag-drop@4.1.1':
     resolution: {integrity: sha512-4ebDFmgQU3QsG0OB5AqXV8dXydtPEIcjrEy7Q0BI2Zick4bv0BwnqbffygPG0iI+IXRyGxdzkxtS8PHtw5Ks6g==}
+    peerDependencies:
+      '@uppy/core': ^4.4.1
+
+  '@uppy/image-editor@3.3.1':
+    resolution: {integrity: sha512-UKxxX8I6cq+o5Rw9BLRunj0Rbqh/2yNO9UarBJIiA76DxV1YPVF7dTr0NrVhfPYpEuirUoOQUvLsMH6WBERSXg==}
     peerDependencies:
       '@uppy/core': ^4.4.1
 
@@ -3864,6 +3891,9 @@ packages:
   cronstrue@2.53.0:
     resolution: {integrity: sha512-CkAcaI94xL8h6N7cGxgXfR5D7oV2yVtDzB9vMZP8tIgPyEv/oc/7nq9rlk7LMxvc3N+q6LKZmNLCVxJRpyEg8A==}
     hasBin: true
+
+  cropperjs@1.6.2:
+    resolution: {integrity: sha512-nhymn9GdnV3CqiEHJVai54TULFAE3VshJTXSqSJKa8yXAKyBKDWdhHarnlIPrshJ0WMFTGuFvG02YjLXfPiuOA==}
 
   cross-spawn@6.0.6:
     resolution: {integrity: sha512-VqCUuhcd1iB+dsv8gxPttb5iZh/D0iubSP21g36KXdEuf6I5JiioesUVjpCdHV9MZRUfVFlvwtIUyPfxo5trtw==}
@@ -5303,6 +5333,10 @@ packages:
   is-module@1.0.0:
     resolution: {integrity: sha512-51ypPSPCoTEIN9dy5Oy+h4pShgJmPCygKfyRCISBI+JoWT/2oJvK8QPxmwv7b/p239jXrm9M1mlQbyKJ5A152g==}
 
+  is-network-error@1.1.0:
+    resolution: {integrity: sha512-tUdRRAnhT+OtCZR/LxZelH/C7QtjtFrTu5tXCA8pl55eTUElUHT+GPYV8MBMBvea/j+NxQqVt3LbWMRir7Gx9g==}
+    engines: {node: '>=16'}
+
   is-number-object@1.1.1:
     resolution: {integrity: sha512-lZhclumE1G6VYD8VHe35wFaIif+CTy5SJIi5+3y4psDgWu4wPDoBhF8NxUOinEc7pHgiTsT6MaBb92rKhhD+Xw==}
     engines: {node: '>= 0.4'}
@@ -6722,6 +6756,10 @@ packages:
     resolution: {integrity: sha512-mxLDbbGIBEXTJL0zEx8JIylaj3xQ7Z/7eEVjcF9fJX4DBiH9oqe+oahYnlKKxm0Ci9TlWTyhSHgygxMxjIB2jw==}
     engines: {node: '>=18'}
 
+  p-retry@6.2.1:
+    resolution: {integrity: sha512-hEt02O4hUct5wtwg4H4KcWgDdm+l1bOaEy/hWzd8xtXB9BqxTWBBhb+2ImAtH4Cv4rPjV76xN3Zumqk3k3AhhQ==}
+    engines: {node: '>=16.17'}
+
   p-timeout@3.2.0:
     resolution: {integrity: sha512-rhIwUycgwwKcP9yTOOFK/AKsAopjjCakVqLHePO3CC6Mir1Z99xT+R63jZxAT5lFZLa2inS5h+ZS2GvR99/FBg==}
     engines: {node: '>=8'}
@@ -7448,6 +7486,10 @@ packages:
   restore-cursor@3.1.0:
     resolution: {integrity: sha512-l+sSefzHpj5qimhFSE5a8nufZYAM3sBSVMAPtYkmC+4EH2anSGaEMXSD0izRQbu9nfyQ9y5JrVmp7E8oZrUjvA==}
     engines: {node: '>=8'}
+
+  retry@0.13.1:
+    resolution: {integrity: sha512-XQBQ3I8W1Cge0Seh+6gjj03LbmRFWuoszgK9ooCpwYIrhhoO80pfq4cUkU5DkknwfOfFteRwlZ56PYOGYyFWdg==}
+    engines: {node: '>= 4'}
 
   reusify@1.0.4:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
@@ -11917,6 +11959,8 @@ snapshots:
 
   '@types/resolve@1.20.2': {}
 
+  '@types/retry@0.12.2': {}
+
   '@types/semver@7.5.8': {}
 
   '@types/send@0.17.4':
@@ -12304,6 +12348,19 @@ snapshots:
       unhead: 1.11.18
       vue: 3.5.13(typescript@5.7.3)
 
+  '@uppy/aws-s3@4.2.3(@uppy/core@4.4.2)':
+    dependencies:
+      '@uppy/companion-client': 4.4.1(@uppy/core@4.4.2)
+      '@uppy/core': 4.4.2
+      '@uppy/utils': 6.1.2
+
+  '@uppy/companion-client@4.4.1(@uppy/core@4.4.2)':
+    dependencies:
+      '@uppy/core': 4.4.2
+      '@uppy/utils': 6.1.2
+      namespace-emitter: 2.0.1
+      p-retry: 6.2.1
+
   '@uppy/core@4.4.2':
     dependencies:
       '@transloadit/prettier-bytes': 0.3.5
@@ -12335,6 +12392,13 @@ snapshots:
     dependencies:
       '@uppy/core': 4.4.2
       '@uppy/utils': 6.1.2
+      preact: 10.25.4
+
+  '@uppy/image-editor@3.3.1(@uppy/core@4.4.2)':
+    dependencies:
+      '@uppy/core': 4.4.2
+      '@uppy/utils': 6.1.2
+      cropperjs: 1.6.2
       preact: 10.25.4
 
   '@uppy/informer@4.2.1(@uppy/core@4.4.2)':
@@ -13718,6 +13782,8 @@ snapshots:
   croner@9.0.0: {}
 
   cronstrue@2.53.0: {}
+
+  cropperjs@1.6.2: {}
 
   cross-spawn@6.0.6:
     dependencies:
@@ -15497,6 +15563,8 @@ snapshots:
   is-map@2.0.3: {}
 
   is-module@1.0.0: {}
+
+  is-network-error@1.1.0: {}
 
   is-number-object@1.1.1:
     dependencies:
@@ -17578,6 +17646,12 @@ snapshots:
       eventemitter3: 5.0.1
       p-timeout: 6.1.4
 
+  p-retry@6.2.1:
+    dependencies:
+      '@types/retry': 0.12.2
+      is-network-error: 1.1.0
+      retry: 0.13.1
+
   p-timeout@3.2.0:
     dependencies:
       p-finally: 1.0.0
@@ -18368,6 +18442,8 @@ snapshots:
     dependencies:
       onetime: 5.1.2
       signal-exit: 3.0.7
+
+  retry@0.13.1: {}
 
   reusify@1.0.4: {}
 

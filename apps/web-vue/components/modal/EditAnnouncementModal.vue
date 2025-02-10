@@ -2,6 +2,13 @@
 import { Link } from 'lucide-vue-next';	
 import * as Yup from 'yup'
 
+const props = defineProps({
+  data: {
+    type: Announcement,
+    required: true,
+  }
+})
+
 const modal = useModal()
 const toast = useToast()
 const previewImage = ref<any>()
@@ -51,8 +58,8 @@ const schema = Yup.object().shape({
 async function submit(values: any) {
   if (values.file) { 
   const file = await s3.upload(values.file)
-  useFetch('/api/admins/announcement/', {
-    method: 'POST',
+  useFetch(`/api/admins/announcement/${props.data._id}`, {
+    method: 'PATCH',
     body: {
       ...values,
       login_image: file
@@ -73,8 +80,8 @@ async function submit(values: any) {
     }
   })
   } else {
-  useFetch('/api/admins/announcement/', {
-    method: 'POST',
+  useFetch(`/api/admins/announcement/${props.data._id}`, {
+    method: 'PATCH',
     body: {
       ...values,
     },
@@ -93,16 +100,28 @@ async function submit(values: any) {
   }
 }
 </script>
+<script lang="ts">
+export class Announcement {
+  _id!: string;
+  title!: string;
+  description!: string;
+  login_image!: string;
+  content!: string;
+  createdAt!: Date;
+  createdBy!: string;
+}
+</script>
 
 <template>
   <UModal>
     <UCard>
         <template #header>
             <div class="flex items-center justify-between">
-              <h1 class="text-2xl font-serif text-oct-green tracking-tighter">Create a new announcement</h1>
+              <h1 class="text-2xl font-serif text-oct-green tracking-tighter">Editing announcement</h1>
               <UButton color="gray" variant="ghost" icon="i-lucide-x" @click="modal.close()" />
             </div>  
         </template>
+        <p class="text-gray-600 text-sm">Post Id: {{ data._id }}</p>
       <div class="space-y-2">
         <Form
           class="flex flex-col gap-2"
@@ -111,15 +130,15 @@ async function submit(values: any) {
           v-slot="{ meta, isSubmitting, errors, values }"
         >
             <div>
-              <FormsTextField name="title" label="Title" placeholder="A great title" />
+              <FormsTextField name="title" label="Title" placeholder="A great title" :value="data.title" />
               <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.title || '', { digit: 8, field: "New password" }) }}</span>
             </div>
             <div>
-              <FormsTextArea name="description"  label="Description" placeholder="Lorem ipsum, dolor sit amet." :className="['resize-none', 'w-full', 'h-32']" />
+              <FormsTextArea name="description"  label="Description" placeholder="Lorem ipsum, dolor sit amet." :className="['resize-none', 'w-full', 'h-32']" :value="data.description" />
               <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.description || '', { digit: 8, field: "New password" }) }}</span>
             </div>
             <div>
-              <FormsTextField name="content" label="Link" placeholder="https://facebook.com/post/1023912391231283">
+              <FormsTextField name="content" label="Link" placeholder="https://facebook.com/post/1023912391231283" :value="data.content">
                 <template #leading>
                     <Link :size="24" />
                 </template>

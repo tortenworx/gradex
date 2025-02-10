@@ -4,7 +4,6 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
-  IsUrl,
   Matches,
 } from 'class-validator';
 import { Gender, Role } from '../../schemas/user.schema';
@@ -16,7 +15,6 @@ export class UserRecord {
   id_number: string;
 
   @IsOptional()
-  @IsUrl()
   image: string;
 
   @IsNotEmpty()

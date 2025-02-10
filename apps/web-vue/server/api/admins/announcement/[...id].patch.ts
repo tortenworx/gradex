@@ -11,10 +11,16 @@ export default defineEventHandler(async (event) => {
             statusMessage: 'The API Key for the backend disappeaed for some reason. This is a known bug. Retry later.'
         })
     }
+    if (!event.context.params?.id) {
+        throw createError({
+            statusCode: 400,
+            statusMessage: "Missing post ID."
+        })
+    }
     const accessToken = sessionData.secure.apiKey
-    const data = await event.$fetch(`${runtime.public.apiUrl}announcements`,
+    const data = await event.$fetch(`${runtime.public.apiUrl}announcements/${event.context.params?.id}`,
         {
-            method: "POST",
+            method: "PATCH",
             body,
             onRequest({ options }) {
                 options.headers = new Headers(options.headers)

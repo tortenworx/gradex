@@ -1,8 +1,5 @@
-import backend from "~/utils/backend-resolver"
-
 export default defineEventHandler(async (event) => {
     const sessionData = await requireUserSession(event)
-    const body = await readBody(event)
     const runtime = useRuntimeConfig()
     if (!sessionData.secure) {
         throw createError({
@@ -11,22 +8,28 @@ export default defineEventHandler(async (event) => {
             statusMessage: 'The API Key for the backend disappeaed for some reason. This is a known bug. Retry later.'
         })
     }
-    const accessToken = sessionData.secure.apiKey
-    const data = await event.$fetch(`${runtime.public.apiUrl}announcements`,
+    if (!event.context.params?.id) {
+        throw createError({
+            statusCode: 400,
+            statusMessage: "Missing post ID."
+        })
+    }
+    const data = await event.$fetch(`${runtime.public.apiUrl}announcements/${event.context.params?.id}`,
         {
-            method: "POST",
-            body,
+            method: "DELETE",
             onRequest({ options }) {
                 options.headers = new Headers(options.headers)
                 options.headers.set("Authorization", `Bearer ${sessionData.secure.apiKey}`)
             },
             onRequestError({ request, error, options }) {
+                console.log('error?')
                 throw createError({
                     statusCode: 500,
                     statusMessage: error.message
                 })
             },
             onResponseError({ response, request }) {
+                console.log('error here!', response._data, request)
                 throw createError({
                     statusCode: response.status,
                     statusMessage: 'Error occured on server'
@@ -34,4 +37,5 @@ export default defineEventHandler(async (event) => {
             }
         },
     )
+    console.log(data)
 })
