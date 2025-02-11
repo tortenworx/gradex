@@ -1,6 +1,7 @@
 export default defineNuxtRouteMiddleware((to, from) => {
   // check if the user is logged in
   const { loggedIn } = useUserSession();
+  if (import.meta.server) return
 
   const authRoutes = ['/accounts/login', '/accounts/resend', '/accounts/forgot-password', '/accounts/reset-password', '/accounts/accept']
   const guestRoutes = ['/legal/terms', '/legal/privacy', '/about']

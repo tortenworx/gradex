@@ -12,6 +12,7 @@ import { Role, User } from '../schemas/user.schema';
 import { CreateClassDto } from './dto/create-class.dto';
 import { AttachSubjectToClassDto } from './dto/attach-subject.dto';
 import { AddUserToClassDto } from './dto/add-user-to-class.dto';
+import { MongoIdParam } from './dto/id-param.dto';
 
 @Injectable()
 export class ClassesService {
@@ -50,34 +51,24 @@ export class ClassesService {
       throw new NotFoundException(
         'No subject found with the provided ID. Check ID, then try again.',
       );
-    classToEdit.stubjects.push(subject);
+    classToEdit.subjects.push(subject);
     return classToEdit.save();
   }
   async attachUserToClass(addUserToClassDto: AddUserToClassDto) {
     const classToAdd = await this.classModel.findById(
       addUserToClassDto.for_class,
     );
-    const student = await this.userModel.findById(addUserToClassDto.user_id);
     if (!classToAdd)
       throw new NotFoundException(
         '[CA1] An error occured while trying to attach student to class.',
         { description: 'No class found with the provided ID.' },
       );
-    if (!student)
-      throw new NotFoundException(
-        '[CAU2] An error occured when trying to attach student to class.',
-        {
-          description: 'No student found with the provided ID.',
-        },
-      );
-    if (student.role !== Role.USER) {
-      throw new UnprocessableEntityException('[CAU3] An error occured.', {
-        description: 'The user is not a student.',
-      });
-    }
     return this.classModel.updateOne(
       { _id: classToAdd._id },
-      { $push: { students: student } },
+      { $addToSet: { students: { $each: addUserToClassDto.user_id }}}
     );
+  }
+  async deleteClass(params: MongoIdParam) {
+    return await this.classModel.findByIdAndDelete(params.id)
   }
 }

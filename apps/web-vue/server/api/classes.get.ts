@@ -1,6 +1,5 @@
 export default defineEventHandler(async (event) => {
     const sessionData = await requireUserSession(event)
-    const body = await readBody(event)
     const runtime = useRuntimeConfig()
     if (!sessionData.secure) {
         throw createError({
@@ -10,10 +9,9 @@ export default defineEventHandler(async (event) => {
         })
     }
     const accessToken = sessionData.secure.apiKey
-    return await event.$fetch(`${runtime.public.apiUrl}announcements`,
+    return await event.$fetch(`${runtime.public.apiUrl}subjects`,
         {
-            method: "POST",
-            body,
+            method: "GET",
             onRequest({ options }) {
                 options.headers = new Headers(options.headers)
                 options.headers.set("Authorization", `Bearer ${accessToken}`)

@@ -5,10 +5,6 @@ defineProps({
         type: String,
         required: true,
     },
-    year: {
-        type: Number,
-        required: true,
-    },
     sem: {
         type: Number,
         required: true
@@ -20,17 +16,11 @@ defineProps({
 </script>
 
 <template>
-    <div class="bg-white shadow-md drop-shadow-xl shadow-lime-400 border-[1px] border-zinc-800 border-opacity-50 px-4 py-2 rounded-md flex flex-col gap-2 md:w-3/4">
+    <div class="bg-white dark:bg-gray-950 shadow-md drop-shadow-xl shadow-lime-400 border-[1px] border-zinc-800 border-opacity-50 px-4 py-2 rounded-md flex flex-col gap-2 md:w-3/4">
         <div class="grid grid-cols-2 md:grid-cols-4 text-center">
             <p class="col-span-2">
                 Full Name:
                 <span class="text-mono">{{ full_name }}</span>
-            </p>
-            <p>
-                Grade Level/Year:
-                <span class="text-mono">
-                    {{ year }}
-                </span>
             </p>
             <p>
                 Semester:
@@ -38,6 +28,7 @@ defineProps({
                     {{ format(sem, '0o') }}
                 </span>
             </p>
+            <UButton icon="i-vscode-icons-file-type-pdf2" class="text-right">Download as PDF</UButton>
         </div>
         <div class="w-full h-[1px] bg-gray-400 rounded-md"></div>
         <div class="flex flex-col gap-4">

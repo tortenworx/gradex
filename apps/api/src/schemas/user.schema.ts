@@ -18,7 +18,7 @@ export enum Role {
 
 @Schema({ autoSearchIndex: true })
 export class User {
-  @Prop({ required: true })
+  @Prop()
   image: string;
 
   @Prop({ required: true })

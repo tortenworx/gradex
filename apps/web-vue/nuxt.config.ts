@@ -61,6 +61,7 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     '@nuxt/ui',
     '@nuxtjs/tailwindcss',
-    '@bg-dev/nuxt-s3'
+    '@bg-dev/nuxt-s3',
+    'nuxt-authorization'
   ]
 })

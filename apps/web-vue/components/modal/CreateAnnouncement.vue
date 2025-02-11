@@ -29,9 +29,9 @@ function previewImg(event: Event) {
 }
 
 const schema = Yup.object().shape({
-  title: Yup.string().required('This title is required.').test('len', 'Title must be 8-32 characters long.', (val) => val.length <= 32 && val.length >= 8 ),
-  description: Yup.string().required('A description is required.').test('len', 'Description can onl be up to 180 characters long.', (val) => val.length <= 180),
-  content: Yup.string().required('This field is required.').url('The link must be an URL!'),
+  title: Yup.string().required('field_errors.required_specialized').test('len', 'field_errors.length_between', (val) => val.length <= 32 && val.length >= 8 ),
+  description: Yup.string().required('field_errors.required_specialized').test('len', 'field_errors.length_max', (val) => val.length <= 180),
+  content: Yup.string().required('field_errors.required_default').url('field_errors.url'),
   file: Yup.mixed<File>().optional().nullable().test({
     message: 'Please use only images with PNG, JPEG, and WEBP file formats.',
     test: (file, context) => {
@@ -56,9 +56,6 @@ async function submit(values: any) {
     body: {
       ...values,
       login_image: file
-    },
-    onRequest({ request, options }) {
-      console.log(request)
     },
     onResponseError({ response, error }) {
       toast.add({
@@ -112,11 +109,11 @@ async function submit(values: any) {
         >
             <div>
               <FormsTextField name="title" label="Title" placeholder="A great title" />
-              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.title || '', { digit: 8, field: "New password" }) }}</span>
+              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.title || '', { a: 8, b:32, field: "title" }) }}</span>
             </div>
             <div>
               <FormsTextArea name="description"  label="Description" placeholder="Lorem ipsum, dolor sit amet." :className="['resize-none', 'w-full', 'h-32']" />
-              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.description || '', { digit: 8, field: "New password" }) }}</span>
+              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.description || '', { max: 180, field: "description", pre: "A" }) }}</span>
             </div>
             <div>
               <FormsTextField name="content" label="Link" placeholder="https://facebook.com/post/1023912391231283">
@@ -124,11 +121,11 @@ async function submit(values: any) {
                     <Link :size="24" />
                 </template>
               </FormsTextField>
-              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.content || '') }}</span>
+              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.content || '', { field: "Link" }) }}</span>
             </div>
             <div>
               <FormsAnnouncementFileUpload name="file" label="Log-in Image" accept="image/jpeg, image/png, image/webp" @change="previewImg" />
-              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.file || '') }}</span>
+              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.file || '', { size: "5MB" }) }}</span>
               <UAccordion v-if="values.file" :items="[{ label: 'Preview Image', icon: 'i-lucide-image', slot: 'img-preview' }]" class="mt-2">
                 <template #img-preview>
                   <img :src="previewImage" class="w-full max-h-96 object-cover aspect-video" />

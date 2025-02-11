@@ -2,7 +2,7 @@
     <main>
         <div class="flex items-center justify-between">
             <h1 class="text-oct-green text-2xl font-serif dark:text-green-600">Accounts List</h1>
-            <div>
+            <div class="flex gap-2">
                 <UButton href="/admin/users/create">
                     New User
                 </UButton>

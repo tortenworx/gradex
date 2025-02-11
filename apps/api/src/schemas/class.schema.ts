@@ -5,7 +5,7 @@
  */
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
 import { User } from './user.schema';
 import { Subject } from './subject.schema';
 
@@ -33,12 +33,12 @@ export class Class {
   section: string;
   @Prop({ required: true, type: String, enum: Strand })
   strand: Strand;
+  @Prop({ type: [mongoose.Schema.ObjectId], ref: 'Subject' })
+  subjects: Subject[];
+  @Prop({ type: [mongoose.Schema.ObjectId], ref: 'User' })
+  students: User[];
   @Prop()
-  links: [ClassLinks];
-  @Prop({ type: mongoose.Schema.ObjectId, ref: 'Subject' })
-  stubjects: [Subject];
-  @Prop({ type: mongoose.Schema.ObjectId, ref: 'User' })
-  students: [User];
+  links: ClassLinks[];
 }
 
 export const ClassSchema = SchemaFactory.createForClass(Class);

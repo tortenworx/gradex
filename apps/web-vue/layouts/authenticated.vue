@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import { FormsSelection } from '#components';
 import { Globe, Menu, X, XIcon } from 'lucide-vue-next';
-const { user, clear } = useUserSession()
+const { user } = useUserSession()
 const runtime = useRuntimeConfig()
 const isOpen = ref(false)
+
+if (!user) {
+  router.push('accounts/login/')
+}
+</script>
+
+<script lang="ts">
 const router = useRouter()
+const { clear } = useUserSession()
 
 const avatarItems = [
   [{
@@ -21,8 +29,8 @@ const avatarItems = [
     label: 'Log Out',
     icon: 'i-lucide-log-out',
     click: () => {
-      clear(),
       navigateTo('/accounts/login', { external: true })
+      clear()
     }
   }], 
 ]
@@ -32,8 +40,7 @@ const avatarItems = [
     <div>
         <nav class="bg-gradient-to-r from-oct-green to-oct-lime px-4 py-2 flex items-center justify-between">
             <div class="flex gap-2">
-              <UButton @click="isOpen = true">
-                <Menu />
+              <UButton @click="isOpen = true" icon="i-lucide-menu" variant="ghost">
               </UButton>
                 <NuxtLink href="/">
                     <img src="~/assets/images/logo/gradex-solid.svg" alt="" width="186">
@@ -41,7 +48,7 @@ const avatarItems = [
             </div>
             <div>
               <UDropdown :items="avatarItems">
-                <UAvatar icon="i-heroicons-photo" :src="user.image" size="lg" />
+                <UAvatar icon="i-heroicons-photo" :src="user?.image" size="lg" />
                 <template #account>
                   <div class="flex-1 min-w-0 text-left">
                     <p>
@@ -89,8 +96,7 @@ const avatarItems = [
       <div class="px-4 py-2 flex flex-col gap-2">
         <section class="flex items-center justify-between">
           <h1 class="font-serif text-oct-green dark:text-green-600 text-xl">Menu</h1>
-          <UButton @click="isOpen = false">
-            <XIcon />
+          <UButton @click="isOpen = false" icon="i-lucide-x" variant="ghost">
           </UButton>
         </section>
         <section class="flex flex-col gap-2">

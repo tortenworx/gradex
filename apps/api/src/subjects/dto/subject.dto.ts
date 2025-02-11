@@ -6,18 +6,21 @@ interface SubjectLinks {
 }
 
 export class SubjectDto {
-    @IsNotEmpty()
-    @IsMongoId()
-    teacher: string;
-    @IsNotEmpty()
-    @MinLength(3)
-    @MaxLength(256)
-    name: string;
-    @IsNotEmpty()
-    code: string;
-    @IsOptional()
-    @MaxLength(800)
-    description: string;
-    @IsOptional()
-    links: [SubjectLinks];
+  @IsNotEmpty()
+  @IsMongoId()
+  teacher: string;
+  @IsOptional()
+  @IsMongoId()
+  forClass: string;
+  @IsNotEmpty()
+  @MinLength(3)
+  @MaxLength(256)
+  name: string;
+  @IsNotEmpty()
+  code: string;
+  @IsOptional()
+  @MaxLength(800)
+  description: string;
+  @IsOptional()
+  links: [SubjectLinks];
 }

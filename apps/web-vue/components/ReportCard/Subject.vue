@@ -21,9 +21,13 @@ defineProps({
 <template>
     <div class="flex items-center justify-between px-8 gap-3">
         <div class="flex flex-col">
-            <span class="font-mono text-zinc-600 text-xs">{{ code }}</span>
+            <div class="text-sm
+            ">
+                <span class="font-mono text-zinc-600 dark:text-zinc-400">{{ code }}</span>
+                &bull;
+                <span class="text-zinc-900 dark:text-zinc-600">{{ teacher || 'Professor X' }}</span>
+            </div>
             <p class="text-lime-600 font-serif text-xl">{{ name }}</p>
-            <p class="text-zinc-900 text-sm uppercase">{{ teacher || 'Professor X' }}</p>
         </div>
         <p class="text-center">
             <span class="font-bold font-mono text-2xl">{{ grade || 'X' }}</span>
