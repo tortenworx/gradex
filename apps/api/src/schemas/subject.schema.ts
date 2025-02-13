@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
 import { User } from './user.schema';
+import { Class } from './class.schema';
 
 export type SubjectDocument = HydratedDocument<Subject>;
 
@@ -19,6 +20,8 @@ export class Subject {
   code: string;
   @Prop({ length: 255 })
   description: string;
+  @Prop({ type: mongoose.Schema.ObjectId, ref: 'Class' })
+  linked_class: Class;
   @Prop()
   links: SubjectLinks[];
   @Prop({ type: [mongoose.Schema.ObjectId], ref: 'User' })

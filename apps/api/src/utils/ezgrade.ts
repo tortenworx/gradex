@@ -1,6 +1,6 @@
 import { Workbook } from "exceljs";
 import { ReadStream } from "node:fs";
-import { Readable, Stream } from 'node:stream'
+import { PassThrough, Readable, Stream, Writable } from 'node:stream'
 
 export interface ExportOptions {
     classId: string;
@@ -57,6 +57,7 @@ export async function exportSpreadsheet(options: ExportOptions, data: GradeData[
             }
             rowCount++;
         })
-    return await wb.xlsx.writeFile('sheet.xlsx')
-
+    const stream = new PassThrough()
+    await wb.xlsx.write(stream)
+    return wb.xlsx.writeBuffer()
 }

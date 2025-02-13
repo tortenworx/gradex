@@ -18,18 +18,21 @@ export class SubjectsService {
     ) {}
     async getSubjects(userId: string) {
         const user = await this.userModel.findById(userId)
-        console.log(userId)
         if (!user) {
             throw new NotFoundException('[SJ0G] Teacher is either invalid or non-existant.')
         }
         if (user.role == Role.FACULTY) {
-            return this.subjectModel.find({ teacher: user.id }).populate('students teacher')
+            return this.subjectModel.find({ teacher: user.id }).populate('students teacher linked_class')
         } else if (user.role == Role.USER) {
             return await this.subjectModel.find({ students: user.id }).populate('teacher').select('-students')
         }
     }
     async newSubject(newSubjectDto: SubjectDto) {
         const teacher = await this.userModel.findById(newSubjectDto.teacher)
+        const atClass = await this.classesModel.findOne({ _id: newSubjectDto.forClass }).populate('students')
+        if (!atClass) {
+            throw new NotFoundException('[SCR1] Class is either invalid or non-existant.')
+        }
         if (!teacher) {
             throw new NotFoundException('[SCR0] Teacher is either invalid or non-existant.')
         }
@@ -37,21 +40,17 @@ export class SubjectsService {
             name: newSubjectDto.name,
             description: newSubjectDto.description,
             code: newSubjectDto.code,
-            teacher: teacher,
+            linked_class: atClass,
+            teacher: teacher
         })
-        if (newSubjectDto.forClass) {
-            const atClass = await this.classesModel.findOne({ _id: newSubjectDto.forClass }).populate('students')
-            if (!atClass) {
-                throw new NotFoundException('[SCR1] Class is either invalid or non-existant.')
+        await this.subjectModel.findByIdAndUpdate(subject.id, 
+            { $addToSet: { students: { $each: atClass.students }}})
+        await this.classesModel.findByIdAndUpdate(atClass, {
+            $push: {
+                "subjects": subject
             }
-            await this.subjectModel.findByIdAndUpdate(subject.id, 
-                { $addToSet: { students: { $each: atClass.students }}})
-            await this.classesModel.findByIdAndUpdate(atClass, {
-                $push: {
-                    "subjects": subject
-                }
-            })
-        }
+        })
+        return subject;
     }
     async attachClass(attachClassDto: AttachClassDto) {
         const subjectDoc = await this.subjectModel.findById(attachClassDto.subject)

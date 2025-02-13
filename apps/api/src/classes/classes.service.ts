@@ -23,7 +23,6 @@ export class ClassesService {
   ) {}
 
   async createClass(createClassDto: CreateClassDto): Promise<Class> {
-    console.log(createClassDto);
     const adviser = await this.userModel.findById(createClassDto.adviser);
     if (!adviser || adviser.role !== Role.FACULTY)
       throw new NotFoundException(
@@ -31,8 +30,9 @@ export class ClassesService {
       );
     const createdClass = await this.classModel.create({
       adviser,
-      strand: createClassDto.strand,
-      section: createClassDto.section,
+      program: createClassDto.program,
+      type: createClassDto.type,
+      class_name: createClassDto.class_name,
     });
     return createdClass;
   }

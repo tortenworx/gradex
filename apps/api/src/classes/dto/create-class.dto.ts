@@ -5,7 +5,7 @@ import {
   IsNotEmpty,
   IsOptional,
 } from 'class-validator';
-import { ClassLinks, Strand } from '../../schemas/class.schema';
+import { ClassLinks, Type, Program } from '../../schemas/class.schema';
 import { User } from 'src/schemas/user.schema';
 import { Subject, SubjectDocument } from 'src/schemas/subject.schema';
 
@@ -14,9 +14,11 @@ export class CreateClassDto {
   @IsNotEmpty()
   adviser: string;
   @IsNotEmpty()
-  section: string;
-  @IsEnum(Strand)
-  strand: Strand;
+  class_name: string;
+  @IsEnum(Program)
+  program: Program;
+  @IsEnum(Type)
+  type: Type;
   @IsOptional()
   @IsArray()
   links: [ClassLinks];

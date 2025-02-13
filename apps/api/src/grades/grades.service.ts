@@ -27,12 +27,13 @@ export class GradesService {
       throw new NotFoundException(
         'No subject was found with the provided information.'
     );
-    const exisitingReport = await this.gradeReportModel.find({
+    const exisitingReport = await this.gradeReportModel.findOne({
       $and: [
         { subject: subject },
         { status: "EDITING" }
       ]
     })
+    console.log(exisitingReport)
     if (exisitingReport) throw new UnauthorizedException('[GR2C] Another unpublished report exists!')
     const report = new this.gradeReportModel()
     report.subject = subject

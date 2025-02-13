@@ -16,13 +16,28 @@ export interface ClassLinks {
   link: string;
 }
 
-export enum Strand {
+
+
+export enum Program {
   GAS = 'GAS',
   STEM = 'STEM',
   HUMMS = 'HUMMS',
   ABM = 'ABM',
   TVL_HE = 'TVL_HE',
   TVL_ICT = 'TVL_ICT',
+  BSIT = 'BSIT',
+  BSHM = 'BSTHM',
+  BEED = 'BEED',
+  BSN = 'BSN',
+  BSBA = 'BSBA',
+  BSA = 'BSA',
+  BSCRIM = 'BSCRIM',
+  BSTM = 'BSTM'
+}
+
+export enum Type {
+  COLLEGE = 'COLLEGE',
+  SHS = 'SHS'
 }
 
 @Schema()
@@ -30,9 +45,11 @@ export class Class {
   @Prop({ type: mongoose.Schema.ObjectId, ref: 'User' })
   adviser: User;
   @Prop({ required: true })
-  section: string;
-  @Prop({ required: true, type: String, enum: Strand })
-  strand: Strand;
+  class_name: string;
+  @Prop({ required: true, type: String, enum: Program })
+  program: Program;
+  @Prop({ required: true, type: String, enum: Type })
+  type: Type;
   @Prop({ type: [mongoose.Schema.ObjectId], ref: 'Subject' })
   subjects: Subject[];
   @Prop({ type: [mongoose.Schema.ObjectId], ref: 'User' })

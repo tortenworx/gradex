@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { isFaculty } from '~/shared/utils/abilities';
 import Class from '~/types/Class'
 const modal = useModal()
 const props = defineProps({
@@ -22,6 +23,31 @@ const props = defineProps({
             <div>
                 {{ data.description }}
             </div>
+            <div class="mt-4">
+                <h3 class="text-xl font-serif">Students</h3>
+            </div>
+            <Can :ability="isFaculty">
+                <div class="mt-4">
+                    <h3 class="text-xl font-serif">Students</h3>
+                    <section class="mt-2">
+                        <div v-for="student in data.students" class="rounded-md bg-gray-100 flex items-center justify-start gap-2">
+                            <div>
+                                <UAvatar :src="student.image" icon="i-lucide-image"></UAvatar>
+                            </div>
+                            <div class="flex-grow">
+                                <p>
+                                    {{ student.first_name }}
+                                    {{ student.middle_name }}
+                                    {{ student.last_name }}
+                                </p>
+                            </div>
+                        </div>
+                        <div v-if="data.students.length == 0">
+                            <p>No students found :'(</p>
+                        </div>
+                    </section>
+                </div>
+            </Can>
         </UCard>
     </UModal>
 </template>

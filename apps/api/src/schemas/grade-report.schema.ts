@@ -26,6 +26,8 @@ export class GradeReport {
   created_by: User;
   @Prop({ required: true })
   semester: number;
+  @Prop()
+  quarter: number;
   @Prop({
     required: true,
     type: String,

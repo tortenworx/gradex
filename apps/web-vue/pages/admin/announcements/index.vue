@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { FormsAnnouncementFileUpload, ModalCreateAnnouncement, ModalEditAnnouncementModal } from '#components'
 import ModalDeleteAnnouncement from '~/components/modal/DeleteAnnouncement.vue'
+import { isAdmin } from '~/shared/utils/abilities'
+
+await authorize(isAdmin)
 
 const toast = useToast()
 const modal = useModal()

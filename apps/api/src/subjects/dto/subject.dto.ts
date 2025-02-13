@@ -9,7 +9,6 @@ export class SubjectDto {
   @IsNotEmpty()
   @IsMongoId()
   teacher: string;
-  @IsOptional()
   @IsMongoId()
   forClass: string;
   @IsNotEmpty()

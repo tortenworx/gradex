@@ -34,8 +34,10 @@ import { TooltipArrow, TooltipContent, TooltipPortal, TooltipProvider, TooltipRo
 import { DropdownMenuItem } from 'radix-vue';
 import { VueSpinnerTail } from 'vue3-spinners';
 import { Gender } from '~/types/User';
+import { isAdmin } from '~/shared/utils/abilities';
 
 const router = useRouter()
+await authorize(isAdmin)
 
 definePageMeta({
     layout: 'authenticated',

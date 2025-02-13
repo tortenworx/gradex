@@ -4,6 +4,7 @@ import { Roles } from '../credentials/decorator/roles.decorator';
 import { CreateReportDto } from './dto/create-report.dto';
 import { CredentialsGuard } from '../credentials/credentials.guard';
 import { createReadStream } from 'node:fs';
+import { Readable } from 'node:stream';
 
 @Controller('grades')
 export class GradesController {
@@ -25,10 +26,10 @@ export class GradesController {
   @Get('/ezgrade/:id')
   @Roles(['FACULTY'])
   @UseGuards(CredentialsGuard)
-  async exportEzGrade(@Res() res: Response, @Param() params) {
-    await this.gradesService.exportToEzGrade(params.id)
-    const file = createReadStream('sheet.xlsx')
-    return new StreamableFile(file, {
+  async exportEzGrade(@Res({ passthrough: true }) res: Response, @Param() params) {
+    const file = await this.gradesService.exportToEzGrade(params.id)
+    const tmp = Buffer.from(file)
+    return new StreamableFile(tmp, {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       disposition: 'attachment; filename="exports.xlsx"'
     });

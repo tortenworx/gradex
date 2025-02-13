@@ -99,10 +99,8 @@ async function submitLogin(values: any) {
             navigateTo('/', { external: true })
           }
         }],
-        callback: () => {
-          navigateTo('/', { external: true })
-        }
       })
+      navigateTo('/', { external: true })
     }
   })
 }

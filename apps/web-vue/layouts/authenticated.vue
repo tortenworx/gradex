@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { FormsSelection } from '#components';
 import { Globe, Menu, X, XIcon } from 'lucide-vue-next';
+import { isAdmin, isStudent } from '~/shared/utils/abilities';
 const { user } = useUserSession()
 const runtime = useRuntimeConfig()
 const isOpen = ref(false)
@@ -103,18 +104,22 @@ const avatarItems = [
           <UButton variant="ghost" color="gray" to="/" icon="i-heroicons-home-20-solid">
             Home
           </UButton>
-          <UButton variant="ghost" color="gray" to="/your-report" icon="i-lucide-file-user">
-            {{ $t('sidebar.student_grades') }}
-          </UButton>
+          <Can :ability="isStudent">
+            <UButton variant="ghost" color="gray" to="/your-report" icon="i-lucide-file-user">
+              {{ $t('sidebar.student_grades') }}
+            </UButton>
+          </Can>
           <UButton variant="ghost" color="gray" to="/classes" icon="i-lucide-presentation">
             {{ $t('sidebar.student_classes') }}
           </UButton>
           <UButton variant="ghost" color="gray" to="/settings" icon="i-heroicons-cog-20-solid">
             {{ $t('sidebar.usr_settings') }}
           </UButton>
-          <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/announcements" icon="i-lucide-megaphone">
-            {{ $t('sidebar.manage_announcements') }}
-          </UButton>
+          <Can :ability="isAdmin">
+            <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/announcements" icon="i-lucide-megaphone">
+              {{ $t('sidebar.manage_announcements') }}
+            </UButton>
+          </Can>
           <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/global-variables" icon="i-heroicons-server-20-solid">
             {{ $t('sidebar.global_vars') }}
           </UButton>
