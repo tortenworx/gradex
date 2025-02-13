@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FormsSelection } from '#components';
 import { Globe, Menu, X, XIcon } from 'lucide-vue-next';
-import { isAdmin, isStudent } from '~/shared/utils/abilities';
+import { isAdmin, isFaculty, isStudent } from '~/shared/utils/abilities';
 const { user } = useUserSession()
 const runtime = useRuntimeConfig()
 const isOpen = ref(false)
@@ -112,6 +112,11 @@ const avatarItems = [
           <UButton variant="ghost" color="gray" to="/classes" icon="i-lucide-presentation">
             {{ $t('sidebar.student_classes') }}
           </UButton>
+          <Can :ability="isFaculty">
+          <UButton variant="ghost" color="gray" to="/settings" icon="i-lucide-file-chart-column">
+            Grade Reports
+          </UButton>
+          </Can>
           <UButton variant="ghost" color="gray" to="/settings" icon="i-heroicons-cog-20-solid">
             {{ $t('sidebar.usr_settings') }}
           </UButton>

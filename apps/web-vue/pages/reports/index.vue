@@ -44,6 +44,6 @@ function createNew() {
         </div>
     </section>
     <main class="grid md:grid-cols-2">
-        <ReportCardGradeReportOverview />
+        <ReportCardGradeReportOverview @click="$router.push('/reports/view/67ad9c1f9d81931639e63db6')" />
     </main>
 </template>
