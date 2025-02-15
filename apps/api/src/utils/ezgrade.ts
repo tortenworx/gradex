@@ -10,7 +10,7 @@ export interface ExportOptions {
 export interface GradeData {
     name: string;
     id: string;
-    grades: [number, number],
+    grade: number,
     gender: any
 }
 
@@ -33,28 +33,25 @@ export async function exportSpreadsheet(options: ExportOptions, data: GradeData[
     classId.value = options.classId;
     recordId.value = options.recordId;
     date.value = new Date().toISOString();
-    console.log(data.filter((m) => m.gender == "MALE"))
     data.filter((m) => m.gender == "MALE").forEach((item) => {
         studentsWorksheet.getRow(rowCount).getCell("B").value = item.id;
         studentsWorksheet.getRow(rowCount).getCell("C").value = item.name;
-        if (item.grades) {
-            for (let i = 0; i < item.grades.length; i++) {
-            const cell = gradesWorksheet.getRow(rowCount).getCell(i + 3)
-            cell.value = item.grades[i];
-            }
-        }
+        const cell = gradesWorksheet.getRow(rowCount).getCell(3)
+        cell.value = item.grade;
         rowCount++;
     })
         rowCount = 40;
         data.filter((m) => m.gender !== "MALE").forEach((item) => {
             studentsWorksheet.getRow(rowCount).getCell("B").value = item.id;
             studentsWorksheet.getRow(rowCount).getCell("C").value = item.name;
-            if (item.grades) {
-                for (let i = 0; i < item.grades.length; i++) {
-                const cell = gradesWorksheet.getRow(rowCount).getCell(i + 3)
-                cell.value = item.grades[i];
-                }
-            }
+            const cell = gradesWorksheet.getRow(rowCount).getCell(3)
+            cell.value = item.grade;
+            // if (item.grades) {
+            //     for (let i = 0; i < item.grades.length; i++) {
+            //     const cell = gradesWorksheet.getRow(rowCount).getCell(i + 3)
+            //     cell.value = item.grades[i];
+            //     }
+            // }
             rowCount++;
         })
     const stream = new PassThrough()

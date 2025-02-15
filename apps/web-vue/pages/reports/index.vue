@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ModalCreateReport } from '#components';
 import { isFaculty } from '~/shared/utils/abilities';
+import ReportsEdit from '~/pages/reports/edit/[reportId].vue'
 const modal = useModal()
 const created = ref()
+const router = useRouter()
 
 await authorize(isFaculty)
 
@@ -12,23 +14,42 @@ definePageMeta({
 })
 await authorize(isFaculty)
 
+interface Record {
+    _id: string,
+    status: "EDITING" | "PUBLISHED" | "REVIEWING";
+    type: "SHS" | "COLLEGE";
+    createdAt: string;
+    subject: {
+      _id: string;
+      name: string;
+      code: string;
+      linked_class: {
+        _id: string;
+        class_name: string;
+      }
+    };
+    created_by: string;
+    semester: number;
+}
+
+const { data } = useFetch<Record[]>('/api/reports/')
+
 function createNew() {
     modal.open(ModalCreateReport, {
         report_id: created,
         onInformation: (res) => {
-            console.log(res)
             const { data, status } = useFetch('/api/reports/', {
                 method: 'POST',
-                timeout: 60000,
                 body: res.selected,
                 onResponse({ response, request }) {
-                    console.log(response._data)
+                    navigateTo(`/reports/edit/${response._data._id}`)
                 }
             })
             modal.close()
         }
     })
 }
+console.log(router.getRoutes())
 </script> 
 
 <template>
@@ -43,7 +64,7 @@ function createNew() {
             <UButton icon="i-lucide-plus" @click="createNew">New Report</UButton>
         </div>
     </section>
-    <main class="grid md:grid-cols-2">
-        <ReportCardGradeReportOverview @click="$router.push('/reports/view/67ad9c1f9d81931639e63db6')" />
+    <main class="grid md:grid-cols-2 gap-2">
+        <ReportCardGradeReportOverview v-for="item in data" :subject="item.subject.name" :className="item.subject.linked_class.class_name" :id="item._id" :status="item.status" :date="item.createdAt" /> 
     </main>
 </template>

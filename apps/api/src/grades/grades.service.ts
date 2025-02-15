@@ -4,9 +4,10 @@ import { GradeReport, REPORT_STATUS, REPORT_TYPE } from '../schemas/grade-report
 import { Subject } from '../schemas/subject.schema';
 import { User } from '../schemas/user.schema';
 import { CreateReportDto } from './dto/create-report.dto';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { exportSpreadsheet, GradeData } from 'src/utils/ezgrade';
 import { MongoIdParam } from 'src/classes/dto/id-param.dto';
+import { UpdateGradesDto } from './dto/update-grade.dto';
 
 @Injectable()
 export class GradesService {
@@ -51,7 +52,7 @@ export class GradesService {
   }
 
   async exportToEzGrade(id: string) {
-    const report = await this.gradeReportModel.findById(id).populate('records.user')
+    const report = await this.gradeReportModel.findById(id)
     const subject = await this.subjectModel.findOne(report.subject)
     if (!report) throw new NotFoundException('[GR0EZ] No report found.')
     if (report.status !== 'EDITING') throw new UnauthorizedException('[GR1EZ] Cannot export on an published report')
@@ -60,12 +61,71 @@ export class GradesService {
       const user = await this.userModel.findOne(i.user)
       arr.push({
         id: user.id,
-        grades: [i.avg, null],
+        grade: i.avg,
         name: `${user.last_name}, ${user.first_name} ${user.middle_name}`,
         gender: user.gender
       })
     }
     return exportSpreadsheet({ classId: subject.id, recordId: report.id }, arr)
+  }
+
+  async fetchReport(id: string, user_id: string) {
+    const data = await this.gradeReportModel.findById(id).populate([
+      {
+        path: 'records',
+        populate: {
+          path: 'user', model: 'User', select: 'first_name middle_name last_name'
+        }
+      }, 
+      {
+        path: 'subject',
+        select: 'name code',
+        populate: {
+          path: 'linked_class',
+          model: 'Class',
+          select: 'class_name'
+        }
+      },
+      {
+        path: 'created_by',
+        select: 'first_name middle_name last_name' 
+      }
+    ])
+    if (!data) throw new NotFoundException('[GR0F] No report found.')
+    const reqUser = await this.userModel.findById(user_id)
+    if (!reqUser) throw new NotFoundException('[GR1F] Unable to verify authorization.')
+    // if (data.created_by.id_number !== reqUser.id_number)
+    //   throw new UnauthorizedException('[GR2F] You are not the orignal report owner.')
+    return data;
+  }
+
+  async fetchAllReports(user_id: string) {
+    const user = await this.userModel.findById(user_id)
+    if (!user) throw new NotFoundException('[GR0FA] No user was found with the provided information.')
+    const data = await this.gradeReportModel.find({ created_by: user._id }).populate([
+      {
+        path: 'subject',
+        select: 'name code',
+        populate: {
+          path: 'linked_class',
+          model: 'Class',
+          select: 'class_name'
+        }
+      }
+    ]).select('-records')
+    return data;
+  }
+
+  async updateReport(id: string, gradeUpdateDto: UpdateGradesDto) {
+    const isPublished = await this.gradeReportModel.findById(id)
+    if (isPublished.status == REPORT_STATUS.PUBLISHED)
+      throw new UnauthorizedException('[GR0UD] This report has been published. You cannot edit this report anymore.')
+    const report = await this.gradeReportModel.findByIdAndUpdate(id, {
+      $set: {
+        records: gradeUpdateDto.records
+      }
+    })
+    return report;
   }
 
   // !NOTICE: Depreciated

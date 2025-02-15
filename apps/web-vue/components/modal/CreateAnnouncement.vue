@@ -96,7 +96,7 @@ async function submit(values: any) {
     <UCard>
         <template #header>
             <div class="flex items-center justify-between">
-              <h1 class="text-2xl font-serif text-oct-green tracking-tighter">Create a new announcement</h1>
+              <h1 class="text-2xl font-serif text-oct-green dark:text-lime-400 tracking-tighter">Create a new announcement</h1>
               <UButton color="gray" variant="ghost" icon="i-lucide-x" @click="modal.close()" />
             </div>  
         </template>

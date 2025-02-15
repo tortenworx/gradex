@@ -8,7 +8,12 @@ import { UserX } from 'lucide-vue-next';
 const toast = useToast()
 const runtime = useRuntimeConfig()
 const router = useRouter()
+const { loggedIn } = useUserSession()
 const isLoginDisabled = await $fetch('/api/admins/global-vars/disable-login')
+
+if (loggedIn) {
+  router.push({ path: '/' })
+}
 
 interface Announcement {
   title: string;
@@ -87,20 +92,22 @@ async function submitLogin(values: any) {
       })
     },
     onResponse({ request, response, options }) {
-      toast.update('log_in', {
-        title: 'You have signed in!',
-        description: 'You will be redirected to the dashboard in 2 seconds.',
-        color: 'green',
-        icon: 'i-lucide-circle-check-big',
-        timeout: 2000,
-        actions: [{
-          label: 'Go to dashboard',
-          click: () => {
-            navigateTo('/', { external: true })
-          }
-        }],
-      })
-      navigateTo('/', { external: true })
+      if (response.ok) { 
+        toast.update('log_in', {
+          title: 'You have signed in!',
+          description: 'You will be redirected to the dashboard in 2 seconds.',
+          color: 'green',
+          icon: 'i-lucide-circle-check-big',
+          timeout: 2000,
+          actions: [{
+            label: 'Go to dashboard',
+            click: () => {
+              navigateTo('/', { external: true })
+            }
+          }],
+        })
+        navigateTo('/', { external: true })
+      }
     }
   })
 }
@@ -109,7 +116,7 @@ async function submitLogin(values: any) {
     <main class="md:grid grid-cols-1 md:grid-cols-3 grid-flow-col min-h-[100dvh] dark:bg-slate-950">
       <div class="md:invisible md:hidden">
         <UCarousel ref="carouselRef" v-slot="{ item }" :items="announcements" :ui="{ item: 'basis-full' }" v-if="announcements">
-          <div class="flex-[0_0_100%] min-w-0 h-full relative text-white mix-blend-overlay bg-gradient-to-br from-oct-othagreen to-transparent">
+          <div class="flex-[0_0_100%] min-w-0 h-full relative text-white bg-gradient-to-br from-oct-othagreen to-transparent">
             <img :src="item.login_image" class="object-fit">
             <div class="absolute md:top-5 w-full bottom-0 left-0 p-4 md:px-0 flex flex-col gap-2 md:w-1/2 text-center bg-gradient-to-t from-green-800 to-transparent">
                 <h1 class="text-lg font-bold">

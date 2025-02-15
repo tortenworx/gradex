@@ -44,6 +44,8 @@ export class GradeReport {
   type: REPORT_TYPE;
   @Prop({ type: [{user: {type: mongoose.Schema.ObjectId}, avg: {type: Number}}], required: true })
   records: {user: User; avg: Nullable<number>}[];
+  @Prop({ type: Date, default: Date.now() })
+  createdAt: Date
 }
 
 export const GradeReportSchema = SchemaFactory.createForClass(GradeReport);

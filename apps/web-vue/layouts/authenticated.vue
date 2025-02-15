@@ -113,7 +113,7 @@ const avatarItems = [
             {{ $t('sidebar.student_classes') }}
           </UButton>
           <Can :ability="isFaculty">
-          <UButton variant="ghost" color="gray" to="/settings" icon="i-lucide-file-chart-column">
+          <UButton variant="ghost" color="gray" to="/reports" icon="i-lucide-file-chart-column">
             Grade Reports
           </UButton>
           </Can>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { isFaculty } from '~/shared/utils/abilities';
-import Class from '~/types/Class'
+import Class from '~/types/Class';
+
 const modal = useModal()
 const props = defineProps({
     data: {
@@ -22,9 +23,6 @@ const props = defineProps({
             <h1 class="text-2xl font-serif text-oct-green dark:text-lime-600 mb-2">{{ data.name }}</h1>
             <div>
                 {{ data.description }}
-            </div>
-            <div class="mt-4">
-                <h3 class="text-xl font-serif">Students</h3>
             </div>
             <Can :ability="isFaculty">
                 <div class="mt-4">
