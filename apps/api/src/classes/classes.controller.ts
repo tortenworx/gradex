@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ClassesService } from './classes.service';
 import { Roles } from '../credentials/decorator/roles.decorator';
 import { CredentialsGuard } from '../credentials/credentials.guard';
@@ -11,6 +11,13 @@ import { MongoIdParam } from './dto/id-param.dto';
 @Controller('classes')
 export class ClassesController {
   constructor(private readonly classesService: ClassesService) {}
+  @Get('/')
+  @Roles(['SUPERADMIN'])
+  @UseGuards(CredentialsGuard)
+  async getAllClass() {
+    return this.classesService.getAllClasses()
+  }
+
   @Post('/create')
   @Roles(['SUPERADMIN'])
   @UseGuards(CredentialsGuard)

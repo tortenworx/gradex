@@ -1,5 +1,8 @@
+import type UserRecord from "~/types/User"
+
 export default defineEventHandler(async (event) => {
     const sessionData = await requireUserSession(event)
+    const body = await readBody(event)
     const runtime = useRuntimeConfig()
     if (!sessionData.secure) {
         throw createError({
@@ -8,18 +11,14 @@ export default defineEventHandler(async (event) => {
             statusMessage: 'The API Key for the backend disappeaed for some reason. This is a known bug. Retry later.'
         })
     }
-    if (!event.context.params?.id) {
-        throw createError({
-            statusCode: 400,
-            statusMessage: "Missing post ID."
-        })
-    }
-    const data = await event.$fetch(`${runtime.public.apiUrl}announcements/${event.context.params?.id}`,
+    const accessToken = sessionData.secure.apiKey
+    const reset = await event.$fetch<{ data: UserRecord }>(`${runtime.public.apiUrl}pw-reset/admin`,
         {
-            method: "DELETE",
+            method: "POST",
+            body,
             onRequest({ options }) {
                 options.headers = new Headers(options.headers)
-                options.headers.set("Authorization", `Bearer ${sessionData.secure.apiKey}`)
+                options.headers.set("Authorization", `Bearer ${accessToken}`)
             },
             onRequestError({ request, error, options }) {
                 throw createError({
@@ -35,4 +34,5 @@ export default defineEventHandler(async (event) => {
             }
         },
     )
+    return reset
 })

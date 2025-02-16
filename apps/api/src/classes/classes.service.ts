@@ -71,4 +71,7 @@ export class ClassesService {
   async deleteClass(params: MongoIdParam) {
     return await this.classModel.findByIdAndDelete(params.id)
   }
+  async getAllClasses() {
+    return await this.classModel.find({})
+  }
 }

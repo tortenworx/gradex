@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ModalAboutClass } from '#components';
+import { isNotAdmin } from '~/shared/utils/abilities';
 import type Class from '~/types/Class';
 const modal = useModal()
 const created = ref()
+
+await authorize(isNotAdmin)
 
 definePageMeta({
     title: 'Your Classes',

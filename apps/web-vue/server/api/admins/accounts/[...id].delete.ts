@@ -1,3 +1,4 @@
+
 export default defineEventHandler(async (event) => {
     const sessionData = await requireUserSession(event)
     const runtime = useRuntimeConfig()
@@ -11,10 +12,10 @@ export default defineEventHandler(async (event) => {
     if (!event.context.params?.id) {
         throw createError({
             statusCode: 400,
-            statusMessage: "Missing post ID."
+            statusMessage: "Missing user ID."
         })
     }
-    const data = await event.$fetch(`${runtime.public.apiUrl}announcements/${event.context.params?.id}`,
+    const data = await event.$fetch(`${runtime.public.apiUrl}users/${event.context.params?.id}`,
         {
             method: "DELETE",
             onRequest({ options }) {

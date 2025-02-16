@@ -34,6 +34,7 @@ export default defineEventHandler(async (event) => {
                 personal_email: element.personal_email_address,
                 school_email: element.educational_email_address,
                 gender: element.gender,
+                credential: element.credential ? true : false
             })
         });
         return result;

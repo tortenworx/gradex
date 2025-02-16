@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FormsSelection } from '#components';
 import { Globe, Menu, X, XIcon } from 'lucide-vue-next';
-import { isAdmin, isFaculty, isStudent } from '~/shared/utils/abilities';
+import { isAdmin, isFaculty, isNotAdmin, isStudent } from '~/shared/utils/abilities';
 const { user } = useUserSession()
 const runtime = useRuntimeConfig()
 const isOpen = ref(false)
@@ -109,17 +109,21 @@ const avatarItems = [
               {{ $t('sidebar.student_grades') }}
             </UButton>
           </Can>
-          <UButton variant="ghost" color="gray" to="/classes" icon="i-lucide-presentation">
-            {{ $t('sidebar.student_classes') }}
-          </UButton>
+          <Can :ability="isNotAdmin">
+            <UButton variant="ghost" color="gray" to="/classes" icon="i-lucide-presentation">
+              {{ $t('sidebar.student_classes') }}
+            </UButton>
+          </Can>
           <Can :ability="isFaculty">
           <UButton variant="ghost" color="gray" to="/reports" icon="i-lucide-file-chart-column">
             Grade Reports
           </UButton>
           </Can>
-          <UButton variant="ghost" color="gray" to="/settings" icon="i-heroicons-cog-20-solid">
-            {{ $t('sidebar.usr_settings') }}
-          </UButton>
+          <Can :ability="isAdmin">
+            <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/users" icon="i-lucide-users">
+              {{ $t('sidebar.manage_users') }}
+            </UButton>
+          </Can>
           <Can :ability="isAdmin">
             <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/announcements" icon="i-lucide-megaphone">
               {{ $t('sidebar.manage_announcements') }}
@@ -127,6 +131,9 @@ const avatarItems = [
           </Can>
           <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/global-variables" icon="i-heroicons-server-20-solid">
             {{ $t('sidebar.global_vars') }}
+          </UButton>
+          <UButton variant="ghost" color="gray" to="/settings" icon="i-heroicons-cog-20-solid">
+            {{ $t('sidebar.usr_settings') }}
           </UButton>
         </section>
       </div>
