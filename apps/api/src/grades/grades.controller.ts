@@ -1,16 +1,34 @@
-import { Body, Controller, Get, Param, Patch, Post, Req, Request, Res, StreamableFile, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Request, Res, StreamableFile, UseGuards } from '@nestjs/common';
 import { GradesService } from './grades.service';
 import { Roles } from '../credentials/decorator/roles.decorator';
 import { CreateReportDto } from './dto/create-report.dto';
 import { CredentialsGuard } from '../credentials/credentials.guard';
-import { createReadStream } from 'node:fs';
-import { Readable } from 'node:stream';
 import { MongoIdParam } from 'src/classes/dto/id-param.dto';
 import { UpdateGradesDto } from './dto/update-grade.dto';
+import { get } from 'mongoose';
 
 @Controller('grades')
 export class GradesController {
   constructor(private readonly gradesService: GradesService) {}
+  
+  @Roles(['USER'])
+  @UseGuards(CredentialsGuard)
+  @Get('/pdf')
+  async exportToPdf(@Res({ passthrough: true }) res: Response, @Request() request) {
+    const file = await this.gradesService.exportToPDF(request.user.sub)
+    const tmp = Buffer.from(file)
+    return new StreamableFile(tmp, {
+      type: 'application/pdf',
+      disposition: 'attachment; filename="exported.pdf"'
+    });
+  }
+
+  @Roles(['USER'])
+  @UseGuards(CredentialsGuard)
+  @Get('/your-report')
+  async getUserGrades(@Request() request) {
+    return await this.gradesService.getUserReport(request.user.sub)
+  }
 
   @Post('/')
   @Roles(['FACULTY'])
@@ -28,14 +46,14 @@ export class GradesController {
   @Get('/:id')
   @Roles(['FACULTY', 'SUPERADMIN'])
   @UseGuards(CredentialsGuard)
-  async getWan(@Param() params: MongoIdParam, @Req() request) {
+  async getWan(@Param() params: MongoIdParam, @Request() request) {
     return await this.gradesService.fetchReport(params.id, request.user.sub)
   }
 
   @Get('/')
   @Roles(['FACULTY'])
   @UseGuards(CredentialsGuard)
-  async getOl(@Req() request) {
+  async getOl(@Request() request) {
     return await this.gradesService.fetchAllReports(request.user.sub)
   }
 

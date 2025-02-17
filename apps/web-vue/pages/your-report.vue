@@ -3,7 +3,45 @@ definePageMeta({
     layout: 'authenticated',
 })
 
+interface Record {
+    subj_name: string,
+    code: string,
+    teacher: {
+        _id: string,
+        first_name: string,
+        middle_name: string,
+        last_name: string
+    },
+    avg: number | null
+}
+
+interface Document {
+  full_name: string,
+  id_number: string,
+  program: string,
+  class_name: string,
+  semester: string | number,
+  records: Record[]
+}
+
 const { user } = useUserSession()
+const { data } = useFetch<Document | null>('/api/reports/student-report')
+data.value?.records.filter((item) => {
+    return item !== null
+})
+console.log(data)
+
+function getGradeAverage(data: Record[]): string | number {
+    const filtration = data.filter(n => n)
+    const averages = filtration.map((i) => {
+        return i.avg
+    })
+    if (averages.some(el => el == null)) return "Inc."
+    const sum = averages.reduce((a,b) => a + b, 0)
+    const avg = (sum / averages.length) || 0
+    console.log(avg)
+    return avg
+}
 </script>
 
 <template>
@@ -16,68 +54,23 @@ const { user } = useUserSession()
                 Report for user {{ user._id }}
             </h3>
         </section>
-        <ReportCard full_name="Jarelle Emmanuel Andulan" :avg="80" :sem="1">
-            <ReportCardSubject code="SH001" name="Practical Research 1" teacher="Jake Doe" :grade="80" />
+        <UAlert
+            title="Incomplete Grades"
+            description="Some of your grades has been listed as blank. Contact your subject teacher immediately to resolve this issue."
+            color="red"
+            variant="outline"
+            icon="i-lucide-badge-x"
+            v-if="getGradeAverage(data?.records) == 'Inc.'"
+        />
+        <!-- <UAlert
+            title="Incomplete Report Card"
+            description="Some subject teachers have not yet released their report, try viewing this report later. If your grades still dont show up, contact your subject teacher."
+            color="blue"
+            variant="outline"
+            icon="i-lucide-info"
+        /> -->
+        <ReportCard :full_name="data?.full_name" :avg="getGradeAverage(data?.records)" :sem="data?.semester" class="mt-4">
+            <ReportCardSubject v-for="(item,key) in data?.records.filter(x => x !== null)" :code="item.code" :name="item.subj_name" :teacher="item.teacher.first_name+' '+item.teacher.last_name" :grade="item.avg" />
         </ReportCard>
-        <!-- <section class="rounded-md bg-gray-200 border-[1px] border-zinc-700 py-2 px-4 md:max-w-[70dvw] flex flex-col gap-2">
-            <div class="flex items-center justify-between gap-2">
-                <p>{{ user.last_name }}, {{ user.first_name }}</p>
-                <p>1st Semester</p>
-                <UButton icon="i-bi-file-earmark-pdf-fill">Download</UButton>
-                <p>{{ user._id }}</p>
-            </div>
-            <Seperator />
-            <div class="flex flex-col gap-2">
-                <div class="flex items-center justify-between border-b-[1.75px] border-gray-300">
-                    <div class="w-[75%]">
-                        <p class="text-sm text-gray-600">SH003 &bull; Jane Doe</p>
-                        <h1 class="text-md font-medium text-lg text-green-600 overflow-ellipsis">Understanding Culture, Society, and Politics</h1>
-                    </div>
-                    <p class="font-bold text-3xl text-oct-othagreen">
-                        82
-                    </p>
-                </div>
-                <div class="flex items-center justify-between border-b-[1.75px] border-gray-300">
-                    <div class="w-[75%]">
-                        <p class="text-sm text-gray-600">SH001 &bull; Jake Doe</p>
-                        <h1 class="text-md font-medium text-lg text-green-600 overflow-ellipsis">Practical Research 1</h1>
-                    </div>
-                    <p class="font-bold text-3xl text-oct-othagreen">
-                        92
-                    </p>
-                </div>
-                <div class="flex items-center justify-between border-b-[1.75px] border-gray-300">
-                    <div class="w-[75%]">
-                        <p class="text-sm text-gray-600">MATH002 &bull; Jane Doe</p>
-                        <h1 class="text-md font-medium text-lg text-green-600 overflow-ellipsis">Statistics and Probability</h1>
-                    </div>
-                    <p class="font-bold text-3xl text-oct-othagreen">
-                        86
-                    </p>
-                </div>
-                <div class="flex items-center justify-between border-b-[1.75px] border-gray-300">
-                    <div class="w-[75%]">
-                        <p class="text-sm text-gray-600">FIL002 &bull; Jane Doe</p>
-                        <h1 class="text-md font-medium text-lg text-green-600 overflow-ellipsis">Pagbasa at Pagsusuri sa Iba't ibang Teksto tungo sa Pananaliksik</h1>
-                    </div>
-                    <p class="font-bold text-3xl text-oct-othagreen">
-                        85
-                    </p>
-                </div>
-                <div class="flex items-center justify-between border-b-[1.75px] border-gray-300">
-                    <div class="w-[75%]">
-                        <p class="text-sm text-gray-600">ENG001 &bull; Jane Doe</p>
-                        <h1 class="text-md font-medium text-lg text-green-600 overflow-ellipsis">Oral Communication in Context</h1>
-                    </div>
-                    <p class="font-bold text-3xl text-oct-othagreen">
-                        88
-                    </p>
-                </div>
-                <div class="flex items-center text-3xl justify-end text-right">
-                    <p class="mr-2">Grade Avg.</p>
-                    <span class="font-bold text-oct-othagreen">{{ Math.floor(86.6) }}</span>
-                </div>
-            </div>
-        </section> -->
     </main>
 </template>

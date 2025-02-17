@@ -1,6 +1,8 @@
 import { isFaculty } from "~/shared/utils/abilities"
 
 export default defineEventHandler(async (event) => {
+    const shsCurrentSem = await $fetch('/api/admins/global-vars/shs-current-semester')
+    const collegeCurrentSem = await $fetch('/api/admins/global-vars/college-current-semester')
     const sessionData = await requireUserSession(event)
     const body = await readBody(event)
     const runtime = useRuntimeConfig()
@@ -11,7 +13,7 @@ export default defineEventHandler(async (event) => {
         body: {
             subject: body._id,
             type: body.linked_class.type,
-            semester: 1
+            semester: body.linked_class.type == "SHS" ? shsCurrentSem.value : collegeCurrentSem.value
         },
         onRequest({ options }) {
             options.headers = new Headers(options.headers)

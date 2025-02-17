@@ -30,7 +30,7 @@ defineProps({
             <p class="text-lime-600 font-serif text-xl">{{ name }}</p>
         </div>
         <p class="text-center">
-            <span class="font-bold font-mono text-2xl">{{ grade || 'X' }}</span>
+            <span class="font-bold font-mono text-2xl">{{ grade || ' ' }}</span>
         </p>
     </div>
 </template>

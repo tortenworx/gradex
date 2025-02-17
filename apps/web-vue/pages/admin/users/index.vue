@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { isAdmin } from '~/shared/utils/abilities';
-import { ModalCreateUser, ModalDeleteUser } from '#components';
+import { ModalCreateUser, ModalDeleteUser, ModalEditUser } from '#components';
 
 const router = useRouter()
 const modal = useModal()
@@ -69,7 +69,7 @@ const actions = (row: any) => [
     [{
     label: 'Edit',
     icon: 'i-lucide-pencil',
-    click: () => router.push('/admin/users/edit/'+row.id)
+    click: () => editUser(row.id)
   }], [{
     label: 'Reset Password',
     icon: 'i-lucide-square-asterisk',
@@ -126,6 +126,12 @@ function deleteUser(id: string) {
             })
             modal.close()
         }
+    })
+}
+
+function editUser(user_id: string) {
+    modal.open(ModalEditUser, {
+        id: user_id,
     })
 }
 

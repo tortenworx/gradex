@@ -8,6 +8,12 @@ import mongoose, { Model } from 'mongoose';
 import { exportSpreadsheet, GradeData } from 'src/utils/ezgrade';
 import { MongoIdParam } from 'src/classes/dto/id-param.dto';
 import { UpdateGradesDto } from './dto/update-grade.dto';
+import { Class } from 'src/schemas/class.schema';
+import { createHash } from 'node:crypto';
+import { readFileSync, unlinkSync } from 'node:fs';
+import path, { join } from 'node:path';
+import puppeteer from 'puppeteer';
+import handlebars from 'handlebars';
 
 @Injectable()
 export class GradesService {
@@ -15,6 +21,7 @@ export class GradesService {
     @InjectModel(GradeReport.name) private gradeReportModel: Model<GradeReport>,
     @InjectModel(Subject.name) private subjectModel: Model<Subject>,
     @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(Class.name) private classesModel: Model<Class>
   ) {}
 
   async newReport(createReportDto: CreateReportDto, originUserId: string) {
@@ -116,6 +123,51 @@ export class GradesService {
     return data;
   }
 
+  async getUserReport(id: string) {
+    const user = await this.userModel.findById(id)
+    if (!user) throw new NotFoundException('[GR0C] No user found with user id.')
+    const classRecord = await this.classesModel.findOne({ students: user }).populate('adviser')
+    const data = await Promise.all(classRecord.subjects.map(async (subj) => {
+      const record = await this.gradeReportModel.findOne(
+        { subject: subj, status: "PUBLISHED" },
+        {
+          records: {
+            $elemMatch: {
+              user: user
+            }
+          }
+        })
+      if (record) {
+        const subject = await this.subjectModel.findById(subj)
+        const teacher_obj = await this.userModel.findById(subject.teacher).select('first_name middle_name last_name')
+        return {
+          subj_name: subject.name,
+          code: subject.code,
+          teacher: teacher_obj,
+          avg: record.records[0].avg
+        }
+      } else {
+        return null
+      }
+    })
+  )
+    return {
+      full_name: `${user.last_name}, ${user.first_name} ${user.middle_name}`,
+      id_number: user.id_number,
+      program: classRecord.program,
+      class_name: classRecord.class_name,
+      class_teacher: `${classRecord.adviser.first_name} ${classRecord.adviser.last_name}`,
+      semester: "1",
+      records: await data
+    };
+  }
+
+  async exportToPDF(id: string) {
+    const records = await this.getUserReport(id);
+    const data = this.render(join(process.cwd(), 'src', 'templates', 'grade-report.hbs'), records)
+    return await this.toPdf(data)
+  }
+
   async updateReport(id: string, gradeUpdateDto: UpdateGradesDto) {
     const isPublished = await this.gradeReportModel.findById(id)
     if (isPublished.status == REPORT_STATUS.PUBLISHED)
@@ -126,6 +178,41 @@ export class GradesService {
       }
     })
     return report;
+  }
+
+  private render(filename: string, data: object) {
+    var source   = readFileSync(filename,'utf8').toString();
+    var template = handlebars.compile(source);
+    var output = template(data);
+    return output;
+  }
+
+  private async toPdf(file: any) {
+    const browser = await puppeteer.launch({
+      browser: 'firefox',
+      headless: true,
+      ignoreDefaultArgs: ['--disable-extensions'],
+    })
+
+    const page = await browser.newPage()
+    await page.setContent(file, {
+      waitUntil: 'networkidle2'
+    })
+
+    await page.setDefaultNavigationTimeout(2000);
+    await page.pdf({
+      format: 'A5',
+      path: `exported.pdf`,
+      displayHeaderFooter: false,
+      preferCSSPageSize: false,
+      printBackground: true,
+    });
+    
+    const pdfFile = readFileSync(`exported.pdf`);
+
+    unlinkSync(`exported.pdf`);
+
+    return pdfFile;
   }
 
   // !NOTICE: Depreciated

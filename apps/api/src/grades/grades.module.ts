@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { GradeReport, GradeReportSchema } from '../schemas/grade-report.schema';
 import { Subject, SubjectSchema } from '../schemas/subject.schema';
 import { User, UserSchema } from '../schemas/user.schema';
+import { Class, ClassSchema } from 'src/schemas/class.schema';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { User, UserSchema } from '../schemas/user.schema';
       { name: GradeReport.name, schema: GradeReportSchema },
       { name: Subject.name, schema: SubjectSchema },
       { name: User.name, schema: UserSchema },
+      { name: Class.name, schema: ClassSchema },
     ]),
   ],
   controllers: [GradesController],
