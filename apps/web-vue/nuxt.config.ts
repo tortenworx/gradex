@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiUrl: process.env.API_URL,
-      appVersion: '1.0.8b'
+      appVersion: '1.0.8y'
     }
   },
   s3: {

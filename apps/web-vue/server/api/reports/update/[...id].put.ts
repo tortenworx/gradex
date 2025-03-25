@@ -2,23 +2,31 @@ import { isFaculty } from "~/shared/utils/abilities"
 
 export default defineEventHandler(async (event) => {
     const sessionData = await requireUserSession(event)
-    await authorize(isFaculty)
-    const runtime = useRuntimeConfig()
-    const accessToken = sessionData.secure.apiKey
+    const body = await readBody(event);
+    const runtime = useRuntimeConfig();
+    await authorize(isFaculty);
+    const accessToken = sessionData.secure.apiKey;
+
     if (!event.context.params) {
         throw createError({
             statusCode: 400,
             statusText: 'Bad Request',
             statusMessage: 'Missing required parameters.'
         })
-        
     }
-    const data = await event.$fetch(`${runtime.public.apiUrl}grades/ezgrade/${event.context.params.id}`, {
+    const request = await $fetch(`${runtime.public.apiUrl}grades/publish/${event.context.params.id}`, {
+        method: "PUT",
         onRequest({ options }) {
             console.log(event.context.params)
             options.headers = new Headers(options.headers)
             options.headers.set("Authorization", `Bearer ${accessToken}`)
+        },
+        onResponseError({ response }) {
+            throw createError({
+                status: response.status,
+                message: response._data.message
+            }) 
         }
     })
-    return data;
+    return request;
 })

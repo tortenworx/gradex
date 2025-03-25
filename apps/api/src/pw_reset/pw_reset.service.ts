@@ -36,7 +36,7 @@ export class PwResetService {
       })
       await this.mailerService.sendMail({
           to: user.educational_email_address,
-          from: 'The GradeX Team <gradex@lyra-research.site>',
+          from: 'The GradeX Team <galaxa@torten.xyz>',
           subject: '[GradeX] Reset your password',
           text: `Greeting in peace! \nYou have request a password request at ${(new Date()).toString()}. To reset your password, use the link below. If you did not request for a password reset, you can safely ignore this message.\nReset Link: https://gradex.lyra-research.site/accounts/reset-password?key${resetDoc.id}`,
           template: 'forgot-password',
@@ -64,7 +64,7 @@ export class PwResetService {
       })
       await this.mailerService.sendMail({
           to: user.educational_email_address,
-          from: 'The GradeX Team <gradex@lyra-research.site>',
+          from: 'The GradeX Team <galaxa@torten.xyz>',
           subject: '[GradeX] Reset your password',
           text: `Greeting in peace! \nYou have request a password request at ${(new Date()).toString()}. To reset your password, use the link below. If you did not request for a password reset, you can safely ignore this message.\nReset Link: https://gradex.lyra-research.site/accounts/reset-password?id=${resetDoc.id}`,
           template: 'forgot-password',
@@ -95,7 +95,7 @@ export class PwResetService {
       })
       await this.mailerService.sendMail({
           to: user.educational_email_address,
-          from: 'The GradeX Team <gradex@lyra-research.site>',
+          from: 'The GradeX Team <galaxa@torten.xyz>',
           subject: '[GradeX] Reset your password',
           text: `Greeting in peace! \nYou have request a password request at ${(new Date()).toString()}. To reset your password, use the link below. If you did not request for a password reset, you can safely ignore this message.\nReset Link: https://gradex.lyra-research.site/accounts/reset-password?key${resetDoc.id}`,
           template: 'forgot-password',
@@ -123,7 +123,7 @@ export class PwResetService {
       })
       await this.mailerService.sendMail({
           to: user.educational_email_address,
-          from: 'The GradeX Team <gradex@lyra-research.site>',
+          from: 'The GradeX Team <galaxa@torten.xyz>',
           subject: '[GradeX] Reset your password',
           text: `Greeting in peace! \nYou have request a password request at ${(new Date()).toString()}. To reset your password, use the link below. If you did not request for a password reset, you can safely ignore this message.\nReset Link: https://gradex.lyra-research.site/accounts/reset-password?id=${resetDoc.id}`,
           template: 'forgot-password',
@@ -138,7 +138,6 @@ export class PwResetService {
       }
     }
   }
-
 
   async resolve(resolvePwResetDto: ResolvePwResetDto) {
     const resetDoc = await this.pwModel.findById(resolvePwResetDto.id);

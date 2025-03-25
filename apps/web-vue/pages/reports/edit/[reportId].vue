@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { ModalReportPublished } from '#components';
+import { ModalPublishReport, ModalReportPublished } from '#components';
 import { readGrades } from '~/shared/utils/xlsx';
 const route = useRoute()
 const toast = useToast()
 const modal = useModal()
 definePageMeta({
-    layout: 'authenticated',
-    validate: (route) => {
-        if (route.params.reportId) return true;
-        return false;
-    }
+    layout: 'authenticated'
 })
+
+const router = useRouter()
 
 interface Record {
     _id: string;
@@ -32,12 +30,17 @@ interface GradeReport {
         name: string,
         linked_class: {
             class_name: string,
-
         }
     }
+    createdAt: string
 }
 
-const { data } = useFetch<GradeReport>(`/api/reports/${route.params.reportId}`)
+const { data } = await useFetch<GradeReport>(`/api/reports/${route.params.reportId}`)
+console.log(data)
+if (!data.value) throw createError({
+    statusCode: 404,
+    message: "No grade report found."
+})
 
 if (data.value?.status !== 'EDITING') {
     modal.open(ModalReportPublished)
@@ -45,7 +48,7 @@ if (data.value?.status !== 'EDITING') {
 
 function updateGrades() {
     const peen = data.value?.records.map((i) => {
-        return { ...i, user: i.user._id }
+        if (i.user) return { ...i, user: i.user._id }
     })
     useFetch(`/api/reports/update/${route.params.reportId}`, {
         method: "PATCH",
@@ -70,6 +73,14 @@ function updateGrades() {
         }
     })
 }
+
+// function publishGrades() {
+//     modal.open(ModalPublishReport, {
+//         id: data.value._id,
+//         onSuccess: () => {
+//             console.log('ok')
+//         }
+//     })
 
 function eatShitInvalidValue(num: number | null) {
     if (!num) return null;
@@ -108,6 +119,21 @@ async function readFile(event: Event) {
     data.value?.records.map(e => (e.avg = grades?.find(a => a.id == e.user._id)?.grades || e.avg, e));
     return console.log(grades)
 }
+function publishGrades() {
+    updateGrades()
+    modal.open(ModalPublishReport, {
+        id: data.value._id,
+        onSuccess: () => {
+            router.push('/reports')
+            toast.add({
+                title: 'Report published!',
+                description: 'Your report is now viewable by your students.',
+                icon: 'i-lucide-disk',
+                color: 'green'
+            })
+        }
+    })
+}
 </script>
 
 <template>
@@ -120,7 +146,7 @@ async function readFile(event: Event) {
         </div>
         <div class="flex flex-col md:flex-row items-end md:items-center justify-end gap-2">
             <UButton v-if="data?.status == 'EDITING'" icon="i-lucide-save" @click="updateGrades">Save</UButton>
-            <UButton v-if="data?.status == 'EDITING'" icon="i-lucide-send" variant="soft">Save and Publish</UButton>
+            <UButton v-if="data?.status == 'EDITING'" icon="i-lucide-send" variant="soft" @click="publishGrades">Save and Publish</UButton>
             <UButton v-if="data?.status !== 'EDITING'" icon="i-lucide-arrow-left" @click="navigateTo('/reports')">Go Back</UButton>
         </div>
     </header>
@@ -128,12 +154,13 @@ async function readFile(event: Event) {
         <header>
             <span class="text-xs font-mono text-gray-400 dark:text-gray-600">{{ data?._id }}</span>
             <h1 class="text-3xl font-sans font-light truncate">{{ data?.subject.name }}</h1>
-            <span class="font-mono text-gray-600 dark:text-gray-400">{{ data?.subject.linked_class.class_name }} &bull; {{ (new Date(data.createdAt).toLocaleDateString() ) }} </span>
+            <span class="font-mono text-gray-601 dark:text-gray-400">{{ data?.subject.linked_class.class_name }} &bull; {{ (new Date(data.createdAt).toLocaleDateString() ) }} </span>
         </header>
         <section class="mt-2">
             <UTabs :items="[{ label: 'Manual Input', slot: 'manual' }, { label: 'ezGrade', slot: 'automatic' }]">
                 <template #manual="{ item }" class="flex flex-col gap-2">
-                    <div class="flex items-center justify-between px-4 py-2" v-for="(grade, index) in data.records">
+                    <div class="" v-for="(grade, index) in data?.records">
+                        <div class="flex items-center justify-between px-4 py-2" v-if="grade.user">
                         <div>
                             {{ grade.user.last_name }},
                             {{ grade.user.first_name }}
@@ -150,6 +177,7 @@ async function readFile(event: Event) {
                                 @change="grade.avg = eatShitInvalidValue(grade.avg)"
                                 :disabled="data?.status !== 'EDITING'"
                                 />
+                        </div>
                         </div>
                     </div>
                 </template>

@@ -66,12 +66,14 @@ export class GradesService {
     const arr: GradeData[] = [];
     for (const i of report.records) {
       const user = await this.userModel.findOne(i.user)
-      arr.push({
-        id: user.id,
-        grade: i.avg,
-        name: `${user.last_name}, ${user.first_name} ${user.middle_name}`,
-        gender: user.gender
-      })
+      if (user) {
+        arr.push({
+          id: user.id,
+          grade: i.avg,
+          name: `${user.last_name}, ${user.first_name} ${user.middle_name}`,
+          gender: user.gender
+        })
+      }
     }
     return exportSpreadsheet({ classId: subject.id, recordId: report.id }, arr)
   }
@@ -121,6 +123,12 @@ export class GradesService {
       }
     ]).select('-records')
     return data;
+  }
+
+  async publishReport(id: string) {
+    const report = await this.gradeReportModel.findById(id)
+    if (!report) throw new NotFoundException('[GR0PB] No report found.')
+    return report.updateOne({ status: "PUBLISHED" })
   }
 
   async getUserReport(id: string) {

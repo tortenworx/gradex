@@ -51,7 +51,7 @@ export class InvitationService {
       this.mailerService.sendMail({
         to:
           createInvitationDto.reciepient_address || user.personal_email_address,
-        from: 'The GradeX Team <gradex@lyra-research.site>',
+        from: 'The GradeX Team <galaxa@torten.xyz>',
         subject: '[GradeX] Complete your account',
         text:
           'Your account is nearly ready, create your log-in credentials using this link: ' +

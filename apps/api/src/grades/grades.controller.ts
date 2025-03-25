@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Request, Res, StreamableFile, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Put, Request, Res, StreamableFile, UseGuards } from '@nestjs/common';
 import { GradesService } from './grades.service';
 import { Roles } from '../credentials/decorator/roles.decorator';
 import { CreateReportDto } from './dto/create-report.dto';
@@ -42,6 +42,12 @@ export class GradesController {
       request.user.sub,
     );
   }
+  @Put('/publish/:id')
+  @Roles(['FACULTY'])
+  @UseGuards(CredentialsGuard)
+  async pabLeesh(@Param() params: MongoIdParam) {
+    return await this.gradesService.publishReport(params.id)
+  }
 
   @Get('/:id')
   @Roles(['FACULTY', 'SUPERADMIN'])
@@ -68,6 +74,7 @@ export class GradesController {
   @Roles(['FACULTY'])
   @UseGuards(CredentialsGuard)
   async exportEzGrade(@Res({ passthrough: true }) res: Response, @Param() params) {
+    console.log(params)
     const file = await this.gradesService.exportToEzGrade(params.id)
     const tmp = Buffer.from(file)
     return new StreamableFile(tmp, {
