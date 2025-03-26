@@ -197,7 +197,7 @@ export class GradesService {
 
   private async toPdf(file: any) {
     const browser = await puppeteer.launch({
-      browser: 'firefox',
+      browser: 'chrome',
       headless: true,
       ignoreDefaultArgs: ['--disable-extensions'],
     })
