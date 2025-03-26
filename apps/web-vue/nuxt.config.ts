@@ -54,6 +54,9 @@ export default defineNuxtConfig({
       }
     ],
   },
+  alias: {
+    'string_decoder': 'string_decoder/',
+  },
   modules: [
     '@nuxtjs/google-fonts',
     '@vee-validate/nuxt',
