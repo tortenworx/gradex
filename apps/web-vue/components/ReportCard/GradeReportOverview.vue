@@ -1,11 +1,12 @@
 <script setup lang="ts">
 defineProps<{ id: string; subject: string; status: "EDITING" | "PUBLISHED" | "REVIEWING", className: string; date: string }>()
+const router = useRouter()
 </script>
 
 <template>
     <div 
         class="border-t-4 border-oct-othagreen bg-gray-100 dark:bg-zinc-900 shadow-md px-4 py-2 rounded overflow-hidden flex flex-col gap-2 hover:cursor-pointer"
-        @click="navigateTo(`/reports/edit/${id}`, { external: true })"
+        @click="router.push(`/reports/edit/${id}`)"
     >
         <div class="flex flex-col gap-1">
             <UBadge v-if="status == 'EDITING'" color="amber" :label="status" :ui="{ rounded: 'rounded-xl' }" class="w-fit" />

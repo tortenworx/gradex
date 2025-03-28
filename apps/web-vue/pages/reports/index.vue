@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { ModalCreateReport } from '#components';
 import { isFaculty } from '~/shared/utils/abilities';
-import ReportsEdit from '~/pages/reports/edit/[reportId].vue'
+import { CalendarRange, Hourglass } from 'lucide-vue-next';
 const modal = useModal()
 const created = ref()
 const router = useRouter()
-
-await authorize(isFaculty)
-
 definePageMeta({
     title: 'Grade reports dashboard',
     layout: 'authenticated',
@@ -31,36 +28,65 @@ interface Record {
     created_by: string;
     semester: number;
 }
+const currentSemester = await $fetch('/api/admins/global-vars/shs-current-semester')
 
 const { data } = useFetch<Record[]>('/api/reports/')
 
 function createNew() {
     modal.open(ModalCreateReport, {
         report_id: created,
-        onInformation: (res) => {
-            const { data, status } = useFetch('/api/reports/', {
+        onInformation: async (res) => {
+            await useFetch('/api/reports/', {
                 method: 'POST',
                 body: res.selected,
                 onResponse({ response, request }) {
-                    navigateTo(`/reports/edit/${response._data._id}`)
+                    router.push(`/reports/edit/${response._data._id}`)
                 }
             })
             modal.close()
         }
     })
 }
-console.log(router.getRoutes())
+
+const pr = new Intl.PluralRules("en-US", { type: "ordinal" });
+
+const suffixes = new Map([
+  ["one", "st"],
+  ["two", "nd"],
+  ["few", "rd"],
+  ["other", "th"],
+]);
+const formatOrdinals = (n: string) => {
+  const rule = pr.select(n);
+  const suffix = suffixes.get(rule);
+  return `${n}${suffix}`;
+};
 </script> 
 
 <template>
-    <section class="flex items-center justify-between gap-2 mb-4">
+    <section class="flex md:items-center justify-between gap-2 mb-4">
         <div>
             <h2 class="text-md text-gray-500 tracking-tight">Grade Reports</h2>
             <h1 class="text-5xl font-serif text-oct-green font-medium dark:text-lime-400 tracking-tighter -my-2">
                 Overview
             </h1>
         </div>
-        <div>
+        <div class="flex flex-col md:flex-row items-end md:items-center justify-end gap-4">
+            <div class="flex items-center gap-1">
+                <CalendarRange class="text-zinc-600" />
+                <span class="invisible hidden md:block md:visible">Reporting for <span class="font-bold">{{ formatOrdinals(currentSemester.value) }}</span> semester</span>
+                <span class="visible block md:invisible md:hidden"><span class="font-bold">{{ formatOrdinals(currentSemester.value) }}</span> semester</span>
+            </div>
+            <div class="flex items-center gap-1">
+                <Hourglass class="text-zinc-600" />
+                <span></span>
+                <span class="invisible hidden md:block md:visible">
+                    Reports due in <span class="font-bold">5 days</span>
+                </span>
+                <span class="visible block md:invisible md:hidden">
+                    <span class="font-bold">5 days</span>
+                </span>
+            </div>
             <UButton icon="i-lucide-plus" @click="createNew">New Report</UButton>
         </div>
     </section>

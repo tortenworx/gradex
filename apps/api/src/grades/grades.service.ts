@@ -41,7 +41,6 @@ export class GradesService {
         { status: "EDITING" }
       ]
     })
-    console.log(exisitingReport)
     if (exisitingReport) throw new UnauthorizedException('[GR2C] Another unpublished report exists!')
     const report = new this.gradeReportModel()
     report.subject = subject
@@ -52,38 +51,39 @@ export class GradesService {
     subject.students.forEach((i) => {
       report.records.push({
         user: i,
-        avg: null,
+        avg: [null, null],
       })
     })
     return await report.save()
   }
 
-  async exportToEzGrade(id: string) {
-    const report = await this.gradeReportModel.findById(id)
-    const subject = await this.subjectModel.findOne(report.subject)
-    if (!report) throw new NotFoundException('[GR0EZ] No report found.')
-    if (report.status !== 'EDITING') throw new UnauthorizedException('[GR1EZ] Cannot export on an published report')
-    const arr: GradeData[] = [];
-    for (const i of report.records) {
-      const user = await this.userModel.findOne(i.user)
-      if (user) {
-        arr.push({
-          id: user.id,
-          grade: i.avg,
-          name: `${user.last_name}, ${user.first_name} ${user.middle_name}`,
-          gender: user.gender
-        })
-      }
-    }
-    return exportSpreadsheet({ classId: subject.id, recordId: report.id }, arr)
-  }
+  // ! Deprecated.
+  // async exportToEzGrade(id: string) {
+  //   const report = await this.gradeReportModel.findById(id)
+  //   const subject = await this.subjectModel.findOne(report.subject)
+  //   if (!report) throw new NotFoundException('[GR0EZ] No report found.')
+  //   if (report.status !== 'EDITING') throw new UnauthorizedException('[GR1EZ] Cannot export on an published report')
+  //   const arr: GradeData[] = [];
+  //   for (const i of report.records) {
+  //     const user = await this.userModel.findOne(i.user)
+  //     if (user) {
+  //       arr.push({
+  //         id: user.id,
+  //         grade: [i.avg, i.avg],
+  //         name: `${user.last_name}, ${user.first_name} ${user.middle_name}`,
+  //         gender: user.gender
+  //       })
+  //     }
+  //   }
+  //   return exportSpreadsheet({ classId: subject.id, recordId: report.id }, arr)
+  // }
 
   async fetchReport(id: string, user_id: string) {
     const data = await this.gradeReportModel.findById(id).populate([
       {
         path: 'records',
         populate: {
-          path: 'user', model: 'User', select: 'first_name middle_name last_name'
+          path: 'user', model: 'User', select: 'first_name middle_name last_name gender'
         }
       }, 
       {
@@ -92,7 +92,7 @@ export class GradesService {
         populate: {
           path: 'linked_class',
           model: 'Class',
-          select: 'class_name'
+          select: 'class_name _id'
         }
       },
       {
@@ -197,7 +197,7 @@ export class GradesService {
 
   private async toPdf(file: any) {
     const browser = await puppeteer.launch({
-      browser: 'chrome',
+      browser: 'firefox',
       headless: true,
       ignoreDefaultArgs: ['--disable-extensions'],
     })

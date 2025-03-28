@@ -1,50 +1,47 @@
 <script setup lang="ts">
-import { ModalPublishReport, ModalReportPublished } from '#components';
+import { ModalPublishReport, ModalReportPublished, UAccordion } from '#components';
 import { readGrades } from '~/shared/utils/xlsx';
+import type { GradeRecord, GradeReport } from '~/types/GradeReport';
+import { Gender } from '~/types/User';
+import { useDropZone } from '@vueuse/core'
 const route = useRoute()
 const toast = useToast()
 const modal = useModal()
-definePageMeta({
-    layout: 'authenticated'
-})
-
 const router = useRouter()
-
-interface Record {
-    _id: string;
-    user: {
-        _id: string;
-        first_name: string;
-        middle_name: string;
-        last_name: string;
-    };
-    avg: number | null
-}
-
-interface GradeReport {
-    _id: string,
-    status: "PUBLISHED" | "EDITING" | "REVIWEING",
-    type: "SHS" | "COLLEGE"
-    records: Record[],
-    subject: {
-        name: string,
-        linked_class: {
-            class_name: string,
-        }
-    }
-    createdAt: string
-}
-
+const dropZoneRef = ref<HTMLDivElement>()
+definePageMeta({
+    layout: 'authenticated',
+})
 const { data } = await useFetch<GradeReport>(`/api/reports/${route.params.reportId}`)
-console.log(data)
 if (!data.value) throw createError({
     statusCode: 404,
     message: "No grade report found."
 })
-
+useHead({
+    title: `Grade Report for ${data.value.subject.name} - GradeX`
+})
 if (data.value?.status !== 'EDITING') {
     modal.open(ModalReportPublished)
 }
+const sortByGenderAndLastName = (data: GradeRecord[]): GradeRecord[] => {
+  const genderPriority: Record<Gender, number> = { "MALE": 0, "FEMALE": 1, "OTHER": 2 };
+
+  return data.sort((a, b) => {
+    // First, sort by gender group (MALE first, then FEMALE, then OTHER)
+    const genderDiff = genderPriority[a.user.gender] - genderPriority[b.user.gender];
+    if (genderDiff !== 0) return genderDiff;
+
+    // If same gender, sort alphabetically by last name
+    return a.user.last_name.localeCompare(b.user.last_name);
+  });
+};
+
+const getMiddleInitial = (middleName?: string): string => {
+  if (!middleName || middleName.trim() === "") return "";
+  return middleName.trim().charAt(0).toUpperCase() + ".";
+};
+
+const sortstudents = sortByGenderAndLastName(data.value.records)
 
 function updateGrades() {
     const peen = data.value?.records.map((i) => {
@@ -74,23 +71,9 @@ function updateGrades() {
     })
 }
 
-// function publishGrades() {
-//     modal.open(ModalPublishReport, {
-//         id: data.value._id,
-//         onSuccess: () => {
-//             console.log('ok')
-//         }
-//     })
-
 function eatShitInvalidValue(num: number | null) {
     if (!num) return null;
     if (num > 100 || num < 0) {
-        toast.add({
-            title: 'Invalid Value',
-            description: 'You have placed an invalid value, the field has been reset.',
-            color: 'red',
-            icon: 'i-lucide-circle-x'
-        })
         return null
     }
     return num
@@ -116,11 +99,62 @@ async function readFile(event: Event) {
     const blob = new Blob([file], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
     const buffer = await blob.arrayBuffer()
     const grades = await readGrades(buffer)
-    data.value?.records.map(e => (e.avg = grades?.find(a => a.id == e.user._id)?.grades || e.avg, e));
-    return console.log(grades)
+    data.value?.records.map(e => ({
+        ...e,
+        avg: grades?.find((a: any) => String(e.user?._id) === String(a.id))?.grades ?? e.avg
+    }));
 }
+
+
+async function onDrop(files: File[] | null) {
+    if (!files) return;
+    const file = files[0];
+    if (!file.name.match(/.(xlsx)$/i)) {
+        return toast.add({
+            icon: 'i-lucide-badge-x',
+            title: 'Invalid file format!',
+            description: 'Only spreadsheet files are allowed!',
+            color: 'red'
+        })
+    }
+    toast.add({
+        title: "Read file sucessfully.",
+        icon: 'i-lucide-check',
+        color: 'green'
+    })
+const blob = new Blob([file], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
+    const buffer = await blob.arrayBuffer()
+    const results = await readGrades(buffer)
+    data.value?.records.map(e => (e.avg = results?.find((a: any) => e.user._id == a.id)?.grades || e.avg, e));
+}
+
+const { isOverDropZone } = useDropZone(dropZoneRef, {
+  onDrop,
+  // specify the types of data to be received.
+  dataTypes: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+  // control multi-file drop
+  multiple: false,
+  // whether to prevent default behavior for unhandled events
+  preventDefaultForUnhandled: false,
+})
+
+function downloadEzGrade() {
+    const { data: buffer } =  useFetch<Buffer>(`/api/reports/ezgrade/${route.params.reportId}`, { responseType: "arrayBuffer" })
+    if (!buffer.value) throw new Error('ezGrade did not find the report!')
+    const content = new Blob([buffer.value], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+
+    const encodedUri = window.URL.createObjectURL(content);
+    const link = document.createElement("a");
+
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `ezgrade-${route.params.reportId}.xlsx`);
+
+    link.click()
+}
+
 function publishGrades() {
     updateGrades()
+    if (!data.value) return;
     modal.open(ModalPublishReport, {
         id: data.value._id,
         onSuccess: () => {
@@ -134,6 +168,29 @@ function publishGrades() {
         }
     })
 }
+
+const faqItems = ref([
+    {
+        label: "How does ezGrade work?",
+        content: "ezGrade generates a spreadsheet where teachers can input their students' grades. Once completed, the spreadsheet can be uploaded to the system, making grade encoding faster and more efficient compared to manual entry in the web portal."
+    },
+    {
+        label: "What are the benefits of using ezGrade?",
+        content: "ezGrade saves time by allowing bulk grade entry in a structured spreadsheet format, reducing errors and minimizing the need for repeated manual input."
+    },
+    {
+        label: "Is there a specific format for the generated spreadsheet?",
+        content: "Yes, ezGrade provides a standardized template with predefined columns for student names, IDs, and grade entries to ensure compatibility when uploading the file back into the system."
+    },
+    {
+        label: "Can I edit the spreadsheet before uploading it?",
+        content: "Yes, teachers can modify grades within the provided template, but they must follow the required format to ensure a smooth upload process."
+    },
+    {
+        label: "What should I do if I encounter an error while uploading the spreadsheet?",
+        content: "If an upload error occurs, check for formatting issues, missing data, or incorrect file types. If the issue persists, refer to the help documentation or contact support for assistance."
+    },
+])
 </script>
 
 <template>
@@ -159,45 +216,78 @@ function publishGrades() {
         <section class="mt-2">
             <UTabs :items="[{ label: 'Manual Input', slot: 'manual' }, { label: 'ezGrade', slot: 'automatic' }]">
                 <template #manual="{ item }" class="flex flex-col gap-2">
-                    <div class="" v-for="(grade, index) in data?.records">
-                        <div class="flex items-center justify-between px-4 py-2" v-if="grade.user">
-                        <div>
-                            {{ grade.user.last_name }},
-                            {{ grade.user.first_name }}
-                            {{ grade.user.middle_name }}
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <!-- {{ index }}
-                            {{ grade }} -->
-                            <UInput
-                                v-model="grade.avg"
-                                type="number"
-                                :min="0"
-                                :max="100"
-                                @change="grade.avg = eatShitInvalidValue(grade.avg)"
-                                :disabled="data?.status !== 'EDITING'"
+                    <div class="grid grid-cols-[1fr_auto_auto] px-4 py-2 gap-4">
+                        <p class="font-bold text-oct-othagreen text-lg">Student Name (Last Name, First Name MI)</p>
+                        <p class="text-center text-oct-green font-medium">1st Quarter</p>
+                        <p class="text-center text-oct-green font-medium">2nd Quarter</p>
+                    </div>
+                    <div v-for="student in sortstudents">
+                        <div class="grid grid-cols-[1fr_auto_auto] px-4 py-2 gap-4">
+                            <div class="w-full">
+                                {{ student.user.last_name }},
+                                {{ student.user.first_name }}
+                                {{ getMiddleInitial(student.user.middle_name) }}
+                            </div>
+                            <div class="w-20">
+                                <UInput
+                                    v-model="student.avg[0]"
+                                    type="number"
+                                    :min="0"
+                                    :max="100"
+                                    @change="student.avg[0] = eatShitInvalidValue(student.avg[0])"
+                                    :disabled="data?.status !== 'EDITING'"
+                                    class="text-center"
                                 />
-                        </div>
+                            </div>
+                            <div class="w-20">
+                                <UInput
+                                    v-model="student.avg[1]"
+                                    type="number"
+                                    :min="0"
+                                    :max="100"
+                                    @change="student.avg[1] = eatShitInvalidValue(student.avg[1])"
+                                    :disabled="data?.status !== 'EDITING'"
+                                    class="text-center"
+                                />
+                            </div>
                         </div>
                     </div>
                 </template>
                 <template #automatic="{ item }">
-                    <UAlert
-                        title="About ezGrade"
-                        description="ezGrade simplifies grade encoding by leveraging the power of spreadsheets. Teachers can use this familiar interface to input grades more effectively. Click the button to learn more and get started."
-                        icon="i-lucide-sheet"
-                        :actions="[{ 
-                            variant: 'solid', 
-                            color: 'primary', 
-                            label: 'Download Sheet', 
-                            click: () => {
-                                return navigateTo(`/api/reports/ezgrade/${$route.params.reportId}`, { open: { target: '_blank' } })
-                            }
-                            }]"
-                        />
-                    <div class="mt-4">
-                        <!-- <UInput type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /> -->
-                        <input type="file" :disabled="data?.status !== 'EDITING'" @change="readFile" />
+                    <div class="flex flex-col md:grid grid-cols-2 grid-rows-1 grid-flow-col md:gap-4">
+                        <div>
+                            <UAlert
+                                title="About ezGrade"
+                                description="ezGrade simplifies grade encoding by leveraging the power of spreadsheets. Teachers can use this familiar interface to input grades more effectively. Click the button to learn more and get started."
+                                icon="i-lucide-sheet"
+                                class="h-fit"
+                                :actions="[{ 
+                                    variant: 'solid', 
+                                    color: 'primary', 
+                                    label: 'Download Sheet', 
+                                    click: downloadEzGrade
+                                    }]"
+                                />
+                            <div class="mt-4">
+                                <h1 class="text-2xl font-medium text-oct-othagreen dark:text-green-500 mb-2">Upload your spreadsheet down below</h1>
+                                <div class="flex items-center justify-center w-full" ref="dropZoneRef">
+                                    <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500" :class="{ 'bg-green-400': isOverDropZone }">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                            </svg>
+                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">GradeX generated ezGrade .xlsx files only.</p>
+                                        </div>
+                                        <input id="dropzone-file" type="file" class="hidden" @change="readFile" :disabled="data.status !== 'EDITING'" />
+                                    </label>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <h2 class="text-2xl font-medium text-oct-othagreen dark:text-green-500">Frequently Asked Questions (FAQ)</h2>
+                            <UAccordion :items="faqItems" />
+                        </div>
                     </div>
                 </template>
             </UTabs>

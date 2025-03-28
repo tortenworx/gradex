@@ -42,8 +42,8 @@ export class GradeReport {
     default: REPORT_TYPE.SENIOR_HIGH,
   })
   type: REPORT_TYPE;
-  @Prop({ type: [{user: {type: mongoose.Schema.ObjectId}, avg: {type: Number}}], required: true })
-  records: {user: User; avg: Nullable<number>}[];
+  @Prop({ type: [{user: {type: mongoose.Schema.ObjectId}, avg: {type: Array<Nullable<Number>>}}], required: true })
+  records: {user: User; avg: [Nullable<number>, Nullable<number>]}[];
   @Prop({ type: Date, default: Date.now() })
   createdAt: Date
 }

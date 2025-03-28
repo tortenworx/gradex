@@ -17,12 +17,15 @@ export async function readGrades(file: Buffer) {
         const studentId = studentWs.getCell(`B${cell.substring(1)}`).value;
         const studentName = studentWs.getCell(cell).value;
         if (!studentId && !studentName) break;
-        const grades = student.getCell(3).value;
-        const data = {
-            id: studentId,
-            grades,
-        };
-        userdata.push(data);
+        const gradeValues = student.values
+        if (student.hasValues) {
+            const grades = gradeValues.slice(3, 5);
+            const data = {
+                id: studentId,
+                grades,
+            };
+            userdata.push(data);
+        }
     }
 
     for (let i = 40; i < 70; i++) {
@@ -32,12 +35,15 @@ export async function readGrades(file: Buffer) {
         const studentId = studentWs.getCell(`B${cell.substring(1)}`).value;
         const studentName = studentWs.getCell(cell).value;
         if (!studentId && !studentName) break;
-        const grades = student.getCell(3).value;
-        const data = {
-            id: studentId,
-            grades,
-        };
-        userdata.push(data);
+        const gradeValues = student.values
+        if (student.hasValues) {
+            const grades = gradeValues.slice(3, 5);
+            const data = {
+                id: studentId,
+                grades,
+            };
+            userdata.push(data);
+        }
     }
     return userdata
 }

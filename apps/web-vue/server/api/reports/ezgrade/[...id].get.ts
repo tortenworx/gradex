@@ -1,4 +1,6 @@
 import { isFaculty } from "~/shared/utils/abilities"
+import type { GradeReport } from "~/types/GradeReport"
+import { exportSpreadsheet } from "~/utils/ezGrade"
 
 export default defineEventHandler(async (event) => {
     const sessionData = await requireUserSession(event)
@@ -13,12 +15,13 @@ export default defineEventHandler(async (event) => {
         })
         
     }
-    const data = await event.$fetch(`${runtime.public.apiUrl}grades/ezgrade/${event.context.params.id}`, {
+    const data = await event.$fetch<GradeReport>(`${runtime.public.apiUrl}grades/${event.context.params.id}`, {
         onRequest({ options }) {
-            console.log(event.context.params)
             options.headers = new Headers(options.headers)
             options.headers.set("Authorization", `Bearer ${accessToken}`)
         }
     })
-    return data;
+    const alphabetizedStudents = data.records.sort((a,b) => a.user.last_name.localeCompare(b.user.last_name))
+    const spreadsheet = exportSpreadsheet({ recordId: data._id, classId: data.subject.linked_class._id }, alphabetizedStudents)
+    return spreadsheet;
 })

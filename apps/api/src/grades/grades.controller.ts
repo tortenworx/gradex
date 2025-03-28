@@ -70,16 +70,16 @@ export class GradesController {
     return await this.gradesService.updateReport(params.id, updateGradesDto)
   }
 
-  @Get('/ezgrade/:id')
-  @Roles(['FACULTY'])
-  @UseGuards(CredentialsGuard)
-  async exportEzGrade(@Res({ passthrough: true }) res: Response, @Param() params) {
-    console.log(params)
-    const file = await this.gradesService.exportToEzGrade(params.id)
-    const tmp = Buffer.from(file)
-    return new StreamableFile(tmp, {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      disposition: 'attachment; filename="exports.xlsx"'
-    });
-  }
+  // ! Depreciated.
+  // @Get('/ezgrade/:id')
+  // @Roles(['FACULTY'])
+  // @UseGuards(CredentialsGuard)
+  // async exportEzGrade(@Res({ passthrough: true }) res: Response, @Param() params) {
+  //   const file = await this.gradesService.exportToEzGrade(params.id)
+  //   const tmp = Buffer.from(file)
+  //   return new StreamableFile(tmp, {
+  //     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  //     disposition: 'attachment; filename="exports.xlsx"'
+  //   });
+  // }
 }

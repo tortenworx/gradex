@@ -1,6 +1,5 @@
 import { Workbook } from "exceljs";
-import { ReadStream } from "node:fs";
-import { PassThrough, Readable, Stream, Writable } from 'node:stream'
+import { PassThrough } from 'node:stream'
 
 export interface ExportOptions {
     classId: string;
@@ -10,7 +9,7 @@ export interface ExportOptions {
 export interface GradeData {
     name: string;
     id: string;
-    grade: number,
+    grades: [number, number] | number
     gender: any
 }
 
@@ -37,7 +36,12 @@ export async function exportSpreadsheet(options: ExportOptions, data: GradeData[
         studentsWorksheet.getRow(rowCount).getCell("B").value = item.id;
         studentsWorksheet.getRow(rowCount).getCell("C").value = item.name;
         const cell = gradesWorksheet.getRow(rowCount).getCell(3)
-        cell.value = item.grade;
+        if (item.grades && Array.isArray(item.grades)) {
+            for (let i = 0; i < item.grades.length; i++) {
+            const cell = gradesWorksheet.getRow(rowCount).getCell(i + 3)
+            cell.value = item.grades[i];
+            }
+        }
         rowCount++;
     })
         rowCount = 40;
@@ -45,13 +49,12 @@ export async function exportSpreadsheet(options: ExportOptions, data: GradeData[
             studentsWorksheet.getRow(rowCount).getCell("B").value = item.id;
             studentsWorksheet.getRow(rowCount).getCell("C").value = item.name;
             const cell = gradesWorksheet.getRow(rowCount).getCell(3)
-            cell.value = item.grade;
-            // if (item.grades) {
-            //     for (let i = 0; i < item.grades.length; i++) {
-            //     const cell = gradesWorksheet.getRow(rowCount).getCell(i + 3)
-            //     cell.value = item.grades[i];
-            //     }
-            // }
+            if (item.grades && Array.isArray(item.grades)) {
+                for (let i = 0; i < item.grades.length; i++) {
+                const cell = gradesWorksheet.getRow(rowCount).getCell(i + 3)
+                cell.value = item.grades[i];
+                }
+            }
             rowCount++;
         })
     const stream = new PassThrough()
