@@ -16,6 +16,6 @@ const { data: announcements, refresh } = useFetch<Announcement[]>(`${runtime.pub
 
 <template>
     <UCarousel v-slot="{ item }" :items="announcements" class="mt-2">
-        <HomecardsAnnouncementCard :title="item.title" :description="item.description" :link="item.content" />
+      <HomecardsAnnouncementCard :title="item.title" :description="item.description" :link="item.content" />
     </UCarousel>
 </template>

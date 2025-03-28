@@ -1,9 +1,19 @@
 <script setup lang="ts">
 import { FormsSelection } from '#components';
 import { Globe, Menu, X, XIcon } from 'lucide-vue-next';
-const { user, clear } = useUserSession()
+import { isAdmin, isFaculty, isNotAdmin, isStudent } from '~/shared/utils/abilities';
+const { user } = useUserSession()
+const runtime = useRuntimeConfig()
 const isOpen = ref(false)
+
+if (!user) {
+  router.push('accounts/login/')
+}
+</script>
+
+<script lang="ts">
 const router = useRouter()
+const { clear } = useUserSession()
 
 const avatarItems = [
   [{
@@ -20,8 +30,8 @@ const avatarItems = [
     label: 'Log Out',
     icon: 'i-lucide-log-out',
     click: () => {
-      clear(),
       navigateTo('/accounts/login', { external: true })
+      clear()
     }
   }], 
 ]
@@ -31,8 +41,7 @@ const avatarItems = [
     <div>
         <nav class="bg-gradient-to-r from-oct-green to-oct-lime px-4 py-2 flex items-center justify-between">
             <div class="flex gap-2">
-              <UButton @click="isOpen = true">
-                <Menu />
+              <UButton @click="isOpen = true" icon="i-lucide-menu" variant="ghost">
               </UButton>
                 <NuxtLink href="/">
                     <img src="~/assets/images/logo/gradex-solid.svg" alt="" width="186">
@@ -40,7 +49,7 @@ const avatarItems = [
             </div>
             <div>
               <UDropdown :items="avatarItems">
-                <UAvatar icon="i-heroicons-photo" :src="user.image" size="lg" />
+                <UAvatar icon="i-heroicons-photo" :src="user?.image" size="lg" />
                 <template #account>
                   <div class="flex-1 min-w-0 text-left">
                     <p>
@@ -80,33 +89,51 @@ const avatarItems = [
               <a href="https://gradex.cronitorstatus.com/" target="_blank" class="max-w-fit">{{ $t('footer.status') }}</a>
             </div>
         </div>
-        <section class="bg-lime-950 flex items-center justify-center text-sm text-gray-600 px-4">
-          <span>Version 0.2.4</span>
+        <section class="bg-lime-950 flex items-center justify-center text-sm text-gray-600 py-4">
+          <span>Version {{ runtime.public.appVersion }}</span>
         </section>
     </div>
     <USlideover v-model="isOpen" :overlay="false" side="left" class="md:max-w-[25%]">
       <div class="px-4 py-2 flex flex-col gap-2">
         <section class="flex items-center justify-between">
           <h1 class="font-serif text-oct-green dark:text-green-600 text-xl">Menu</h1>
-          <UButton @click="isOpen = false">
-            <XIcon />
+          <UButton @click="isOpen = false" icon="i-lucide-x" variant="ghost">
           </UButton>
         </section>
         <section class="flex flex-col gap-2">
           <UButton variant="ghost" color="gray" to="/" icon="i-heroicons-home-20-solid">
             Home
           </UButton>
-          <UButton variant="ghost" color="gray" to="/your-report" icon="i-lucide-file-user">
-            {{ $t('sidebar.student_grades') }}
+          <Can :ability="isStudent">
+            <UButton variant="ghost" color="gray" to="/your-report" icon="i-lucide-file-user">
+              {{ $t('sidebar.student_grades') }}
+            </UButton>
+          </Can>
+          <Can :ability="isNotAdmin">
+            <UButton variant="ghost" color="gray" to="/classes" icon="i-lucide-presentation">
+              {{ $t('sidebar.student_classes') }}
+            </UButton>
+          </Can>
+          <Can :ability="isFaculty">
+          <UButton variant="ghost" color="gray" to="/reports" icon="i-lucide-file-chart-column">
+            Grade Reports
           </UButton>
-          <UButton variant="ghost" color="gray" to="/classes" icon="i-lucide-presentation">
-            {{ $t('sidebar.student_classes') }}
+          </Can>
+          <Can :ability="isAdmin">
+            <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/users" icon="i-lucide-users">
+              {{ $t('sidebar.manage_users') }}
+            </UButton>
+          </Can>
+          <Can :ability="isAdmin">
+            <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/announcements" icon="i-lucide-megaphone">
+              {{ $t('sidebar.manage_announcements') }}
+            </UButton>
+          </Can>
+          <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/global-variables" icon="i-heroicons-server-20-solid">
+            {{ $t('sidebar.global_vars') }}
           </UButton>
           <UButton variant="ghost" color="gray" to="/settings" icon="i-heroicons-cog-20-solid">
             {{ $t('sidebar.usr_settings') }}
-          </UButton>
-          <UButton variant="ghost" color="gray" v-if="user.role == 'SUPERADMIN'" to="/admin/global-variables" icon="i-heroicons-server-20-solid">
-            {{ $t('sidebar.global_vars') }}
           </UButton>
         </section>
       </div>

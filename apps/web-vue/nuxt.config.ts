@@ -13,6 +13,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiUrl: process.env.API_URL,
+      appVersion: '1.0.8y'
     }
   },
   s3: {
@@ -53,6 +54,9 @@ export default defineNuxtConfig({
       }
     ],
   },
+  alias: {
+    'string_decoder': 'string_decoder/',
+  },
   modules: [
     '@nuxtjs/google-fonts',
     '@vee-validate/nuxt',
@@ -60,6 +64,7 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     '@nuxt/ui',
     '@nuxtjs/tailwindcss',
-    '@bg-dev/nuxt-s3'
+    '@bg-dev/nuxt-s3',
+    'nuxt-authorization'
   ]
 })

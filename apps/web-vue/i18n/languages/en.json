@@ -3,9 +3,17 @@
       "required_default": "This field is required",
       "required_specialized":"{pre} {field} is required.",
       "min":"This field must have {digit} or more characters.",
-      "id_num_invalid":"Invalid ID Number provided. Check the number, then try again.",
+      "id_number_invalid":"Invalid ID Number provided. Check the number, then try again.",
       "password_min":"Your password should be a minimum of {digit} characters.",
-      "password_match":"Passwords must match."
+      "password_match":"Passwords must match.",
+      "length_between": "{field} must be between {a} and {b} characters long.",
+      "length_max": "{field} can only be up to {max} characters long.",
+      "url": "{field} must be a valid URL.",
+      "img_format": "Please use only images with PNG, JPEG, and WEBP file formats.",
+      "file_too_big": "File too big, can't exceed {size}",
+      "email_invalid": "{field} must be a valid email address!",
+      "personal_email_invalid": "Personal Email Addresses should not come from the olivarezcollegetagaytay.edu.ph domain.",
+      "school_email_invalid": "Organizational Email Addresses should come from the olivarezcollegetagaytay.edu.ph domain."
    },
    "fields": {
       "username": "Username",
@@ -95,7 +103,9 @@
       "global_vars":"System Settings",
       "student_grades": "Your grade report",
       "student_classes": "Your classes",
-      "announcements": "Announcements"
+      "announcements": "Announcements",
+      "manage_announcements": "Manage Announcements",
+      "manage_users": "Manage Users"
    },
    "footer":{
       "desc":"GradeX is a capstone project made to fullfil the requirements for Practical Research 2. Read more about our research paper",

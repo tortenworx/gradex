@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://glitch.com/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>Grade Report</title>
+
+    <!-- import the webpage's stylesheet -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --font-serif: "Lora";
+        --font-sans: "DM Sans";
+        --font-mono: "DM Mono"
+      }
+    </style>
+
+    <!-- import the webpage's javascript file -->
+    <script src="/script.js" defer></script>
+  </head>
+  <body class="max-w-[148mm] p-8">
+    <section class="flex items-center justify-between">
+      <img
+        src="http://localhost:3000/_nuxt/assets/images/logo/gradex-default-inverted.svg"
+        class="max-w-1/2"
+      />
+      <h1 class="text-4xl text-right font-medium tracking-tighter text-green-950 font-serif">
+        Grade Report
+      </h1>
+    </section>
+    <section class="grid grid-rows-2 grid-cols-3 gap-4 mt-4 grid-flow-col">
+      <div>
+        <span class="text-gray-400 text-sm font-mono">Student Name</span>
+        <p class="text-gray-950 font-bold">
+          {{ full_name }}
+        </p>
+      </div>
+      <div>
+        <span class="text-gray-400 text-sm font-mono">ID Number</span>
+        <p class="text-gray-950 font-bold">
+          {{ id_number }}
+        </p>
+      </div>
+      <div>
+        <span class="text-gray-400 text-sm font-mono">Track/Strand</span>
+        <p class="text-gray-950 font-bold">
+          {{ program }}
+        </p>
+      </div>
+      <div>
+        <span class="text-gray-400 text-sm font-mono">Section</span>
+        <p class="text-gray-950 font-bold">
+          {{ class_name }}
+        </p>
+      </div>
+      <div>
+        <span class="text-gray-400 text-sm font-mono">Semester</span>
+        <p class="text-gray-950 font-bold">
+          {{ semester }}
+        </p>
+      </div>
+      <div>
+        <span class="text-gray-400 text-sm font-mono">Quarter</span>
+        <p class="text-gray-950 font-bold">
+          1
+        </p>
+      </div>
+    </section>
+    <section class="mt-4">
+      <h1 class="text-2xl font-serif font-medium">
+        Academic Performance
+      </h1>
+      <div class="flex flex-col gap-2">
+        <div class="grid grid-cols-4">
+          <span class="text-center">Code</span>
+          <span class="col-span-2">Subject</span>
+          <span class="text-center">Grade</span>
+        </div>
+        {{#each records}}
+        <div class="grid grid-cols-4">
+          <span class="text-center">{{ code }}</span>
+          <span class="col-span-2 truncate">{{ subj_name }}</span>
+          <span class="text-center font-bold">{{ avg }}</span>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+    <section class="flex items-center justify-end mt-2">
+      <div class="mt-8 grid grid-cols-1">
+        <div class="text-center">
+          <p class="text-sm">
+          {{ class_teacher }}
+          </p>
+          <div class="border-t border-gray-400 pt-1 w-48">
+            Class Adviser
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

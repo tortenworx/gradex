@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreatePwResetDto } from './dto/create-pw_reset.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from 'src/schemas/user.schema';
+import { Role, User } from 'src/schemas/user.schema';
 import { Model } from 'mongoose';
 import { PasswordResetRequest } from 'src/schemas/pw_request.schema';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -21,7 +21,6 @@ export class PwResetService {
     private credentialService: CredentialsService
   ) {}
 
-
   async create(createPwResetDto: CreatePwResetDto) {
     const isUsernameIdNumber = createPwResetDto.username.match(
       /^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g,
@@ -33,11 +32,11 @@ export class PwResetService {
       if (!user) throw new NotFoundException('[PWR1] No user was found with the provided information.')
       if (user.role !== "USER") throw new UnauthorizedException('[PWR0] Only user accounts can request for password requests using this method.')
       const resetDoc = await this.pwModel.create({
-        user: user
+        user: user,
       })
       await this.mailerService.sendMail({
           to: user.educational_email_address,
-          from: 'The GradeX Team <gradex@lyra-research.site>',
+          from: 'The GradeX Team <galaxa@torten.xyz>',
           subject: '[GradeX] Reset your password',
           text: `Greeting in peace! \nYou have request a password request at ${(new Date()).toString()}. To reset your password, use the link below. If you did not request for a password reset, you can safely ignore this message.\nReset Link: https://gradex.lyra-research.site/accounts/reset-password?key${resetDoc.id}`,
           template: 'forgot-password',
@@ -65,7 +64,66 @@ export class PwResetService {
       })
       await this.mailerService.sendMail({
           to: user.educational_email_address,
-          from: 'The GradeX Team <gradex@lyra-research.site>',
+          from: 'The GradeX Team <galaxa@torten.xyz>',
+          subject: '[GradeX] Reset your password',
+          text: `Greeting in peace! \nYou have request a password request at ${(new Date()).toString()}. To reset your password, use the link below. If you did not request for a password reset, you can safely ignore this message.\nReset Link: https://gradex.lyra-research.site/accounts/reset-password?id=${resetDoc.id}`,
+          template: 'forgot-password',
+          context: {
+            name: user.first_name,
+            reset_link: `https://gradex.lyra-research.site/accounts/reset-password?id=${resetDoc.id}`,
+          },
+      });
+      return {
+        statusCode: 200,
+        message: 'Password link sent.'
+      }
+    }
+  }
+
+  async createAdmin(createPwResetDto: CreatePwResetDto, adminId: string) {
+    const isAdmin = await this.userModel.findById(adminId)
+    const isUsernameIdNumber = createPwResetDto.username.match(
+      /^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g,
+    );
+    if (isUsernameIdNumber) {
+      const user = await this.userModel.findOne({
+        id_number: createPwResetDto.username
+      });
+      if (!user) throw new NotFoundException('[PWR1] No user was found with the provided information.')
+      const resetDoc = await this.pwModel.create({
+        user: user,
+      })
+      await this.mailerService.sendMail({
+          to: user.educational_email_address,
+          from: 'The GradeX Team <galaxa@torten.xyz>',
+          subject: '[GradeX] Reset your password',
+          text: `Greeting in peace! \nYou have request a password request at ${(new Date()).toString()}. To reset your password, use the link below. If you did not request for a password reset, you can safely ignore this message.\nReset Link: https://gradex.lyra-research.site/accounts/reset-password?key${resetDoc.id}`,
+          template: 'forgot-password',
+          context: {
+            name: user.first_name,
+            reset_link: `https://gradex.lyra-research.site/accounts/reset-password?key=${resetDoc.id}`,
+          },
+        });
+        return {
+          statusCode: 200,
+          message: 'Password link sent.'
+        }
+    } else {
+      const credential = await this.credentialModel.findOne({
+        user_name: createPwResetDto.username
+      })
+      if (!credential) throw new NotFoundException('[PWR1] No user was found with the provided information.')
+      const user = await this.userModel.findOne({
+        credential: credential.id
+      })
+      if (user.role !== "USER") throw new UnauthorizedException('[PWR0] Only user accounts can request for password requests using this method.')
+      if (!user) throw new NotFoundException('[PWR1] No user was found with the provided information.')
+      const resetDoc = await this.pwModel.create({
+        user: user
+      })
+      await this.mailerService.sendMail({
+          to: user.educational_email_address,
+          from: 'The GradeX Team <galaxa@torten.xyz>',
           subject: '[GradeX] Reset your password',
           text: `Greeting in peace! \nYou have request a password request at ${(new Date()).toString()}. To reset your password, use the link below. If you did not request for a password reset, you can safely ignore this message.\nReset Link: https://gradex.lyra-research.site/accounts/reset-password?id=${resetDoc.id}`,
           template: 'forgot-password',

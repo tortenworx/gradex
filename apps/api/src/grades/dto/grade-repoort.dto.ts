@@ -21,7 +21,7 @@ export class GradeReport {
   @IsNotEmpty()
   semester: number;
   @IsArray()
-  grades: [
+  records: [
     {
       user: string;
       avg: number;

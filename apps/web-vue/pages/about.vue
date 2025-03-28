@@ -46,7 +46,7 @@
                 </div>
                 <div class="text-center">
                     <h3 class="text-lg text-oct-othagreen font-serif font-medium">Daniela Claire Cortez</h3>
-                    <p>Research Member &bull; Literary Sources Contributor</p>
+                    <p>Research Member &bull; Literary Sources Contributor &bull; System Translator (FIL)</p>
                 </div>
                 <div class="text-center">
                     <h3 class="text-lg text-oct-othagreen font-serif font-medium">Princess Gutierrez</h3>
@@ -78,7 +78,7 @@
                 </div>
                 <div class="text-center">
                     <h3 class="text-lg text-oct-othagreen font-serif font-medium">Jaryl Dane Vidallon</h3>
-                    <p>Research Member</p>
+                    <p>Research Member &bull; System Translator (FIL)</p>
                 </div>
             </div>
         </section>

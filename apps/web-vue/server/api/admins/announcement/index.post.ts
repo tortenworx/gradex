@@ -1,8 +1,3 @@
-
-import backend from "~/utils/backend-resolver"
-import axios from 'axios'
-import { ofetch } from "ofetch";
-
 export default defineEventHandler(async (event) => {
     const sessionData = await requireUserSession(event)
     const body = await readBody(event)
@@ -15,13 +10,13 @@ export default defineEventHandler(async (event) => {
         })
     }
     const accessToken = sessionData.secure.apiKey
-    console.log(accessToken)
-    const data = await $fetch(`${runtime.public.apiUrl}announcements`,
+    return await event.$fetch(`${runtime.public.apiUrl}announcements`,
         {
-            method: 'POST',
+            method: "POST",
             body,
-            headers: {
-                Authorization: accessToken
+            onRequest({ options }) {
+                options.headers = new Headers(options.headers)
+                options.headers.set("Authorization", `Bearer ${accessToken}`)
             },
             onRequestError({ request, error, options }) {
                 throw createError({
@@ -29,10 +24,10 @@ export default defineEventHandler(async (event) => {
                     statusMessage: error.message
                 })
             },
-            onResponseError({ response }) {
+            onResponseError({ response, request }) {
                 throw createError({
                     statusCode: response.status,
-                    statusMessage: response._data.message
+                    statusMessage: 'Error occured on server'
                 })
             }
         },

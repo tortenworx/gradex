@@ -52,7 +52,7 @@
               </div>
               </div>
           <section class="flex items-center justify-center text-sm text-gray-600">
-            <span>Version 0.2.8</span>
+          <span>Version {{ runtime.public.appVersion }}</span>
           </section>
         </footer>
     </div>
@@ -73,4 +73,5 @@ const isDark = computed({
 const availableLocales = computed(() => {
   return locales.value.filter(i => i.code !== locale.value)
 })
+const runtime = useRuntimeConfig()
 </script>

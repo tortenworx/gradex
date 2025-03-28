@@ -4,9 +4,16 @@ import * as Yup from 'yup';
 import UsernameField from '~/components/forms/UsernameField.vue';
 import PasswordField from '~/components/forms/PasswordField.vue';
 import { VueSpinnerTail } from 'vue3-spinners';
+import { UserX } from 'lucide-vue-next';
 const toast = useToast()
 const runtime = useRuntimeConfig()
 const router = useRouter()
+const { loggedIn } = useUserSession()
+const isLoginDisabled = await $fetch('/api/admins/global-vars/disable-login')
+
+if (loggedIn) {
+  router.push({ path: '/' })
+}
 
 interface Announcement {
   title: string;
@@ -85,33 +92,33 @@ async function submitLogin(values: any) {
       })
     },
     onResponse({ request, response, options }) {
-      toast.update('log_in', {
-        title: 'You have signed in!',
-        description: 'You will be redirected to the dashboard in 5 seconds.',
-        color: 'green',
-        icon: 'i-lucide-circle-check-big',
-        timeout: 5000,
-        actions: [{
-          label: 'Go to dashboard',
-          click: () => {
-            navigateTo('/', { external: true })
-          }
-        }],
-        callback: () => {
-          navigateTo('/', { external: true })
-        }
-      })
+      if (response.ok) { 
+        toast.update('log_in', {
+          title: 'You have signed in!',
+          description: 'You will be redirected to the dashboard in 2 seconds.',
+          color: 'green',
+          icon: 'i-lucide-circle-check-big',
+          timeout: 2000,
+          actions: [{
+            label: 'Go to dashboard',
+            click: () => {
+              navigateTo('/', { external: true })
+            }
+          }],
+        })
+        navigateTo('/', { external: true })
+      }
     }
   })
 }
 </script>
 <template>
-    <main class="md:grid grid-cols-1 md:grid-cols-3 grid-flow-col min-h-screen dark:bg-slate-950">
+    <main class="md:grid grid-cols-1 md:grid-cols-3 grid-flow-col min-h-[100dvh] dark:bg-slate-950">
       <div class="md:invisible md:hidden">
         <UCarousel ref="carouselRef" v-slot="{ item }" :items="announcements" :ui="{ item: 'basis-full' }" v-if="announcements">
-          <div class="flex-[0_0_100%] min-w-0 h-full relative text-white mix-blend-overlay bg-gradient-to-br from-oct-othagreen to-transparent">
+          <div class="flex-[0_0_100%] min-w-0 h-full relative text-white bg-gradient-to-br from-oct-othagreen to-transparent">
             <img :src="item.login_image" class="object-fit">
-            <div class="absolute md:top-5 md:left-5 bottom-0 left-0 p-4 md:px-0 flex flex-col gap-2 md:w-1/2 text-center bg-gradient-to-t from-green-800 to-transparent">
+            <div class="absolute md:top-5 w-full bottom-0 left-0 p-4 md:px-0 flex flex-col gap-2 md:w-1/2 text-center bg-gradient-to-t from-green-800 to-transparent">
                 <h1 class="text-lg font-bold">
                     {{ item.title }}
                 </h1>
@@ -122,7 +129,19 @@ async function submitLogin(values: any) {
           </div>
         </UCarousel>
       </div>
-      <div class="px-4 py-2">
+      <div v-if="isLoginDisabled.value" class="px-4 py-2">
+        <div class="mb-4 max-w-screen md:max-w-96">
+          <img src="~/assets/images/logo/gradex-default-inverted.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="dark:invisible dark:hidden visible block">
+          <img src="~/assets/images/logo/gradex-default.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="dark:visible dark:block invisible hidden">
+        </div>
+        <div class="flex flex-col items-center justify-center h-full text-center">
+          <UserX :size="48" class="text-gray-400" />
+          <h1 class="text-oct-green dark:text-lime-400 text-2xl font-serif">Log-in's are currently disabled.</h1>
+          <p class="mb-2">Administrators have prevented users from logging in to the system. Please refer to the system's status down below or thru other authorized channels.</p>
+          <a href="https://gradex.cronitorstatus.com" target="_blank" class="text-lime-600 underline underline-offset-4">View system status</a>
+        </div>
+      </div>
+      <div v-else class="px-4 py-2">
         <div class="mb-4 max-w-screen md:max-w-96">
           <img src="~/assets/images/logo/gradex-default-inverted.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="dark:invisible dark:hidden visible block">
           <img src="~/assets/images/logo/gradex-default.svg" alt="Logo of the system, with the Logo of Olivarez College Tagaytay on the left and the words GradeX on the other." class="dark:visible dark:block invisible hidden">
@@ -162,8 +181,8 @@ async function submitLogin(values: any) {
         </div>
       </div>
       <div class="hidden invisible md:visible md:block col-span-2">
-        <UCarousel ref="carouselRef" v-slot="{ item }" :items="announcements" :ui="{ item: 'basis-full' }" v-if="announcements" indicators>
-          <div class="flex-[0_0_100%] min-w-0 h-full relative text-white">
+        <UCarousel ref="carouselRef" v-slot="{ item }" :items="announcements" :ui="{ item: 'basis-full',  }" v-if="announcements" indicators>
+          <div class="flex-[0_0_100%] min-w-0 h-screen relative text-white">
             <img :src="item.login_image" class="object-cover w-full h-full">
             <div class="absolute top-0 left-0 p-4 flex flex-col gap-2 bg-gradient-to-br from-green-800 via-transparent to-transparent w-full h-full">
               <div class="w-1/2">

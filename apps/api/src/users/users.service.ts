@@ -57,12 +57,12 @@ export class UsersService {
     }
     return user;
   }
-  async getUsers(id?: string): Promise<User[] | User> {
-    if (id) return await this.userModel.find({ _id: id }).select('-credential');
+  async getUsers(id?: string): Promise<User[] | User | any> {
+    if (id) return await this.userModel.findOne({ _id: id }).select('-credential');
     return await this.userModel.find().select('-credential, -__v');
   }
-  async deleteUser(deleteUserDto: DeleteUserDto): Promise<[any, any]> {
-    const user = await this.userModel.findByIdAndDelete(deleteUserDto.id);
+  async deleteUser(id: string): Promise<[any, any]> {
+    const user = await this.userModel.findByIdAndDelete(id);
     const userCredentials = await this.credentialModel.deleteOne({
       _id: user.credential,
     });

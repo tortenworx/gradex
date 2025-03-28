@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { Link } from 'lucide-vue-next';	
 import * as Yup from 'yup'
+
 const modal = useModal()
 const toast = useToast()
 const previewImage = ref<any>()
 const s3 = useS3Object()
+
+const emit = defineEmits(['success'])
 
 definePageMeta({
   title: 'Create New Announcement'  
@@ -22,14 +25,13 @@ function previewImg(event: Event) {
   reader.readAsDataURL(file)
   reader.onload = (img) => {
     previewImage.value = img.target?.result
-    console.log(img.target?.result)
   }
 }
 
 const schema = Yup.object().shape({
-  title: Yup.string().required('This title is required.').test('len', 'Title must be 8-32 characters long.', (val) => val.length <= 32 && val.length >= 8 ),
-  description: Yup.string().required('A description is required.').test('len', 'Description can onl be up to 180 characters long.', (val) => val.length <= 180),
-  content: Yup.string().required('This field is required.').url('The link must be an URL!'),
+  title: Yup.string().required('field_errors.required_specialized').test('len', 'field_errors.length_between', (val) => val.length <= 32 && val.length >= 8 ),
+  description: Yup.string().required('field_errors.required_specialized').test('len', 'field_errors.length_max', (val) => val.length <= 180),
+  content: Yup.string().required('field_errors.required_default').url('field_errors.url'),
   file: Yup.mixed<File>().optional().nullable().test({
     message: 'Please use only images with PNG, JPEG, and WEBP file formats.',
     test: (file, context) => {
@@ -55,16 +57,16 @@ async function submit(values: any) {
       ...values,
       login_image: file
     },
-    onRequest({ request, options }) {
-      
-    },
-    onResponse({  }) {
+    onResponseError({ response, error }) {
       toast.add({
-        title: 'Announcement created successfuly!',
-        icon: 'i-lucide-check-circle',
+        title: 'An error occured',
+        description: response._data.message || error?.message,
+        icon: 'i-lucide-circle-x',
         timeout: 3000
       })
-      modal.close()
+    },
+    onResponse() {
+      emit('success')
     }
   })
   } else {
@@ -73,16 +75,16 @@ async function submit(values: any) {
     body: {
       ...values,
     },
-    onRequest({ request, options }) {
-      
-    },
-    onResponse({  }) {
+    onResponseError({ response, error }) {
       toast.add({
-        title: 'Announcement created successfuly!',
-        icon: 'i-lucide-check-circle',
+        title: 'An error occured',
+        description: response._data.message || error?.message,
+        icon: 'i-lucide-circle-x',
         timeout: 3000
       })
-      modal.close()
+    },
+    onResponse() {
+      emit('success')
     }
   })
   }
@@ -94,7 +96,7 @@ async function submit(values: any) {
     <UCard>
         <template #header>
             <div class="flex items-center justify-between">
-              <h1 class="text-2xl font-serif text-oct-green tracking-tighter">Create a new announcement</h1>
+              <h1 class="text-2xl font-serif text-oct-green dark:text-lime-400 tracking-tighter">Create a new announcement</h1>
               <UButton color="gray" variant="ghost" icon="i-lucide-x" @click="modal.close()" />
             </div>  
         </template>
@@ -107,11 +109,11 @@ async function submit(values: any) {
         >
             <div>
               <FormsTextField name="title" label="Title" placeholder="A great title" />
-              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.title || '', { digit: 8, field: "New password" }) }}</span>
+              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.title || '', { a: 8, b:32, field: "title" }) }}</span>
             </div>
             <div>
               <FormsTextArea name="description"  label="Description" placeholder="Lorem ipsum, dolor sit amet." :className="['resize-none', 'w-full', 'h-32']" />
-              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.description || '', { digit: 8, field: "New password" }) }}</span>
+              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.description || '', { max: 180, field: "description", pre: "A" }) }}</span>
             </div>
             <div>
               <FormsTextField name="content" label="Link" placeholder="https://facebook.com/post/1023912391231283">
@@ -119,11 +121,11 @@ async function submit(values: any) {
                     <Link :size="24" />
                 </template>
               </FormsTextField>
-              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.content || '') }}</span>
+              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.content || '', { field: "Link" }) }}</span>
             </div>
             <div>
               <FormsAnnouncementFileUpload name="file" label="Log-in Image" accept="image/jpeg, image/png, image/webp" @change="previewImg" />
-              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.file || '') }}</span>
+              <span v-if="meta.touched && errors" class="text-sm text-red-600">{{ $t(errors.file || '', { size: "5MB" }) }}</span>
               <UAccordion v-if="values.file" :items="[{ label: 'Preview Image', icon: 'i-lucide-image', slot: 'img-preview' }]" class="mt-2">
                 <template #img-preview>
                   <img :src="previewImage" class="w-full max-h-96 object-cover aspect-video" />

@@ -1,7 +1,7 @@
 export enum Gender {
-  MALE,
-  FEMALE,
-  OTHER,
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+  OTHER = "OTHER",
 }
 
 export enum Role {
@@ -11,6 +11,7 @@ export enum Role {
 }
 
 export default interface UserRecord {
+  _id?: string;
   id: string;
   image: string;
   id_number: string;

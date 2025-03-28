@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Post,
   Request,
   UseGuards,
@@ -40,9 +41,9 @@ export class UsersController {
   }
   @Roles(['SUPERADMIN'])
   @UseGuards(CredentialsGuard)
-  @Delete('/delete')
-  async deleteUser(deleteUserDto: DeleteUserDto) {
-    return await this.usersService.deleteUser(deleteUserDto);
+  @Delete('/:id')
+  async deleteUser(@Param() params: DeleteUserDto) {
+    return await this.usersService.deleteUser(params.id);
   }
   @Roles(['SUPERADMIN'])
   @UseGuards(CredentialsGuard)

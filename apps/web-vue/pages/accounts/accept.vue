@@ -75,7 +75,7 @@ const idSchema = Yup.object().shape({
   id_number: Yup.string().required("invitation_resend.errors.required").matches(/^(\d{3}[S|C]|OCT)-\d{4,}\w?$/g, 'invitation_resend.errors.invalid').oneOf([user.value?.id_number, null], 'Student ID Number does not match the record.'),
 })
 const schema = Yup.object().shape({
-  username: Yup.string().required('Your username is required.').min(3, "Usernames must be 3 characters or more"),
+  username: Yup.string().required('Your username is required.').min(3, "Usernames must be 3 characters or more").matches(/^[a-zA-Z0-9_]*$/g, 'field_errors.invalid'),
   password: Yup.string().required('Your new password is required.').min(8, "new_pw.errors.min_8"),
   confirm_password: Yup.string().oneOf([Yup.ref('password'), undefined], "new_pw.errors.match")
 })
@@ -95,10 +95,10 @@ const schema = Yup.object().shape({
                     <UAvatar icon="i-svg-spinners-eclipse" :src="user?.image" size="lg" />
                   </div>
                   <div>
-                    <span>{{ $t('new_pw.greetings') }} {{ user?.first_name }}!</span>
+                    <span>{{ $t('greetings.default', { name: user?.first_name }) }}!</span>
                     <UPopover class="w-fit">
                       <span class="text-lime-600 decoration-dotted w-fit">
-                        {{ $t('new_pw.not_you') }}
+                        {{ $t('greetings.not_you') }}
                       </span>
                       <template #panel>
                         <div class="p-4 w-48">
@@ -155,10 +155,10 @@ const schema = Yup.object().shape({
                   <ButtonsDefault :disabled="!meta.valid || isSubmitting" type="submit" class="mt-4">
                       <div v-if="isSubmitting" class="flex items-center justify-center gap-2">
                       <VueSpinnerTail size="24" color="#fcfcfc" />
-                      <span>{{ $t('new_pw.submitting') }}</span>
+                      <span>{{ $t('fields.submitting') }}</span>
                       </div>
                       <div v-else class="flex items-center justify-center gap-2">
-                      {{ $t('new_pw.submit') }}
+                      {{ $t('fields.submit') }}
                       </div>
                   </ButtonsDefault>
                   </Form>

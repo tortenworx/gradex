@@ -16,6 +16,8 @@ export enum REPORT_STATUS {
   REVIEWING = 'REVIEWING',
 }
 
+type Nullable<T> = T | null
+
 @Schema()
 export class GradeReport {
   @Prop({ type: mongoose.Types.ObjectId, ref: 'Subject' })
@@ -24,6 +26,8 @@ export class GradeReport {
   created_by: User;
   @Prop({ required: true })
   semester: number;
+  @Prop()
+  quarter: number;
   @Prop({
     required: true,
     type: String,
@@ -35,16 +39,13 @@ export class GradeReport {
     required: true,
     type: String,
     enum: REPORT_TYPE,
-    default: REPORT_TYPE.COLLEGE,
+    default: REPORT_TYPE.SENIOR_HIGH,
   })
   type: REPORT_TYPE;
-  @Prop({ required: true })
-  records: [
-    {
-      user: User;
-      avg: number;
-    },
-  ];
+  @Prop({ type: [{user: {type: mongoose.Schema.ObjectId}, avg: {type: Array<Nullable<Number>>}}], required: true })
+  records: {user: User; avg: [Nullable<number>, Nullable<number>]}[];
+  @Prop({ type: Date, default: Date.now() })
+  createdAt: Date
 }
 
 export const GradeReportSchema = SchemaFactory.createForClass(GradeReport);
